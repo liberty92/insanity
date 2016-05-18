@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+	<!-- Static resources mapping -->
+	<mvc:resources mapping="/resources/**" location="/resources/theme1/" cache-period="31556926" />
+	<mvc:annotation-driven />
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+		in the /WEB-INF/views directory -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+
+ 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<beans:property name="url" value="jdbc:mysql://localhost:3306/bksecurities?UseUnicode=true&amp;characterEncoding=utf8" />
+		<beans:property name="username" value="root" />
+		<beans:property name="password" value="" />
+	</beans:bean>
+	
+<!-- 	OPENSHIFT DEPLOYING -->
+<!-- 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<beans:property name="url" value="jdbc:mysql://127.6.125.2:3306/bksecurities?UseUnicode=true&amp;characterEncoding=utf8" />
+		<beans:property name="username" value="adminUu1ddgi" />
+		<beans:property name="password" value="SQY_cXt_l93B" />
+	</beans:bean> -->
+
+	<!-- Hibernate 4 SessionFactory Bean definition -->
+	<beans:bean id="hibernate4AnnotatedSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="annotatedClasses">
+			<beans:list>
+				<beans:value>com.liberation.lab.model.Article</beans:value>
+				<beans:value>com.liberation.lab.model.User</beans:value>
+				<beans:value>com.liberation.lab.model.UserRole</beans:value>
+				<beans:value>com.liberation.lab.model.Balance</beans:value>
+				<beans:value>com.liberation.lab.model.Company</beans:value>
+				<beans:value>com.liberation.lab.model.CompanyCategory</beans:value>
+			</beans:list>
+		</beans:property>
+		<beans:property name="hibernateProperties">
+			<beans:props>
+				<beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect
+				</beans:prop>
+				<beans:prop key="hibernate.show_sql">true</beans:prop>
+			</beans:props>
+		</beans:property>
+	</beans:bean>
+	
+	<!-- ARTICLE BEAN -->
+	<beans:bean id="articleDAO" class="com.liberation.lab.dao.ArticleDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="articleService"
+		class="com.liberation.lab.service.ArticleServiceImpl">
+		<beans:property name="articleDAO" ref="articleDAO"></beans:property>
+	</beans:bean>
+	
+	<!-- USER BEAN -->
+	<beans:bean id="userDAO" class="com.liberation.lab.dao.UserDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="userService"
+		class="com.liberation.lab.service.UserServiceImpl">
+		<beans:property name="userDAO" ref="userDAO"></beans:property>
+	</beans:bean>
+	
+	<!-- USER ROLE BEAN -->
+	<beans:bean id="userRoleDAO" class="com.liberation.lab.dao.UserRoleDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="userRoleService"
+		class="com.liberation.lab.service.UserRoleServiceImpl">
+		<beans:property name="userRoleDAO" ref="userRoleDAO"></beans:property>
+	</beans:bean>
+	
+	<!-- BALANCE ROLE BEAN -->
+	<beans:bean id="balanceDAO" class="com.liberation.lab.dao.BalanceDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="balanceService"
+		class="com.liberation.lab.service.BalanceServiceImpl">
+		<beans:property name="balanceDAO" ref="balanceDAO"></beans:property>
+	</beans:bean>
+	
+	<!-- COMPANY ROLE BEAN -->
+	<beans:bean id="companyDAO" class="com.liberation.lab.dao.CompanyDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="companyService"
+		class="com.liberation.lab.service.CompanyServiceImpl">
+		<beans:property name="companyDAO" ref="companyDAO"></beans:property>
+	</beans:bean>
+	
+	<!-- COMPANY CATEGORY ROLE BEAN -->
+	<beans:bean id="companyCategoryDAO" class="com.liberation.lab.dao.CompanyCategoryDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="companyCategoryService"
+		class="com.liberation.lab.service.CompanyCategoryServiceImpl">
+		<beans:property name="companyCategoryDAO" ref="companyCategoryDAO"></beans:property>
+	</beans:bean>
+	
+	<context:component-scan base-package="com.liberation.lab" />
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<beans:bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+
+
+</beans:beans>

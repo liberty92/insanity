@@ -1,0 +1,169 @@
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <!-- STYLES -->
+    <link rel="stylesheet" type="text/css" href="assets/css/MegaNavbar.css" tppabs="http://mastercafe.com.es/assets/css/MegaNavbar.css"/>
+    <link rel="stylesheet" type="text/css" href="assets/css/navbar-inverse.css" tppabs="http://mastercafe.com.es/assets/css/skins/navbar-inverse.css" title="inverse"> 
+    <!-- jQuery JavaScript CDN version (necessary for Bootstrap's JavaScript plugins) -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Latest compiled and minified Bootstrap JavaScript CDN version -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+</head>
+
+
+<body>
+<style>
+  .toTop {position: fixed;right: 15px;bottom: 56px;z-index: 10000;color: #999;}
+</style>
+
+   
+    <div class="container">
+        <nav class="navbar navbar-inverse no-border-radius" id="main_navbar" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html" tppabs="http://mastercafe.com.es/index.html"><i class="fa fa-home"></i> Brand</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                 
+                    <!-- regular link -->
+
+                    <a href="#" class="navbar-link navbar-left"><i class="fa fa-link"></i>&nbsp;<span class="hidden-sm hidden-md">Link</span></a>
+                    <ul class="nav navbar-nav navbar-left">
+                        <!-- divider -->
+                        <li class="divider"></li>
+                        <!-- dropdown default -->
+                        <li class="dropdown-short">
+                            <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle" aria-expanded="true"><i class="fa fa-bars"></i>&nbsp;<span class="hidden-sm">Short</span><span class="caret"></span></a>
+
+                            <ul class="dropdown-menu">
+
+                                <li>
+                                    <p><a href="#&quot;">Regular link<span class="desc">Regular link description</span></a></p>
+                                </li>
+                                <li class="divider"></li>
+
+                                 <li>
+                                    <p><a href="#&quot;">Regular link<span class="desc">Regular link description</span></a></p>
+                                </li>
+                                <li class="divider"></li>
+
+                                 <li>
+                                    <p><a href="#&quot;">Regular link<span class="desc">Regular link description</span></a></p>
+                                </li>
+                                <li class="divider"></li>
+
+                                 <li>
+                                    <p><a href="#&quot;">Regular link<span class="desc">Regular link description</span></a></p>
+                                </li>
+                                <li class="divider"></li>
+                            </ul>
+                        </li>
+                        <!-- divider -->
+                        <li class="divider"></li>
+                       
+                        <!-- divider -->
+                        <li class="divider"></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- search form -->
+                        <form class="navbar-form-expanded navbar-form navbar-left visible-lg-block visible-md-block visible-xs-block" role="search">
+                            <div class="input-group">
+                                <input type="text" class="form-control" data-width="80px" data-width-expanded="170px" placeholder="Search..." name="query">
+                                <span class="input-group-btn"><button class="btn btn-default" type="submit"><i class="fa fa-search"></i>&nbsp;</button></span>
+                            </div>
+                        </form>
+                        <li class="dropdown-grid visible-sm-block">
+                            <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"><i class="fa fa-search"></i> Search</a>
+                            <div class="dropdown-grid-wrapper" role="menu">
+                                <ul class="dropdown-menu col-sm-6">
+                                    <li>
+                                        <form class="no-margin">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control">
+                                                <span class="input-group-btn"><button class="btn btn-default" type="button">&nbsp;<i class="fa fa-search"></i></button></span>
+                                            </div>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!-- media -->
+             
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    
+    <script>
+        //Start Fix MegaNavbar on scroll page
+        var navHeight = $('#main_navbar').offset().top;
+        FixMegaNavbar(navHeight);
+        $(window).bind('scroll', function() {FixMegaNavbar(navHeight);});
+
+        function FixMegaNavbar(navHeight) {
+            if (!$('#main_navbar').hasClass('navbar-fixed-bottom')) {
+                if ($(window).scrollTop() > navHeight) {
+                    $('#main_navbar').addClass('navbar-fixed-top')
+                    $('body').css({'margin-top': $('#main_navbar').height()+'px'});
+                    if ($('#main_navbar').parent('div').hasClass('container')) $('#main_navbar').children('div').addClass('container').removeClass('container-fluid');
+                    else if ($('#main_navbar').parent('div').hasClass('container-fluid')) $('#main_navbar').children('div').addClass('container-fluid').removeClass('container');
+                }
+                else {
+                    $('#main_navbar').removeClass('navbar-fixed-top');
+                    $('#main_navbar').children('div').addClass('container-fluid').removeClass('container');
+                    $('body').css({'margin-top': ''});
+                }
+            }
+        }
+        //Start Fix MegaNavbar on scroll page
+
+
+        //Start Fix MegaNavbar on scroll page
+        var tocHeight = $('#Table_of_Contents').offset().top;
+        FixTOC(tocHeight);
+        $(window).bind('scroll', function() {FixTOC(tocHeight);});
+
+        function FixTOC(tocHeight) {
+
+                if ($(window).scrollTop() > (tocHeight-75)) {
+                    $('#Table_of_Contents').css({'position':'relative', 'top':(($(window).scrollTop()-tocHeight)+90)+"px", 'right':'auto'});
+                }
+                else {
+                    $('#Table_of_Contents').css({'position':'relative', 'top':'0px', 'right':'auto'});
+                }
+        }
+        //Start Fix MegaNavbar on scroll page
+
+
+        //Next code used to prevent unexpected menu close when using some components (like accordion, tabs, forms, etc), please add the next JavaScript to your page
+        $( window ).load(function() {
+            $(document).on('click', '.navbar .dropdown-menu', function(e) {e.stopPropagation();});
+        });
+
+        /*SCROLL PAGE TO TOP*/
+        $(document).ready(function() {
+            $(".toTop").css("display", "none");
+
+            $(window).scroll(function(){
+                if($(window).scrollTop() > 0){$(".toTop").fadeIn("slow");} else {$(".toTop").fadeOut("slow");}
+            });
+
+            $(".toTop").click(function(){
+                event.preventDefault();
+                $("html, body").animate({scrollTop:0},"slow");
+            });
+        });
+
+    </script>
+</body>
+</html>
