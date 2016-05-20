@@ -15,7 +15,8 @@ public class CompanyCategory {
 	
 	@Id
     @Column(name="companyCategoryId")
-	private String companyCategoryId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int companyCategoryId;
 	
     
     @Column(name = "companyCategoryName")
@@ -23,56 +24,48 @@ public class CompanyCategory {
 	
     @Column(name = "companyCategoryInfo")
 	private String companyCategoryInfo;
+	
+    @Column(name = "description")
+	private String description;
 	 
     
- 
- 
-    public String getCompanyCategoryId() {
+    
+    public int getCompanyCategoryId() {
 		return companyCategoryId;
 	}
 
-
-
-
-	public void setCompanyCategoryId(String companyCategoryId) {
+	public void setCompanyCategoryId(int companyCategoryId) {
 		this.companyCategoryId = companyCategoryId;
 	}
-
-
-
 
 	public String getCompanyCategoryName() {
 		return companyCategoryName;
 	}
 
-
-
-
 	public void setCompanyCategoryName(String companyCategoryName) {
 		this.companyCategoryName = companyCategoryName;
 	}
-
-
-
 
 	public String getCompanyCategoryInfo() {
 		return companyCategoryInfo;
 	}
 
+	public String getDescription() {
+		return description;
+	}
 
-
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public void setCompanyCategoryInfo(String companyCategoryInfo) {
 		this.companyCategoryInfo = companyCategoryInfo;
 	}
 
-
-
-
 	@Override
     public String toString(){
         return "companyCategoryId="+companyCategoryId+", companyCategoryName="+companyCategoryName+", companyCategoryId="+companyCategoryId
-        		+",companyCategoryInfo="+companyCategoryInfo;
+        		+",description="+description+",companyCategoryInfo="+companyCategoryInfo;
     }
  
 

@@ -1,7 +1,5 @@
 package com.liberation.lab.model;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,8 +19,8 @@ public class Company {
     @Column(name = "companyName")
 	private String companyName;
 	
-    @Column(name = "companyCategoryId")
-	private String companyCategoryId;
+    @Column(name = "companyCategoryName")
+	private String companyCategoryName;
 	
     @Column(name = "companyBOD")
 	private String companyBOD;
@@ -50,11 +48,11 @@ public class Company {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
-	public String getCompanyCategoryId() {
-		return companyCategoryId;
+	public String getCompanyCategoryName() {
+		return companyCategoryName;
 	}
-	public void setCompanyCategoryId(String companyCategoryId) {
-		this.companyCategoryId = companyCategoryId;
+	public void setCompanyCategoryName(String companyCategoryName) {
+		this.companyCategoryName = companyCategoryName;
 	}
 	public String getCompanyBOD() {
 		return companyBOD;
@@ -84,7 +82,7 @@ public class Company {
  
     @Override
     public String toString(){
-        return "companyId="+companyId+", companyName="+companyName+", companyCategoryId="+companyCategoryId
+        return "companyId="+companyId+", companyName="+companyName+", companyCategoryName="+companyCategoryName
         		+",companyBOD="+companyBOD+", companyInfo="+companyInfo+", companyState="
         		+companyState;
     }

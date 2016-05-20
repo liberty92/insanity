@@ -19,10 +19,18 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	
+	
+<script
+	src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 
 
 <link rel="stylesheet" type="text/css"
@@ -41,6 +49,11 @@ LOCAL
 <script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 --%>
+<style>
+label, .dataTables_info{
+	color:white;
+}
+</style>
 </head>
 <body>
 	<div class="container-fluid 111">
@@ -64,7 +77,7 @@ LOCAL
 
 
 					<div class="table-responsive" style="margin: 0px 10px">
-						<table
+						<table id="dataTable"
 							class="table table-responsive table-hover table-striped table-bordered">
 							<thead>
 								<tr>
@@ -185,12 +198,7 @@ LOCAL
 </html>
 
 <script type="text/javascript">
-	$(document).ready(
-			function() {
-				var glow = $('.insanity');
-				setInterval(function() {
-					glow.hasClass('glow') ? glow.removeClass('glow') : glow
-							.addClass('glow');
-				}, 4000);
-			});
+$(document).ready(function() {
+	$('#dataTable').DataTable();
+} );
 </script>

@@ -76,7 +76,7 @@ public class CompanyController {
 		}
 
 		String companyName = request.getParameter("companyName");
-		String companyCategoryId = request.getParameter("companyCategoryId");
+		String companyCategoryName = request.getParameter("companyCategoryName");
 		String companyBOD = request.getParameter("companyBOD");
 		String companyContact = request.getParameter("companyContact");
 		String companyInfo = request.getParameter("companyInfo");
@@ -91,13 +91,13 @@ public class CompanyController {
 		Company u = new Company();
 		u.setCompanyId(companyId);
 		u.setCompanyName(companyName);
-		u.setCompanyCategoryId(companyCategoryId);
+		u.setCompanyCategoryName(companyCategoryName);
 		u.setCompanyBOD(companyBOD);
 		u.setCompanyContact(companyContact);
 		u.setCompanyInfo(companyInfo);
 		u.setCompanyState(companyState);
 
-		if (u.getCompanyId() == 0) {
+		if (companyId == 0) {
 			// new company, add it
 			this.companyService.addCompany(u);
 		} else {
@@ -141,8 +141,12 @@ public class CompanyController {
 			e.printStackTrace();
 		}
  
+		int companyCategoryId = 0;
+		if (request.getParameter("companyCategoryId") != null && request.getParameter("companyCategoryId").toString().length()>0) {
+			companyCategoryId = Integer.parseInt(request.getParameter("companyCategoryId"));
+		}
 
-		String companyCategoryId = request.getParameter("companyCategoryId");
+		String description = request.getParameter("description");
 		String companyCategoryName = request.getParameter("companyCategoryName");
 		String companyCategoryInfo = request.getParameter("companyCategoryInfo");
 		
@@ -151,9 +155,10 @@ public class CompanyController {
 		CompanyCategory u = new CompanyCategory();
 		u.setCompanyCategoryId(companyCategoryId);
 		u.setCompanyCategoryName(companyCategoryName); 
+		u.setDescription(description); 
 		u.setCompanyCategoryInfo(companyCategoryInfo);
 
-		if (companyCategoryId.length() > 0) {
+		if (companyCategoryId == 0) {
 			// new company, add it
 			this.companyCategoryService.addCompanyCategory(u);
 		} else {
@@ -166,13 +171,13 @@ public class CompanyController {
 	}
 
 	@RequestMapping("/core/removeCompanyCategory/{companyCategoryId}")
-	public String removeCompanyCategory(@PathVariable("companyCategoryId") String id) {
+	public String removeCompanyCategory(@PathVariable("companyCategoryId") int id) {
 		this.companyCategoryService.removeCompanyCategory(id);
 		return "redirect:/core/companyCategory";
 	}
 
 	@RequestMapping("/core/editCompanyCategory/{companyCategoryId}")
-	public String editCompanyCategory(@PathVariable("companyCategoryId") String id, Model model) {
+	public String editCompanyCategory(@PathVariable("companyCategoryId") int id, Model model) {
 		model.addAttribute("companyCategory", this.companyCategoryService.getCompanyCategoryById(id));
 		model.addAttribute("listCompanyCategory", this.companyCategoryService.listCompanyCategory());
 		return "/core/coreCompanyCategory";

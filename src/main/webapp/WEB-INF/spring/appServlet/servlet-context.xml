@@ -64,6 +64,10 @@
 				<beans:value>com.liberation.lab.model.Balance</beans:value>
 				<beans:value>com.liberation.lab.model.Company</beans:value>
 				<beans:value>com.liberation.lab.model.CompanyCategory</beans:value>
+				<beans:value>com.liberation.lab.model.Stock</beans:value>
+				<beans:value>com.liberation.lab.model.Portfolio</beans:value>
+				<beans:value>com.liberation.lab.model.PriceBoard</beans:value>
+				<beans:value>com.liberation.lab.model.Orders</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
@@ -135,6 +139,47 @@
 		<beans:property name="companyCategoryDAO" ref="companyCategoryDAO"></beans:property>
 	</beans:bean>
 	
+	<!-- STOCK BEAN -->
+	<beans:bean id="stockDAO" class="com.liberation.lab.dao.StockDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="stockService"
+		class="com.liberation.lab.service.StockServiceImpl">
+		<beans:property name="stockDAO" ref="stockDAO"></beans:property>
+	</beans:bean>
+	
+	<!-- PORTFOLIO BEAN -->
+	<beans:bean id="portfolioDAO" class="com.liberation.lab.dao.PortfolioDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="portfolioService"
+		class="com.liberation.lab.service.PortfolioServiceImpl">
+		<beans:property name="portfolioDAO" ref="portfolioDAO"></beans:property>
+	</beans:bean>
+	
+	<!-- PRICEBOARD BEAN -->
+	<beans:bean id="priceBoardDAO" class="com.liberation.lab.dao.PriceBoardDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="priceBoardService"
+		class="com.liberation.lab.service.PriceBoardServiceImpl">
+		<beans:property name="priceBoardDAO" ref="priceBoardDAO"></beans:property>
+	</beans:bean>
+	
+	<!-- ORDERS BEAN -->
+	<beans:bean id="ordersDAO" class="com.liberation.lab.dao.OrdersDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="ordersService"
+		class="com.liberation.lab.service.OrdersServiceImpl">
+		<beans:property name="ordersDAO" ref="ordersDAO"></beans:property>
+	</beans:bean>
+	
+	<!-- BEANS DECLARATION ENDS -->
 	<context:component-scan base-package="com.liberation.lab" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />

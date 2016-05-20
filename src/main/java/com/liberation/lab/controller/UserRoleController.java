@@ -20,22 +20,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.liberation.lab.model.UserRole;
 import com.liberation.lab.service.UserRoleService;
+import com.liberation.lab.service.UserService;
 
 @Controller
 public class UserRoleController {
+	
+	private UserRoleService userRoleService;
+	
+	@Autowired(required=true)
+	@Qualifier(value="userRoleService")
+	public void setUserRoleService(UserRoleService us){
+		this.userRoleService = us;
+	}
 
-    private UserRoleService userRoleService;
+    private UserService userService;
     
     @Autowired(required=true)
-    @Qualifier(value="userRoleService")
-    public void setUserRoleService(UserRoleService us){
-        this.userRoleService = us;
+    @Qualifier(value="userService")
+    public void setUserService(UserService us){
+        this.userService = us;
     }
      
     @RequestMapping(value = {"/core/userRole"}, method = RequestMethod.GET)
     public String listUserRoles(Model model) {
         model.addAttribute("userRole", new UserRole());
         model.addAttribute("listUserRoles", this.userRoleService.listUserRoles());
+        model.addAttribute("listUsers", this.userService.listUsers());
         return "core/coreUserRole";
     }
      
@@ -88,6 +98,7 @@ public class UserRoleController {
     public String editUserRole(@PathVariable("userRoleId") int id, Model model){
         model.addAttribute("userRole", this.userRoleService.getUserRoleById(id));
         model.addAttribute("listUserRoles", this.userRoleService.listUserRoles());
+        model.addAttribute("listUsers", this.userService.listUsers());
         return "/core/coreUserRole";
     }
      

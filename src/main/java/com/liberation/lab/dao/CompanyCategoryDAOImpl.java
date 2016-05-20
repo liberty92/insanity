@@ -23,7 +23,7 @@ public class CompanyCategoryDAOImpl implements CompanyCategoryDAO {
     @Override
     public void addCompanyCategory(CompanyCategory u) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.saveOrUpdate(u);
+        session.persist(u);
         logger.info("CompanyCategory saved successfully, CompanyCategory Details="+u);
     }
  
@@ -46,7 +46,7 @@ public class CompanyCategoryDAOImpl implements CompanyCategoryDAO {
     }
  
     @Override
-    public CompanyCategory getCompanyCategoryById(String id) {
+    public CompanyCategory getCompanyCategoryById(int id) {
         Session session = this.sessionFactory.getCurrentSession();      
         CompanyCategory u = (CompanyCategory) session.get(CompanyCategory.class, (id));
         logger.info("CompanyCategory loaded successfully, CompanyCategory details="+u);
@@ -54,7 +54,7 @@ public class CompanyCategoryDAOImpl implements CompanyCategoryDAO {
     }
  
     @Override
-    public void removeCompanyCategory(String id) {
+    public void removeCompanyCategory(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         CompanyCategory u = (CompanyCategory) session.load(CompanyCategory.class, (id));
         if(null != u){

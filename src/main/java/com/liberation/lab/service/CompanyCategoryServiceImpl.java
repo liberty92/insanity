@@ -35,13 +35,13 @@ public class CompanyCategoryServiceImpl implements CompanyCategoryService{
  
     @Override
     @Transactional
-    public CompanyCategory getCompanyCategoryById(String id) {
+    public CompanyCategory getCompanyCategoryById(int id) {
         return this.companyCategoryDAO.getCompanyCategoryById(id);
     }
  
     @Override
     @Transactional
-    public void removeCompanyCategory(String id) {
+    public void removeCompanyCategory(int id) {
         this.companyCategoryDAO.removeCompanyCategory(id);
     }
  

@@ -40,11 +40,136 @@
 					<!-- 1. TRADING -->
 					<li class="dropdown-short">
 						<a data-toggle="dropdown" href="${pageContext.request.contextPath}/admin" class="dropdown-toggle"
-						onclick="location.href ='${pageContext.request.contextPath}/admin';"
+						ondblclick="location.href ='${pageContext.request.contextPath}/admin';"
 						 aria-expanded="true">
 							<i class="fa fa-connectdevelop"></i>&nbsp;
 							<span class="hidden-sm">Dashboard</span> 
+							<span class="caret"></span>
 						</a>
+						
+						
+							<ul class="dropdown-menu" style="min-width:350px"> 
+							
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/admin">
+									Dashboard controller
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li> 
+							
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/core/user">
+									User
+									<span class="desc">
+									<span style="color:red">Core engine</span> - Core engine
+									</span>
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li> 
+							
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/core/userRole">
+									User role
+									<span class="desc">
+									<span style="color:red">Core engine</span> - User role
+									</span>
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li> 
+							
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/core/balance">
+									Balance
+									<span class="desc">
+									<span style="color:red">Core engine</span> - Balance
+									</span>
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li> 
+							
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/core/portfolio">
+									Portfolio
+									<span class="desc">
+									<span style="color:red">Core engine</span> - Portfolio
+									</span>
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li> 
+							
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/core/company">
+									Company
+									<span class="desc">
+									<span style="color:red">Core engine</span> - Company
+									</span>
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li> 
+							
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/core/companyCategory">
+									Company category
+									<span class="desc">
+									<span style="color:red">Core engine</span> - Company category
+									</span>
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li> 
+							
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/core/stock">
+									Stock
+									<span class="desc">
+									<span style="color:red">Core engine</span> - Stock
+									</span>
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li> 
+							
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/core/priceBoard">
+									Price board
+									<span class="desc">
+									<span style="color:red">Core engine</span> - Price board
+									</span>
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li> 
+							
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/core/orders">
+									Orders
+									<span class="desc">
+									<span style="color:red">Core engine</span> - Orders
+									</span>
+									</a>
+								</p>
+							</li>
+							
+						 
+							
+							
+						</ul>
 
 					
 					</li>

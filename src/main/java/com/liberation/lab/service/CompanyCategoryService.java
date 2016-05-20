@@ -9,6 +9,6 @@ public interface CompanyCategoryService {
     public void addCompanyCategory(CompanyCategory u);
     public void updateCompanyCategory(CompanyCategory u);
     public List<CompanyCategory> listCompanyCategory();
-    public CompanyCategory getCompanyCategoryById(String id);
-    public void removeCompanyCategory(String id);
+    public CompanyCategory getCompanyCategoryById(int id);
+    public void removeCompanyCategory(int id);
 }

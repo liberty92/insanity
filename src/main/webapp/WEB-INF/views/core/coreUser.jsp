@@ -13,6 +13,7 @@
 <!-- Meta data -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
@@ -39,7 +40,7 @@
 				</h1>
 			</div>
 			<div class="row">
-				<%@ include file="../template/frontend/menu/menu.jsp"%>  
+				<%@ include file="../template/frontend/menu/menuAdmin.jsp"%>  
 			</div>
 			<div class="row">
 				<c:if test="${!empty listUsers}">
@@ -47,7 +48,7 @@
 						<div class="panel-body">
 							<h2>List Users</h2>
 							<div class="table-responsive">
-							<table class="table table-hover table-striped table-bordered">
+							<table id="dataTable" class="table table-hover table-striped table-bordered">
 								<thead>
 									<tr>
 										<th width="100">User ID</th>
@@ -184,6 +185,13 @@
  
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
-
+		
+		<script src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+		<script src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$('#dataTable').DataTable();
+	} );
+</script>
 </body>
 </html>

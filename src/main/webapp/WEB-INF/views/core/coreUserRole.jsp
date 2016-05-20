@@ -12,12 +12,26 @@
 <title>UserRole manager - BK Securities core engine</title>
 <!-- Meta data -->
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	
+<link
+	href="${pageContext.request.contextPath}/resources/css/select2.min.css"
+	rel="stylesheet">
+<script
+	src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
 
-<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
+<link
+	href="${pageContext.request.contextPath}/resources/images/core/favicon.ico"
+	rel="shortcut icon">
 
 <%-- 
 	<link href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet">
@@ -26,12 +40,12 @@
 	<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
 
  --%>
-<style type="text/css"> 
+<style type="text/css">
 </style>
 </head>
 <body>
 
-	<div class="container-fluid" style="width:95%" >
+	<div class="container-fluid" style="width: 95%">
 		<div class="row">
 			<div class="row">
 				<h1>
@@ -39,9 +53,9 @@
 						style="float: right;">User role manager</span>
 				</h1>
 			</div>
-			
+
 			<div class="row">
-				<%@ include file="../template/frontend/menu/menu.jsp"%>  
+				<%@ include file="../template/frontend/menu/menuAdmin.jsp"%>
 			</div>
 
 			<div class="row">
@@ -50,29 +64,38 @@
 						<div class="panel-body">
 							<h2>List user role</h2>
 							<div class="table-responsive">
-							<table class="table table-hover table-striped table-bordered">
-								<thead>
-									<tr>
-										<th width="200">User role ID</th>
-										<th width="200">User Id</th>
-										<th>User role</th>
-										<th width="100">Edit</th>
-										<th width="100">Delete</th>
-									</tr>
-								</thead>
-								<c:forEach items="${listUserRoles}" var="u">
-									<tr>
-										<td>${u.userRoleId}</td>
-										<td>${u.userId}</td>
-										<td>${u.userRole}</td>
-										<td><a
-											href="<c:url value='/core/editUserRole/${u.userRoleId}' />">Edit</a></td>
-										<td><a
-											href="<c:url value='/core/removeUserRole/${u.userRoleId}' />">Delete</a></td>
-									</tr>
-								</c:forEach>
-							</table>
-						</div>
+								<table id="dataTable"
+									class="table table-hover table-striped table-bordered">
+									<thead>
+										<tr>
+											<th width="50">Index</th>
+											<th width="200">User role ID</th>
+											<th width="200">User Id</th>
+											<th width="200">User Name</th>
+											<th>User role</th>
+											<th width="100">Edit</th>
+											<th width="100">Delete</th>
+										</tr>
+									</thead>
+									<c:forEach items="${listUserRoles}" var="u" varStatus="loop">
+										<tr>
+											<td>${loop.index + 1}</td>
+											<td>${u.userRoleId}</td>
+											<td>${u.userId}</td>
+											<td>
+												<c:forEach items="${listUsers}" var="user">
+													<c:if test="${u.userId == user.userId }">${user.userFullName}</c:if>
+												</c:forEach>
+											</td>
+											<td>${u.userRole}</td>
+											<td><a
+												href="<c:url value='/core/editUserRole/${u.userRoleId}' />">Edit</a></td>
+											<td><a
+												href="<c:url value='/core/removeUserRole/${u.userRoleId}' />">Delete</a></td>
+										</tr>
+									</c:forEach>
+								</table>
+							</div>
 						</div>
 					</div>
 				</c:if>
@@ -94,35 +117,35 @@
 									<label for="">User Id</label> <input type="hidden"
 										class="form-control" name="userRoleId"
 										value="${userRole.userRoleId}" id=""
-										placeholder="Demo content"> <input type="text"
+										placeholder="Demo content"> 
+										<%-- <input type="text"
 										class="form-control" name="userId" value="${userRole.userId}"
-										id="" placeholder="Demo content">
-									<%--
-								<select name="" id="input" class="form-control"
-									required="required">
-									<c:if test="${!empty listUserRoles}">
-										<c:forEach items="${listUserRoles}" var="u">
-											<option class="id" value="${u.userId}">${u.userId}</option>
+										id="" placeholder="Demo content"> --%>
+										
+								<select name="userId" id="dropdownSelect" class="form-control dropdownSelect"
+									required="required"> 
+										<c:forEach items="${listUsers}" var="user">
+											<option value="${user.userId}">${user.userId} - ${user.userFullName}</option>
 										</c:forEach>
-									</c:if>
 								</select>
-								--%>
+								
 
 								</div>
 
 								<div class="form-group">
 									<label for="">Role</label>
-									<%-- 
-							<select name="" id="input"
+									 
+							<select name="userRole" id="input"
 								class="form-control" required="required">
-								<option value="CUSTOMER">CUSTOMER</option>
-								<option value="NEWS_MANAGER">NEWS_MANAGER</option>
-								<option value="SYSTEM_MANAGER">SYSTEM_MANAGER</option>
+								<option value="CUSTOMER"  <c:if test="${userRole.userRole == CUSTOMER}"> selected="selected" </c:if> >CUSTOMER</option>
+								<option value="NEWS_MANAGER" <c:if test="${userRole.userRole == NEWS_MANAGER}"> selected="selected" </c:if>>NEWS_MANAGER</option>
+								<option value="SYSTEM_MANAGER" <c:if test="${userRole.userRole == SYSTEM_MANAGER}"> selected="selected" </c:if>>SYSTEM_MANAGER</option>
 							</select>
-							--%>
+							
 
-									<input type="text" class="form-control" name="userRole"
-										value="${userRole.userRole}" id="" placeholder="Demo content">
+									<%-- <input type="text" class="form-control" name="userRole"
+										value="${userRole.userRole}" id="" placeholder="Demo content"> --%>
+										
 								</div>
 
 
@@ -141,8 +164,14 @@
 			</div>
 		</div>
 	</div>
- 
-	<script src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
+
+	<script
+		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
+
+	<script
+		src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 
 	<script type="text/javascript">
 		function checkDuplicateOption() {
@@ -159,7 +188,8 @@
 		}
 
 		$(document).ready(function() {
-
+			$('#dataTable').DataTable();
+			$(".dropdownSelect").select2();
 		});
 	</script>
 </body>

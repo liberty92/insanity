@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page session="true"%>
 <!DOCTYPE html>
 <html>
@@ -19,10 +19,19 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+<script
+	src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 
 
 <link rel="stylesheet" type="text/css"
@@ -41,6 +50,12 @@ LOCAL
 <script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 --%>
+
+<style>
+label, .dataTables_info{
+	color:white;
+}
+</style>
 </head>
 <body>
 	<div class="container-fluid 111">
@@ -52,17 +67,17 @@ LOCAL
 
 			<div class="col-xs-12">
 
-				<div class="listArticle" style="margin-bottom:10px">
+				<div class="listArticle" style="margin-bottom: 10px">
 
 					<div class="title">
 
 						<span style="color: #00aeef; font-size: 2em; margin-left: 10px">${listArticles[0].articleTypeId}</span>
-						
+
 					</div>
 
 
 					<div class="table-responsive" style="margin: 0px 10px">
-						<table
+						<table id="dataTable"
 							class="table table-responsive table-hover table-striped table-bordered">
 							<thead>
 								<tr>
@@ -101,16 +116,19 @@ LOCAL
 							</c:if>
 						</table>
 
-						<div class="col-xs-12" style="padding:0px;">
-							<button type="button" class="btn btn-primary btn-lg" style="float: left;" 
+						<div class="col-xs-12" style="padding: 0px;">
+							<button type="button" class="btn btn-primary btn-lg"
+								style="float: left;"
 								onclick="location.href ='${pageContext.request.contextPath}/admin/addArticleForm';">
-								<i style="color:white" class="fa fa-plus-square" >
-								</i> Add article</button>
-								
-								
-								<span style="float: right; font-weight:bold; color:white">Total:
-									<span style="font-weight:bold; color:#00aeef ">${fn:length(listArticles)} articles</span>
-								 </span>
+								<i style="color: white" class="fa fa-plus-square"> </i> Add
+								article
+							</button>
+
+
+							<span style="float: right; font-weight: bold; color: white">Total:
+								<span style="font-weight: bold; color: #00aeef">${fn:length(listArticles)}
+									articles</span>
+							</span>
 						</div>
 					</div>
 
@@ -183,12 +201,7 @@ LOCAL
 </html>
 
 <script type="text/javascript">
-	$(document).ready(
-			function() {
-				var glow = $('.insanity');
-				setInterval(function() {
-					glow.hasClass('glow') ? glow.removeClass('glow') : glow
-							.addClass('glow');
-				}, 4000);
-			});
+$(document).ready(function() {
+	$('#dataTable').DataTable();
+} );
 </script>

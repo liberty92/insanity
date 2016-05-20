@@ -397,6 +397,9 @@
                         <li class="dropdown-grid">
                             <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
                             <i class="fa fa-lock"></i>&nbsp;
+                            <c:if test="${empty sessionScope.userFullName}">
+                            Đăng nhập
+                            </c:if>
                             <span class="hidden-sm"><c:out value="${sessionScope.userFullName}"/></span>
                             <span class="caret"></span>
                             </a>

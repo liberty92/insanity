@@ -12,15 +12,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Article manager - BK Securities core engine</title>
 <!-- Meta data -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
 
-<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+	
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 
-<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
+<link
+	href="${pageContext.request.contextPath}/resources/images/core/favicon.ico"
+	rel="shortcut icon">
 
 
 <%-- 
@@ -35,7 +44,7 @@
 </head>
 <body>
 
-	<div class="container-fluid" style="width:95%" >
+	<div class="container-fluid" style="width: 95%">
 		<div class="row">
 			<div class="row">
 				<h1>
@@ -44,7 +53,7 @@
 				</h1>
 			</div>
 			<div class="row">
-			<%@ include file="../template/frontend/menu/menu.jsp"%>  
+				<%@ include file="../template/frontend/menu/menuAdmin.jsp"%>
 			</div>
 			<div class="row">
 				<c:if test="${!empty listArticles}">
@@ -52,7 +61,7 @@
 						<div class="panel-body">
 							<h2>List Articles</h2>
 							<div class="table-responsive">
-								<table
+								<table id="dataTable"
 									class="table table-responsive table-hover table-striped table-bordered">
 									<thead>
 										<tr>
@@ -70,9 +79,9 @@
 										</tr>
 									</thead>
 									<c:forEach items="${listArticles}" var="a" varStatus="loop">
-										<tr  style="height:80px;">
-											<td style="text-align:center; font-weight:bold">${loop.index}</td>
-											<td style="text-align:center;">${a.articleId}</td>
+										<tr style="height: 80px;">
+											<td style="text-align: center; font-weight: bold">${loop.index}</td>
+											<td style="text-align: center;">${a.articleId}</td>
 											<td style="word-break: break-all;">${a.articleTypeId}</td>
 											<td>${a.articleTitle}</td>
 											<td>${fn:substring(a.articleSummary,0,100)}</td>
@@ -130,10 +139,13 @@
 								</div>
 
 								<div class="form-group">
-									<label for="">Content</label> 
+									<label for="">Content</label>
 
-									<textarea name="articleContent" value="${article.articleContent}" id="input" class="form-control" rows="10" placeholder="Demo content" required="required">${article.articleContent}</textarea>
- 
+									<textarea name="articleContent"
+										value="${article.articleContent}" id="input"
+										class="form-control" rows="10" placeholder="Demo content"
+										required="required">${article.articleContent}</textarea>
+
 								</div>
 
 
@@ -177,10 +189,15 @@
 
 		</div>
 	</div>
- 
+
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
+
+	<script
+		src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootstrap-datetimepicker.min.js"></script>
 
@@ -211,7 +228,7 @@
 		$(document)
 				.ready(
 						function() {
-
+							$('#dataTable').DataTable();
 							var $datetimepicker = $('#datetimepicker');
 
 							var d = new Date();

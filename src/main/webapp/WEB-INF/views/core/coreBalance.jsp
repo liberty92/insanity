@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page session="true"%>
 <!DOCTYPE html>
 <head>
@@ -12,12 +12,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Balance manager - BK Securities core engine</title>
 <!-- Meta data -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
+<link
+	href="${pageContext.request.contextPath}/resources/css/select2.min.css"
+	rel="stylesheet">
+<script
+	src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
+
+<link
+	href="${pageContext.request.contextPath}/resources/images/core/favicon.ico"
+	rel="shortcut icon">
 
 <%-- 
 	<link href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet">
@@ -26,12 +40,12 @@
 	<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
 
  --%>
-<style type="text/css"> 
+<style type="text/css">
 </style>
 </head>
 <body>
 
-	<div class="container-fluid" style="width:95%" >
+	<div class="container-fluid" style="width: 95%">
 		<div class="row">
 			<div class="row">
 				<h1>
@@ -40,7 +54,7 @@
 				</h1>
 			</div>
 			<div class="row">
-				<%@ include file="../template/frontend/menu/menu.jsp"%>  
+				<%@ include file="../template/frontend/menu/menuAdmin.jsp"%>
 			</div>
 			<div class="row">
 				<c:if test="${!empty listBalances}">
@@ -48,63 +62,64 @@
 						<div class="panel-body">
 							<h2>List Balances</h2>
 							<div class="table-responsive">
-							<table class="table table-hover table-striped table-bordered">
-								<thead>
-									<tr>
-										<th width="50">Index</th>
-										<th width="50">ID</th>
-										<th width="100">User ID</th>
-										<th width="100">Balance Name</th>
-										<th width="100">Created Date</th>
-										<th width="100">Initial NAV</th>
-										<th width="100">Cash</th>
-										<th width="100">Total assets</th>
-										<th width="50">NAV</th>
-										<th width="50">Margin</th>
-										<th width="50">State</th> 
-										<th width="50">Edit</th>
-										<th width="50">Delete</th>
-									</tr>
-								</thead>
-								<c:forEach items="${listBalances}" var="u"  varStatus="loop">
-									<tr>
-										<td style="text-align:center; font-weight:bold">${loop.index +1}</td>
-										<td>${u.balanceId}</td>
-										<td>${u.userId}
-										<c:forEach items="${listUsers}" var="user">
-											<c:if test="${user.userId == u.userId}">
-													<br/>${user.userFullName}
-                                            	</c:if> 
-										</c:forEach>
-										</td>
-										<td>${u.balanceName}</td>
-										<td>${u.balanceCreatedDate}</td>
-										<td class="formatNummber" style="text-align:right;color: blue">
-										<fmt:parseNumber var="i" type="number" value="${u.balanceInitialNAV}" pattern="#,###"/>
-										<c:out value="${i}"/> đ 
-										</td>
-										<td class="formatNummber" style="text-align:right;color: blue">
-										<fmt:parseNumber var="i" type="number" value="${u.balanceCash}" pattern="#,###"/>
-										<c:out value="${i}"/> đ 
-										</td>
-										<td class="formatNummber" style="text-align:right;color: blue">
-										<fmt:parseNumber var="i" type="number" value="${u.balanceTotalAssets}" pattern="#,###"/>
-										<c:out value="${i}"/> đ 
-										</td>
-										<td class="formatNummber" style="text-align:right;color: blue">
-										<fmt:parseNumber var="i" type="number" value="${u.balanceNAV}" pattern="#,###"/>
-										<c:out value="${i}"/> đ 
-										</td> 
-										<td>${u.balanceMarginRate}</td> 
-										<td>${u.balanceState}</td>
-										<td><a
-											href="<c:url value='/core/editBalance/${u.balanceId}' />">Edit</a></td>
-										<td><a
-											href="<c:url value='/core/removeBalance/${u.balanceId}' />">Delete</a></td>
-									</tr>
-								</c:forEach>
-							</table>
-						</div>
+								<table id="dataTable"
+									class="table table-hover table-striped table-bordered">
+									<thead>
+										<tr>
+											<th width="50">Index</th>
+											<th width="50">ID</th>
+											<th width="100">User ID</th>
+											<th width="100">Balance Name</th>
+											<th width="100">Created Date</th>
+											<th width="100">Initial NAV</th>
+											<th width="100">Cash</th>
+											<th width="100">Total assets</th>
+											<th width="50">NAV</th>
+											<th width="50">Margin</th>
+											<th width="50">State</th>
+											<th width="50">Edit</th>
+											<th width="50">Delete</th>
+										</tr>
+									</thead>
+									<c:forEach items="${listBalances}" var="u" varStatus="loop">
+										<tr>
+											<td style="text-align: center; font-weight: bold">${loop.index +1}</td>
+											<td>${u.balanceId}</td>
+											<td>${u.userId}<c:forEach items="${listUsers}"
+													var="user">
+													<c:if test="${user.userId == u.userId}">
+														<br />${user.userFullName}
+                                            	</c:if>
+												</c:forEach>
+											</td>
+											<td>${u.balanceName}</td>
+											<td>${u.balanceCreatedDate}</td>
+											<td class="formatNummber"
+												style="text-align: right; color: blue"><fmt:parseNumber
+													var="i" type="number" value="${u.balanceInitialNAV}"
+													pattern="#,###" /> <c:out value="${i}" /> đ</td>
+											<td class="formatNummber"
+												style="text-align: right; color: blue"><fmt:parseNumber
+													var="i" type="number" value="${u.balanceCash}"
+													pattern="#,###" /> <c:out value="${i}" /> đ</td>
+											<td class="formatNummber"
+												style="text-align: right; color: blue"><fmt:parseNumber
+													var="i" type="number" value="${u.balanceTotalAssets}"
+													pattern="#,###" /> <c:out value="${i}" /> đ</td>
+											<td class="formatNummber"
+												style="text-align: right; color: blue"><fmt:parseNumber
+													var="i" type="number" value="${u.balanceNAV}"
+													pattern="#,###" /> <c:out value="${i}" /> đ</td>
+											<td>${u.balanceMarginRate}</td>
+											<td>${u.balanceState}</td>
+											<td><a
+												href="<c:url value='/core/editBalance/${u.balanceId}' />">Edit</a></td>
+											<td><a
+												href="<c:url value='/core/removeBalance/${u.balanceId}' />">Delete</a></td>
+										</tr>
+									</c:forEach>
+								</table>
+							</div>
 						</div>
 					</div>
 				</c:if>
@@ -123,20 +138,21 @@
 
 								<div class="form-group">
 									<label for="">User Id</label> <input type="hidden"
-										class="form-control" name="balanceId" value="${balance.balanceId}"
-										id="" placeholder="Demo content"> 
-										
-										<select name="userId" id="input" class="form-control" >
-											<c:forEach items="${listUsers}" var="user">
-												<option value="${user.userId}">${user.userFullName}</option>
-											</c:forEach>
-										</select>
+										class="form-control" name="balanceId"
+										value="${balance.balanceId}" id="" placeholder="Demo content">
+
+									<select name="userId" id="input" class="form-control dropdownSelect" id="dropdownSelect">
+										<c:forEach items="${listUsers}" var="user">
+											<option value="${user.userId}">${user.userId} - ${user.userFullName}</option>
+										</c:forEach>
+									</select>
 								</div>
 
 								<div class="form-group">
 									<label for="">Balance name</label> <input type="text"
-										class="form-control" name="balanceName" value="${balance.balanceName}"
-										id="" placeholder="Demo content">
+										class="form-control" name="balanceName"
+										value="${balance.balanceName}" id=""
+										placeholder="Demo content">
 								</div>
 
 								<label for="">Created date</label>
@@ -158,8 +174,9 @@
 
 								<div class="form-group">
 									<label for="">Cash</label> <input type="text"
-										class="form-control" name="balanceCash" value="${balance.balanceCash}"
-										id="" placeholder="Demo content">
+										class="form-control" name="balanceCash"
+										value="${balance.balanceCash}" id=""
+										placeholder="Demo content">
 								</div>
 
 								<div class="form-group">
@@ -178,14 +195,16 @@
 								<div class="form-group">
 									<label for="">Margin rate</label> <input type="text"
 										class="form-control" name="balanceMarginRate"
-										value="${balance.balanceMarginRate}" id="" placeholder="Demo content">
+										value="${balance.balanceMarginRate}" id=""
+										placeholder="Demo content">
 								</div>
 
 								<div class="form-group">
 									<label for="">State</label> <input type="text"
 										class="form-control" name="balanceState"
-										value="${balance.balanceState}" id="" placeholder="Demo content">
-								</div> 
+										value="${balance.balanceState}" id=""
+										placeholder="Demo content">
+								</div>
 
 
 								<br />
@@ -202,10 +221,14 @@
 
 		</div>
 	</div>
- 
+
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
-		<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootstrap-datetimepicker.min.js"></script>
 
@@ -232,19 +255,21 @@
 		$('#datetimepicker').datetimepicker({
 			format : 'DD-MM-YYYY HH:mm:ss'
 		});
-		
-		$.fn.digits = function(){ 
-		    return this.each(function(){ 
-		        $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") ); 
-		    })
+
+		$.fn.digits = function() {
+			return this.each(function() {
+				$(this).text(
+						$(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g,
+								"$1,"));
+			})
 		}
-		
-		 
 
 		$(document)
 				.ready(
 						function() {
+							$('#dataTable').DataTable();
 							$(".formatNummber").digits();
+							$(".dropdownSelect").select2();
 
 							var $datetimepicker = $('#datetimepicker');
 
