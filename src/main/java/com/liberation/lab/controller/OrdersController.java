@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.liberation.lab.model.Orders;
+import com.liberation.lab.model.Stock;
+import com.liberation.lab.model.TransactionResult;
 import com.liberation.lab.model.Orders;
 import com.liberation.lab.service.OrdersService;
 import com.liberation.lab.service.StockService;
@@ -82,7 +84,7 @@ public class OrdersController {
 	}
  
 	@RequestMapping(value = "/core/addOrder", method = RequestMethod.POST)
-	public String addOrders(Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String addOrders(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		try {
 			request.setCharacterEncoding("UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -108,6 +110,7 @@ public class OrdersController {
 		String orderType = request.getParameter("orderType");
 		String orderState = request.getParameter("orderState");
 
+		Stock s = stockService.getStockById(stockId); 
 		
 		// FIXED CODE, MARGIN'S NOT ENABLED YET
 		double margin = 0;
@@ -153,13 +156,59 @@ public class OrdersController {
 		b.setOrderType(orderType);
 		b.setMargin(margin);
 		b.setOrderState(orderState);
+		
+		
+		
+		// TRANSACTION STARTS
+		Transaction t = new Transaction();
+		TransactionResult tr = t.transaction(b,s);
+		
+		if(tr.isResult() == false){
+			b.setOrderState("WAITING");
+		}
+		else{
+			// MATCHED ALL
+			if(tr.getMatchQuantity() == b.getQuantity()){
+				b.setPrice(tr.getMatchedPrice());
+				b.setOrderState("SUCCEEDED");
+				
+				//UPDATE BALANCE - ADD OR MINUS CASH
+				
+			}
+			// PARTIAL MATCHED
+			else{
+				double remainQuantity = b.getQuantity() - tr.getMatchQuantity();
+				b.setPrice(tr.getMatchedPrice());
+				b.setQuantity(tr.getMatchQuantity());
+				b.setOrderState("SUCCEEDED");
+				
+				
+				//UPDATE BALANCE - ADD OR MINUS CASH
+				
+				//CREATE ORDER FOR THE REMAINED QUANTITY
+				Orders remain = new Orders();
+				remain.setBalanceId(b.getBalanceId());
+				remain.setStockId(b.getStockId());
+				remain.setCreatedTime(b.getCreatedTime());
+				remain.setPrice(b.getPrice());
+				remain.setQuantity(remainQuantity);
+				remain.setAction(b.getAction());
+				remain.setOrderType(b.getOrderType());
+				remain.setMargin(b.getMargin());
+				remain.setOrderState("WAITING");
+				this.ordersService.addOrders(remain);
+			}
+		}
+		
+		
 
 		if (orderId == 0) {
 			// new orders, add it
 			this.ordersService.addOrders(b);
 		} else {
 			// existing orders, call update
-			this.ordersService.updateOrders(b);
+			// ORDER IS CAN NOT BE UPDATED!
+			// this.ordersService.updateOrders(b);
 		}
 		return "redirect:/core/orders";
 	}
