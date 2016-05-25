@@ -86,10 +86,10 @@ public class UserController {
 		ur.setUserId(newUser.getUserId());
 		ur.setUserRole("CUSTOMER");
 		this.userRoleService.addUserRole(ur);
-		session.setAttribute("welcomeMessage", "Chào mừng "+userFullName+" đến với Insanity! Bạn hãy đăng nhập để tiếp tục.");
+		session.setAttribute("welcomeMessage", "Welcome to INSANITY, "+userFullName+" ! Please login to continue!");
 		}
 		catch(Exception e){
-			session.setAttribute("registerErrorMessager", "Tên đăng nhập đã có người sử dụng, bạn hãy chọn tên khác!");
+			session.setAttribute("registerErrorMessager", "This username is unavailable, please choose another one!");
 			return "redirect:/register";
 		}
 		return "redirect:/login";
@@ -139,9 +139,9 @@ public class UserController {
 		if (this.getMD5(password).equals(u.getPassword()) && password2.equals(password3)) {
 			u.setPassword(this.getMD5(password2));
 			this.userService.updateUser(u);
-			session.setAttribute("updateMessage", "Mật khẩu của bạn đã được cập nhật");
+			session.setAttribute("updateMessage", "Your password has been successfully updated!");
 		} else {
-			session.setAttribute("updateError", "Đã sảy ra lỗi khi cập nhật mật khẩu! Hãy kiểm tra lại thông tin");
+			session.setAttribute("updateError", "Some error occured ! Please check your information again1");
 		}
 		return "redirect:/user/Info";
 	}
@@ -192,7 +192,7 @@ public class UserController {
 		session.setAttribute("userPhoneNumber", userPhoneNumber);
 		session.setAttribute("userProfilePicture", userProfilePicture);
 
-		session.setAttribute("updateMessage", "Thông tin của bạn đã được cập nhật!");
+		session.setAttribute("updateMessage", "Your information has been successfully updated!");
 		return "redirect:/user/Info";
 	}
 
