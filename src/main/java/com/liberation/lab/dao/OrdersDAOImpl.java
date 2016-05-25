@@ -55,7 +55,16 @@ public class OrdersDAOImpl implements OrdersDAO {
     @Override
     public List<Orders> getOrdersByBalanceId(int balanceId) {
         Session session = this.sessionFactory.getCurrentSession();  
-        List <Orders> listOrdersByBalanceId = session.createQuery("from Orders where balanceId =:balanceId").setParameter("balanceId", balanceId).list();
+        List <Orders> listOrdersByBalanceId = session.createQuery("from Orders where balanceId =:balanceId order by createdTime desc").setParameter("balanceId", balanceId).list();
+		for (Orders b : listOrdersByBalanceId) {
+			logger.info("Orders List::" + b);
+		}
+        return listOrdersByBalanceId;
+    }
+    @Override
+    public List<Orders> getOrdersByBalanceIdToday(int balanceId) {
+        Session session = this.sessionFactory.getCurrentSession();  
+        List <Orders> listOrdersByBalanceId = session.createQuery("from Orders o where o.balanceId =:balanceId and o.createdTime > CURRENT_DATE() order by createdTime desc").setParameter("balanceId", balanceId).list();
 		for (Orders b : listOrdersByBalanceId) {
 			logger.info("Orders List::" + b);
 		}

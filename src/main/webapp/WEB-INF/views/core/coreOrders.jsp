@@ -641,7 +641,10 @@
 							$(".formatPercent").formatPercent();
 							$(".formatQuantity").formatQuantity();
 							
-							$('#dataTable').DataTable();
+							$('#dataTable').DataTable({
+						        "aLengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
+						        "iDisplayLength": -1
+						    });
 							$(".dropdownSelect").select2();
 							
 						/* 	$("a").click(function(){

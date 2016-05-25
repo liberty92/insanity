@@ -24,7 +24,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 
 
-
+<link href="${pageContext.request.contextPath}/resources/css/select2.min.css" rel="stylesheet">
 <c:if test="${empty sessionScope.theme}">
 	<link rel="stylesheet" type="text/css"
 		href="${pageContext.request.contextPath}/resources/css/style2.css">
@@ -44,6 +44,8 @@ LOCAL -->
 <link
 	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
 	rel="stylesheet">
+	
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <!-- JS -->
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
@@ -74,24 +76,16 @@ table {
 			<!--2. Main body-->
 
 			<div class="row " style="margin: 0px 10px">
-				<div class="col-md-9 listArticle"
+				<!-- <div class="col-md-9 listArticle" -->
+				<div class="col-md-12 listArticle"
 					style="padding-left: 10px; padding-right: 10px;">
 					<div
 						style="border-bottom: 1px solid #00aeef; padding-top: 0px; padding-bottom: 10px; margin-top: 0px; margin-bottom: 5px;">
 						<span
 							style="text-transform: uppercase; font-size: 23px; font-weight: bold; color: #00aeef; float: left">
-							Danh mục đầu tư</span> &nbsp; 
-							<button id="btn1" type="button" style="float:right; margin-left: 6px; padding:3px 12px;"
-									onclick="window.location.href='${pageContext.request.contextPath}/user/portfolioHistory/${balance.balanceId}'"
-									 class="btn btn-primary">
-									 <i class="fa fa-history" >
-									 Lịch sử danh mục
-									 </i>
-									 </button>
-							<span
+							Lịch sử giao dịch</span> &nbsp; <span
 							style="float: right; margin-top: 10px">Balance ID:
-							${balance.balanceId} - ${balance.balanceName}</span>
-							
+							${user.userId} - ${user.userFullName}</span>
 					</div>
 
 
@@ -121,110 +115,43 @@ table {
 						</c:if>
 
 						<div class="row">
-						
-						
-						
-						<div class="table-responsive">
-								<table id="dataTable"
-									class="table table-hover table-striped table-bordered">
-									<thead>
-										<tr>
-											<th width="30">ID</th>
-											<th width="100">Tên TK</th>
-											<th width="30">Ngày tạo</th>
-											<th width="80">NAV gốc</th>
-											<th width="80">Tiền mặt</th>
-											<th width="80">Tổng TS</th>
-											<th width="80">NAV</th>
-											<th width="30">Margin</th>
-											<th width="30">Xóa</th>
-										</tr>
-									</thead>
-										<tr>
-											<td>${balance.balanceId}</td>
-											<td>${balance.balanceName} </td>
-											<td>${balance.balanceCreatedDate}</td>
-											<td id="n1" class="formatNummber"
-												style="text-align: right; color: blue">
-												${balance.balanceInitialNAV}</td>
-											<td class="formatNummber"
-												style="text-align: right; color: blue">
-												${balance.balanceCash}</td>
-											<td class="formatNummber"
-												style="text-align: right; color: blue">
-												${balance.balanceTotalAssets}</td>
-											<td class="formatNummber"
-												style="text-align: right; color: blue">${balance.balanceNAV}</td>
-											<td>${balance.balanceMarginRate}</td>
-											<td
-												style="padding-left: 0px; padding-right: 0px; text-align: center;">
-												<a onclick="return confirm('Xác nhận xóa tài khoản?')"
-												style="color: red !important; font-weight: bold"
-												href="<c:url value='/user/removeBalance/${balance.balanceId}' />">Delete</a>
-											</td>
-										</tr>
-								</table>
-							</div>
-						
-					 
-						
 							<div class="table-responsive">
-								<table id="dataTable"
+								<table id="dataTable" style="color: blue"
 									class="table table-hover table-striped table-bordered">
 									<thead>
 										<tr>
-											<th width="30">STT</th>
+											<th width="20">STT</th>
+											<th width="30">TK</th>
 											<th width="30">ID</th>
-											<th width="50">Mã CK</th>
-											<th width="80">Số lượng</th>
-											<th width="80">Giá mua</th>
-											<th width="80">Tổng GT</th>
-											<th width="80">Giá hiện tại</th>
-											<th width="80">Tổng GT</th>
-											<th width="30">+/-</th>
-											<th width="30">%</th>
-											<th width="80">Ngày mua</th>
+											<th width="50">CK</th>
+											<th width="80" style="max-width: 80px !important; padding-right:2px;">Action</th>
+											<th width="80">Loại lệnh</th>
+											<th width="80">Giá</th>
+											<th width="80">Khối lượng</th>
+											<th width="80" style="max-width: 100px !important; padding-right:8px;">Tổng GT</th>
+											<th width="90" >Thời gian</th>
+											<th width="80">Trạng thái</th>
 										</tr>
 									</thead>
-									
-									<c:forEach items="${listPortfolios}" var="u" varStatus="loop">
+
+									<c:forEach items="${listOrders}" var="u" varStatus="loop">
 										<tr>
 											<td style="text-align: center; font-weight: bold">${loop.index +1}</td>
-											<td>${u.portfolioId}</td>
-											<td style="color: blue; font-weight:bold">
-												<c:forEach items="${listStocks}" var="stock">  
+											<td>${u.balanceId}</td>
+											<td>${u.orderId}</td>
+											<td style="color: blue; font-weight: bold"><c:forEach
+													items="${listStocks}" var="stock">
 													<c:if test="${stock.stockId == u.stockId}"> 
 														${stock.stockName} 
 													</c:if>
-												</c:forEach> 
-											
-											</td>
-											<td style="text-align: right" class="formatQuantity">${u.quantity}</td>
-											<td style="text-align: right">${u.buyPrice}</td>
-											<td class="formatNummber" style="text-align: right">${u.buyPrice * u.quantity*1000}</td>
-											<td  style="text-align: right">
-											
-												<c:forEach items="${listPriceBoard}" var="pb">
-													<c:if test="${pb.stockId == u.stockId}">
-														<c:if test="${pb.matchPrice != 0}">
-															<c:set var="temp0" scope="session" value="${pb.matchPrice}"/>
-															${temp0}
-														</c:if>
-														<c:if test="${pb.matchPrice == 0}">
-															<c:set var="temp0" scope="session" value="${pb.price}"/>
-															${temp0}
-														</c:if>
-														<c:set var="temp1" scope="session" value="${temp0*u.quantity*1000}"/>
-														<c:set var="temp2" scope="session" value="${temp0*u.quantity*1000 - u.buyPrice * u.quantity*1000}"/>
-														<c:set var="temp3" scope="session" value="${temp2/(u.buyPrice*u.quantity*1000)*100 }"/>
-													</c:if>
-												</c:forEach>
-											
-											</td>
-											<td class="formatNummber"   style="text-align: right; color: green; ">${temp1}</td>
-											<td class="formatNummber"  style="text-align: right ; color: green;<c:if test="${temp2 < 0}"> color:red</c:if>">${temp2}</td> 
-											<td class="formatPercent"  style="font-weight: bold;text-align: right ; color: green; <c:if test="${temp2 < 0}"> color:red</c:if>">${temp3}</td> 
-											<td>${u.buyDate}</td>
+												</c:forEach></td>
+											<td style="text-align: right; max-width: 80px !important;">${u.action}</td>
+											<td style="text-align: right">${u.orderType}</td>
+											<td style="text-align: right">${u.price}</td>
+											<td class="formatQuantity" style="text-align: right">${u.quantity}</td>
+											<td class="formatNummber"  style="text-align: right;max-width: 100px !important;">${u.price * u.quantity*1000}</td>
+											<td class="formatTime" >${u.createdTime}</td>
+											<td>${u.orderState}</td>
 										</tr>
 									</c:forEach>
 								</table>
@@ -235,27 +162,29 @@ table {
 
 
 
+
+
  
 
 
 
 
-
-
-
 					</div>
 
 
 
 				</div>
 
-				<div class="col-md-3" style="padding-right: 0px">
+	<%-- 			<div class="col-md-3" style="padding-right: 0px">
 					<div class="col-xs-12 sideBarWrapper">
 						<div class="Side-bar">
 							<%@ include file="../template/frontend/rightside.jsp"%>
 						</div>
 					</div>
-				</div>
+				</div> --%>
+				
+				
+				
 			</div>
 		</div>
 		<!-- ====================== BODY ENDS =================================== -->
@@ -269,59 +198,110 @@ table {
 
 
 
-	<div class="modal fade" id="changeInfo">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Tạo tài khoản</h4>
-				</div>
-				<div class="modal-body">
-
-					<form action="${pageContext.request.contextPath}/user/addBalance"
-						method="POST" role="form" data-toggle="validator">
-
-						<input type="hidden" value="${user.userId}" name="userId">
-
-						<div class="form-group">
-							<label for="">Tên tài khoản</label> <input type="text"
-								data-minlength="3" required value="" class="form-control"
-								name="balanceName" id="" placeholder="demo 1">
-						</div>
-
-						<div class="form-group">
-							<div>
-								<label for=""><span style="float: left">NAV ban
-										đầu</span> </label><span id="cashDisplay"
-									style="color: blue; float: right; font-weight: bold">0</span>
-							</div>
-							<input type="number" pattern="[0-9]*" min="100000" max="10e9"
-								required value="" class="form-control" name="balanceInitialNAV"
-								id="cashInput" placeholder="10,000,000">
-						</div>
-
-
-						<button type="submit" class="btn btn-primary">Submit</button>
-					</form>
-
-
-
-				</div>
-			</div>
-		</div>
-	</div>
 
 
 
 </body>
 </html>
 <script
+	src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
+<script
 	src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
+	
+	
+		<script src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+		<script src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript">
+	var priceBoard  = [0.0,0.0,0.0];
+	var cash = 0;
+	
+	$('#orderForm').on('submit', function() {
+	    // check validation
+		   var p = $("#orderPrice").val();
+		   var q = $("#orderQuantity").val();
+		   var stockId = $('#inputStockId').val();
+		   var balanceId = $('#inputBalanceId').val();
+		 	
+		   stockId = parseInt(stockId);
+		   balanceId = parseInt(balanceId);
 
+		   if( balanceId<=0){
+			   bootbox.alert("Bạn chưa chọn tài khoản!", function() {
+				});
+			   return false
+		   }
 
+		   if(stockId<=0){
+			   bootbox.alert("Bạn chưa chọn mã chứng khoán!", function() {
+				});
+			   return false
+		   }
+		   
+		   if(p > priceBoard[1] ){
+			   bootbox.alert("Bạn đã đặt giá mua lớn hơn giá trần!", function() {
+				});
+			   return false
+		   }
+		   if(p < priceBoard[2] ){
+			   bootbox.alert("Bạn đã đặt giá mua nhỏ hơn giá sàn!", function() {
+				});
+			   return false
+		   }
+	        return true;
+	});
+	
+	$('#orderQuantity').on('blur', function (e) {
+		var p = $("#orderPrice").val();
+	    var q = $("#orderQuantity").val();
+	    var value1 = p*q*1000;
+	    
+	    var a = parseFloat(value1);
+		 
+	    $('#tradeValue').text(accounting.formatMoney(a));
+	   	 
+	}); 
+	
+	$('#inputBalanceId').on('change', function (e) {
+	    var balanceId = this.value;
+	    
+	    $.ajax({
+            url : '${pageContext.request.contextPath}/user/ajaxGetBalanceInfo',
+            data : {
+            	balanceId : balanceId
+            },
+            success : function(responseText) {
+            	cash = parseFloat(responseText);
+            	$('#balanceInfo').text("Sức mua: " + accounting.formatMoney(responseText));
+                 
+            }
+        });
+	   	 
+	}); 
 
+	
+	$('#inputStockId').on('change', function (e) {
+	    var stockId = this.value;
+	    
+	    $.ajax({
+            url : '${pageContext.request.contextPath}/user/ajaxGetStockInfo',
+            data : {
+            	stockId : stockId
+            },
+            success : function(responseText) {
+            	var tempArray = responseText.split("|");
+            	priceBoard[0] = parseFloat(tempArray[0]);
+            	priceBoard[1] = parseFloat(tempArray[1]);
+            	priceBoard[2] = parseFloat(tempArray[2]);
+            	
+            	$('#p1').text("TC: "+tempArray[0]);
+            	$('#p2').text("Trần: "+tempArray[1]);
+            	$('#p3').text("Sàn: "+tempArray[2]);
+            	$('#p4').text("Max: "+(cash/priceBoard[1]/1000).toFixed(0));
+            }
+        });
+	   	 
+	}); 
+	
 	$.fn.digits = function() {
 		return this.each(function() {
 			$(this).text(
@@ -329,21 +309,17 @@ table {
 		})
 	};
 
-	$.fn.digits2 = function() {
-		return this.each(function() {
-			var a = parseFloat($(this).text());
-			$(this).text(accounting.formatMoney(a));
-		})
-	};
+
 
 	$.fn.formatPercent = function() {
 		return this.each(function() {
 			var a = parseFloat($(this).text());
 			var b = Math.round(a * 100) / 100;
-			$(this).text(b +"%");
+			$(this).text(b + "%");
 		})
 	};
 	
+
 
 	$.fn.formatQuantity = function() {
 		return this.each(function() {
@@ -355,18 +331,37 @@ table {
 		})
 	};
 
+	$.fn.formatTime = function() {
+		return this.each(function() {
+			var a = ($(this).text());
+			$(this).text(a.substring(10, 19) + " "+ a.substring(8, 10) + "/"+a.substring(5, 7)+"/"+a.substring(0, 4) );
+		})
+	};
+	
+	
+	/* $("a[aria-controls]").click(function(){
+		alert();
+		$(".formatTime").formatTime();
+	});
+ */
 	function confirmDelete() {
 		var x = 2;
-		bootbox.prompt("Hãy nhập OK để xác nhận xóa tài khoản", function(result) {                
-			  if (result == "OK") {
-				  x = 4;
-				  alert(x>3);
-			  }
-		});
-		
-		return x>3;
-	};
+		bootbox.prompt("Hãy nhập OK để xác nhận xóa tài khoản",
+				function(result) {
+					if (result == "OK") {
+						x = 4;
+						alert(x > 3);
+					}
+				});
 
+		return x > 3;
+	};
+	$.fn.digits2 = function() {
+		return this.each(function() {
+			var a = parseFloat($(this).text());
+			$(this).text(accounting.formatMoney(a));
+		})
+	};
 	accounting.settings = {
 		currency : {
 			symbol : " đ", // default currency symbol is '$'
@@ -385,11 +380,37 @@ table {
 	/* var xx = ${user.userId};
 	var x2 = accounting.formatMoney(xx);
 	$('#n1').html(x2); */
-
 	$(document).ready(
-			function() {
+			function() { 
+				 
+
+				 $('#dataTable').DataTable({
+				        "aLengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
+				        "iDisplayLength": -1
+				    });
+				 
+/* 				 $('#myTable').on( 'draw.dt', function () {
+					 $(".formatNummber").digits2();
+						$(".formatPercent").formatPercent();
+						$(".formatTime").formatTime();
+					} );
 				
-			
+				 $('#dataTable')
+			        .on( 'order.dt',  function () { console.log('Order' ); } )
+			        .on( 'search.dt', function () {console.log('Search' ); } )
+			        .on( 'page.dt',   function () {
+			        	$(".formatNummber").digits2();
+						$(".formatPercent").formatPercent();
+						$(".formatTime").formatTime();
+			        	} )
+			        .dataTable(); */
+			        /* 
+			        var table = $('#dataTable').dataTable();
+			        table.fnSettings()._iDisplayLength = 5; //variable from your question
+			        //table.fnDraw();
+  */
+				 
+				$(".dropdownSelect").select2();
 
 				$('#cashInput').keyup(function() {
 					var raw_num = $(this).val();
@@ -401,9 +422,10 @@ table {
 					}); */
 				//$(".formatNummber").html(accounting.formatMoney($(this).val()));
 				// $(".formatNummber").digits();
-				$(".formatQuantity").formatQuantity();
 				$(".formatNummber").digits2();
 				$(".formatPercent").formatPercent();
+				$(".formatTime").formatTime();
+				$(".formatQuantity").formatQuantity();
 				var glow = $('.insanity');
 				setInterval(function() {
 					glow.hasClass('glow') ? glow.removeClass('glow') : glow

@@ -34,7 +34,14 @@
 	
 	<div style="position:absolute; top:0px;right:0px; width:100px; height:50px; z-index:99999; background: rgba(0,0,0,0.0)">&nbsp;</div>
 		<iframe width="700px" style="margin:auto;position:relative; left:-30px; height:230px; padding:3px 0px" class="" scrolling="no" frameborder="3px"  src="http://tcsc.vn:8080/TCSCIframe/chart/hcmchart#hnxindex" frameborder="0" allowfullscreen="1"></iframe>
-		<iframe width="700px" style="margin:auto;position:relative; left:-408px; height:230px; padding:3px 0px" class="" scrolling="no" frameborder="3px"  src="http://tcsc.vn:8080/TCSCIframe/chart/hcmchart#hnxindex" frameborder="0" allowfullscreen="1"></iframe>
+		
+		<iframe height="220px" class="img-responsive" scrolling="no" frameborder="0" id="iframeGiaVang" 
+		src="http://giavang.doji.vn/sites/default/files/bieudo/tabs.html?t=0.396166338986611"></iframe>
+		
+		<!-- <iframe width="700px" style="margin:auto;position:relative; left:-408px; 
+		height:230px; padding:3px 0px" class="" scrolling="no" frameborder="3px"  
+		src="http://tcsc.vn:8080/TCSCIframe/chart/hcmchart#hnxindex"
+		 frameborder="0" allowfullscreen="1"></iframe> -->
 	</div>
 	</div>
 	

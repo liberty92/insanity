@@ -18,7 +18,10 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="${pageContext.request.contextPath}"  style="  padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 5px; ">
+				<%-- <a class="navbar-brand" href="${pageContext.request.contextPath}" 
+				 style="  padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 5px; "> --%>
+				<a class="navbar-brand" href="http://www.nth7.com"  
+				style="  padding-top: 0px; padding-bottom: 0px; padding-left: 5px; padding-right: 5px; ">
 					<!-- <i class="fa fa-home"></i>
 					<span style="font-size: 12">HOME</span> -->
 					<img src="${pageContext.request.contextPath}/resources/images/core/logo.png" height="48px"  />
@@ -65,6 +68,17 @@
 									Quản lý tài khoản
 									<span class="desc">
 									Balance management
+									</span>
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/user/tradingHistory">
+									Lịch sử giao dịch
+									<span class="desc">
+									Trading history
 									</span>
 									</a>
 								</p>

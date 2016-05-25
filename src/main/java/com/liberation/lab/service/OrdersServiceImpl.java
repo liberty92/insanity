@@ -50,4 +50,10 @@ public class OrdersServiceImpl implements OrdersService{
 	public List<Orders> getOrdersByBalanceId(int balanceId) {
 		return this.ordersDAO.getOrdersByBalanceId(balanceId);
 	}
+
+	@Override
+	@Transactional
+	public List<Orders> getOrdersByBalanceIdToday(int balanceId) {
+		return this.ordersDAO.getOrdersByBalanceIdToday(balanceId);
+	}
 }

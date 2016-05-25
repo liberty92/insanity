@@ -46,7 +46,7 @@
 			<div class="row contact">
 				<div style="overflow:hidden">
 					<strong>Địa chỉ:</strong>
-					Liberation Lab, Liberty palace  <br/>71A Định Công, Hoàng Mai, Hà Nội
+					Liberation Lab, Liberty palace  <br/>74A Định Công, Hà Nội
 				</div>
 			</div>
 			<div class="row contact">
@@ -61,10 +61,10 @@
 			</div>
 			<div class="row contact">
 				<div style="overflow:hidden">
-					<strong>Email :</strong> info@bkdelivery.com.vn <br />
+					<strong>Email :</strong> liberty4692@gmail.com <br />
 					<br/>
 					<strong>Website: </strong> 
-					<a target="_blank">http://www.bkdelivery.com.vn</a>
+					<a  style="color:#00AEEF" target="_blank">http://www.nth7.com</a>
 				</div>
 			</div>
 		</div>

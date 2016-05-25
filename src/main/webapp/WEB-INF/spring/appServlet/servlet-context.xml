@@ -3,6 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
     http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/beans 
@@ -12,7 +13,9 @@
         http://www.springframework.org/schema/tx 
         http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
         http://www.springframework.org/schema/mvc 
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/task 
+        http://www.springframework.org/schema/task/spring-task-4.0.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing 
 		infrastructure -->
@@ -35,22 +38,22 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 
-<!--  	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+  	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<beans:property name="url" value="jdbc:mysql://localhost:3306/bksecurities?UseUnicode=true&amp;characterEncoding=utf8" />
 		<beans:property name="username" value="root" />
 		<beans:property name="password" value="" />
-	</beans:bean> -->
+	</beans:bean>
 	
 <!-- 	OPENSHIFT DEPLOYING -->
- 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+<!-- 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<beans:property name="url" value="jdbc:mysql://127.5.181.2:3306/insanity?UseUnicode=true&amp;characterEncoding=utf8" />
-		<beans:property name="username" value="adminxx6Upz1" />
-		<beans:property name="password" value="yeYN9jfJQRcH" />
-	</beans:bean> 
+		<beans:property name="url" value="jdbc:mysql://127.2.208.2:3306/insanity?UseUnicode=true&amp;characterEncoding=utf8" />
+		<beans:property name="username" value="adminwsVQVzw" />
+		<beans:property name="password" value="_l1EdkSlQ8i-" />
+	</beans:bean> -->
 
 	<!-- Hibernate 4 SessionFactory Bean definition -->
 	<beans:bean id="hibernate4AnnotatedSessionFactory"
@@ -68,6 +71,7 @@
 				<beans:value>com.liberation.lab.model.Portfolio</beans:value>
 				<beans:value>com.liberation.lab.model.PriceBoard</beans:value>
 				<beans:value>com.liberation.lab.model.Orders</beans:value>
+				<beans:value>com.liberation.lab.model.TransactionUpdater</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
@@ -179,8 +183,24 @@
 		<beans:property name="ordersDAO" ref="ordersDAO"></beans:property>
 	</beans:bean>
 	
+	<!-- ORDERS BEAN -->
+	<beans:bean id="transactionUpdaterDAO" class="com.liberation.lab.dao.TransactionUpdaterDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="transactionUpdaterService"
+		class="com.liberation.lab.service.TransactionUpdaterServiceImpl">
+		<beans:property name="transactionUpdaterDAO" ref="transactionUpdaterDAO"></beans:property>
+	</beans:bean>
+	
 	<!-- BEANS DECLARATION ENDS -->
+
+
 	<context:component-scan base-package="com.liberation.lab" />
+	<task:scheduler id="updateTransaction"/>
+    <task:scheduled-tasks scheduler="updateTransaction">
+        <task:scheduled ref="orderController" method="checkTransactionAllWaitingOrders" fixed-delay="180000" />
+    </task:scheduled-tasks>
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 

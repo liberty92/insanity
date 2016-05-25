@@ -11,5 +11,6 @@ public interface OrdersDAO {
     public List<Orders> listOrders();
     public Orders getOrdersById(int id);
     public List<Orders> getOrdersByBalanceId(int balanceId);
+    public List<Orders> getOrdersByBalanceIdToday(int balanceId);
     public void removeOrders(int id);
 }

@@ -27,6 +27,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -51,6 +52,7 @@ import com.liberation.lab.service.BalanceService;
 import java.util.List;
 
 @Controller
+@Component("orderController")
 public class OrdersController {
 
 	private UserService userService;
@@ -110,7 +112,7 @@ public class OrdersController {
 		List<Orders> listOrders = new ArrayList();
 		for (int i = 0; i < listBalance.size(); i++) {
 			int balanceId = listBalance.get(i).getBalanceId();
-			List<Orders> thisBalanceOrders = this.ordersService.getOrdersByBalanceId(balanceId);
+			List<Orders> thisBalanceOrders = this.ordersService.getOrdersByBalanceIdToday(balanceId);
 			for (int j = 0; j < thisBalanceOrders.size(); j++) {
 				listOrders.add(thisBalanceOrders.get(j));
 			}
@@ -123,6 +125,38 @@ public class OrdersController {
 		model.addAttribute("listUsers", this.userService.listUsers());
 		model.addAttribute("listBalances", this.balanceService.getBalanceByUserId(userId));
 		return "user/trading";
+	}
+
+	@RequestMapping(value = { "/user/tradingHistory" }, method = RequestMethod.GET)
+	public String userTradingHistory(Model model, HttpServletRequest request, HttpServletResponse response) {
+
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+
+		int userId = 0;
+		if (session.getAttribute("userId") != null) {
+			userId = Integer.parseInt(session.getAttribute("userId").toString());
+		}
+		User u = this.userService.getUserById(userId);
+
+		List<Balance> listBalance = this.balanceService.getBalanceByUserId(userId);
+		List<Orders> listOrders = new ArrayList();
+		for (int i = 0; i < listBalance.size(); i++) {
+			int balanceId = listBalance.get(i).getBalanceId();
+			List<Orders> thisBalanceOrders = this.ordersService.getOrdersByBalanceId(balanceId);
+			for (int j = 0; j < thisBalanceOrders.size(); j++) {
+				listOrders.add(thisBalanceOrders.get(j));
+			}
+		}
+
+		model.addAttribute("user", u);
+		model.addAttribute("order", new Orders());
+		model.addAttribute("listOrders", listOrders);
+		model.addAttribute("listStocks", this.stockService.listStock());
+		model.addAttribute("listUsers", this.userService.listUsers());
+		model.addAttribute("listBalances", this.balanceService.getBalanceByUserId(userId));
+		return "user/tradingHistory";
 	}
 
 	@RequestMapping(value = "/user/addOrder", method = RequestMethod.POST)
@@ -353,27 +387,29 @@ public class OrdersController {
 	
 
 	public void timeoutCancelAllWaitingOrders() {
+		System.out.println(new java.util.Date()+ " TIMEOUT CANCELLING ALL TRANSACTION");
 		List<Orders> listOrders = this.ordersService.listOrders();
 		for (int i = 0; i < listOrders.size(); i++) {
 			if (listOrders.get(i).getOrderState().equals("WAITING")) {
 				this.timeoutCancelOrder(listOrders.get(i));
-				System.out.println("CANCELLED ORDER "+ listOrders.get(i).getOrderId());
+				System.out.println(new java.util.Date()+" - CANCELLED ORDER "+ listOrders.get(i).getOrderId());
 			}
 		}
 	}
 
 	public void checkTransactionAllWaitingOrders() throws Exception {
-		
+		System.out.println(new java.util.Date()+ " UPDATING ALL TRANSACTION");
 		List<Orders> listOrders = this.ordersService.listOrders();
 		for (int i = 0; i < listOrders.size(); i++) {
 			if (listOrders.get(i).getOrderState().equals("WAITING")) {
+				System.out.println(new java.util.Date()+ " - ORDER "+ listOrders.get(i).getOrderId()+" IS BEING PROCESSED");
 				boolean checkOrder = this.transaction(listOrders.get(i));
 				if (checkOrder == true) {
 					this.updateBalanceAndPortfolioAfterTransaction(listOrders.get(i));
-					System.out.println("ORDER "+ listOrders.get(i).getOrderId()+" COMPLETED !!!");
+					System.out.println(new java.util.Date()+" - ORDER "+ listOrders.get(i).getOrderId()+" COMPLETED !!!");
 				}
 				else{
-					System.out.println("ORDER "+ listOrders.get(i).getOrderId()+" STILL WAITING !!!");
+					System.out.println(new java.util.Date()+" - ORDER "+ listOrders.get(i).getOrderId()+" STILL WAITING");
 				}
 			}
 		}

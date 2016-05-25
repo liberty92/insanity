@@ -10,7 +10,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>I N S A N I T Y | Admin</title>
+<title>Liberty Invest</title>
 <!-- Meta data -->
 
 <!-- CDN -->
@@ -83,7 +83,7 @@ table {
 						<span
 							style="text-transform: uppercase; font-size: 23px; font-weight: bold; color: #00aeef; float: left">
 							Giao dịch trực tuyến</span> &nbsp; <span
-							style="float: right; margin-top: 10px">Balance ID:
+							style="float: right; margin-top: 10px">User ID:
 							${user.userId} - ${user.userFullName}</span>
 					</div>
 
@@ -112,68 +112,6 @@ table {
 								</strong>
 							</div>
 						</c:if>
-
-						<div class="row">
-							<div class="table-responsive">
-								<table id="dataTable" style="color: blue"
-									class="table table-hover table-striped table-bordered">
-									<thead>
-										<tr>
-											<th width="20">STT</th>
-											<th width="30">TK</th>
-											<th width="30">ID</th>
-											<th width="50">CK</th>
-											<th width="80">Action</th>
-											<th width="80">Loại lệnh</th>
-											<th width="80">Giá</th>
-											<th width="80">Khối lượng</th>
-											<th width="80">Tổng GT</th>
-											<th width="80">Thời gian</th>
-											<th width="80">Trạng thái</th>
-											<th width="40">Hủy</th>
-										</tr>
-									</thead>
-
-									<c:forEach items="${listOrders}" var="u" varStatus="loop">
-										<tr>
-											<td style="text-align: center; font-weight: bold">${loop.index +1}</td>
-											<td>${u.balanceId}</td>
-											<td>${u.orderId}</td>
-											<td style="color: blue; font-weight: bold"><c:forEach
-													items="${listStocks}" var="stock">
-													<c:if test="${stock.stockId == u.stockId}"> 
-														${stock.stockName} 
-													</c:if>
-												</c:forEach></td>
-											<td style="text-align: right">${u.action}</td>
-											<td style="text-align: right">${u.orderType}</td>
-											<td style="text-align: right">${u.price}</td>
-											<td class="formatQuantity" style="text-align: right">${u.quantity}</td>
-											<td class="formatNummber" style="text-align: right">${u.price * u.quantity*1000}</td>
-											<td class="formatTime" >${u.createdTime}</td>
-											<td>${u.orderState}</td>
-											<td
-												style="padding-left: 0px; padding-right: 0px; text-align: center;">
-												
-												<c:if test="${u.orderState == 'WAITING'}">
-												<a onclick="return confirm('Xác nhận hủy lệnh?')"
-												style="color: red !important; font-weight: bold"
-												href="<c:url value='/user/removeOrder/${u.orderId}' />">Hủy</a>
-												</c:if>
-												
-												
-												
-											</td>
-										</tr>
-									</c:forEach>
-								</table>
-							</div>
-						</div>
-
-
-
-
-
 
 
 
@@ -246,6 +184,18 @@ table {
 
 											</div>
 
+
+
+
+
+										</div>
+
+										<div class="col-sm-6">
+
+
+									<div class="row">
+										<div class="col-sm-4">
+										
 											<div class="form-group">
 												<label for="">Action</label> <select class="form-control"
 													name="action">
@@ -254,25 +204,10 @@ table {
 												</select>
 
 											</div>
-
-
-											<div class="form-group">
-												<label for="">Using margin</label> <select
-													class="form-control" name="marginState">
-													<option value="NO">No</option>
-													<option value="YES">Yes</option>
-												</select>
-
-											</div>
-
-
 										</div>
-
-										<div class="col-sm-6">
-
-
-
-											<div class="form-group">
+										<div class="col-sm-4">
+										
+										<div class="form-group">
 												<label for="">Order type</label> <select
 													class="form-control" name="orderType">
 													<option value="LO">LO</option>
@@ -281,18 +216,51 @@ table {
 													<option value="ATC">ATC</option>
 												</select>
 											</div>
+										
+										</div>
+										<div class="col-sm-4">
+										
+											<div class="form-group">
+												<label for="">Using margin</label> <select
+													class="form-control" name="marginState">
+													<option value="NO">No</option>
+													<option value="YES">Yes</option>
+												</select>
 
+											</div>
+										</div>
+								 
+									
+									
+									</div>
+									 
+									 
+									 <div class="row">
+									 			<div class="col-sm-4">
+										
 											<div class="form-group">
 												<label for="">Price</label> <input type="number" step="0.1"
 													class="form-control" name="price" value="${order.price}"
 													id="orderPrice" placeholder="Demo content">
 											</div>
-
-											<div class="form-group">
+										</div>
+										
+													<div class="col-sm-8">
+										
+										<div class="form-group">
 												<label for="">Quantity</label> <input type="number"
 													step="10" class="form-control" name="quantity"
 													value="${order.quantity}" id="orderQuantity" placeholder="Demo content">
 											</div>
+										</div>
+									 
+									 
+									 
+									 </div>
+
+											
+
+											
 
 											<div class="form-group">
 												<button type="submit" style="float:left" class="btn btn-primary">Submit</button>
@@ -320,6 +288,72 @@ table {
 							</div>
 						</div>
 						</div>
+
+
+
+
+						<div class="row">
+							<div class="table-responsive">
+								<table id="dataTable" style="color: blue"
+									class="table table-hover table-striped table-bordered">
+									<thead>
+										<tr>
+											<th width="20">STT</th>
+											<th width="30">TK</th>
+											<th width="30">ID</th>
+											<th width="50">CK</th>
+											<th width="80">Action</th>
+											<th width="80">Loại lệnh</th>
+											<th width="80">Giá</th>
+											<th width="80">Khối lượng</th>
+											<th width="80" style="max-width: 100px !important; padding-right:8px;">Tổng GT</th>
+											<th width="80">Thời gian</th>
+											<th width="80">Trạng thái</th>
+											<th width="40">Hủy</th>
+										</tr>
+									</thead>
+
+									<c:forEach items="${listOrders}" var="u" varStatus="loop">
+										<tr>
+											<td style="text-align: center; font-weight: bold">${loop.index +1}</td>
+											<td>${u.balanceId}</td>
+											<td>${u.orderId}</td>
+											<td style="color: blue; font-weight: bold"><c:forEach
+													items="${listStocks}" var="stock">
+													<c:if test="${stock.stockId == u.stockId}"> 
+														${stock.stockName} 
+													</c:if>
+												</c:forEach></td>
+											<td style="text-align: right">${u.action}</td>
+											<td style="text-align: right">${u.orderType}</td>
+											<td style="text-align: right">${u.price}</td>
+											<td class="formatQuantity" style="text-align: right">${u.quantity}</td>
+											<td class="formatNummber" style="text-align: right; max-width: 100px !important;">${u.price * u.quantity*1000}</td>
+											<td class="formatTime" >${u.createdTime}</td>
+											<td>${u.orderState}</td>
+											<td
+												style="padding-left: 0px; padding-right: 0px; text-align: center;">
+												
+												<c:if test="${u.orderState == 'WAITING'}">
+												<a onclick="return confirm('Xác nhận hủy lệnh?')"
+												style="color: red !important; font-weight: bold"
+												href="<c:url value='/user/removeOrder/${u.orderId}' />">Hủy</a>
+												</c:if>
+												
+												
+												
+											</td>
+										</tr>
+									</c:forEach>
+								</table>
+							</div>
+						</div>
+
+
+
+
+
+
 
 
 
