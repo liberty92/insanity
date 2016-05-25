@@ -7,10 +7,10 @@
 		<div class="panel-heading"
 			style="background: rgba(202, 202, 202, 0.67)">
 			<ul class="nav nav-tabs" style="padding-bottom: 0px">
-				<li class="active"><a href="#tab1default" data-toggle="tab"><span style="font-weight:bold;color:#0A4256">News</span>
+				<li class="active"><a href="#tab1default" data-toggle="tab"><span style="font-weight:bold;color:#0A4256">Tin tức</span>
 						</a></li>
-				<li><a href="#tab2default" data-toggle="tab"><span style="font-weight:bold;color:#0A4256">Market</span></a></li>
-				<li><a href="#tab3default" data-toggle="tab"><span style="font-weight:bold;color:#0A4256">Announcement</span></a></li>
+				<li><a href="#tab2default" data-toggle="tab"><span style="font-weight:bold;color:#0A4256">Thị trường</span></a></li>
+				<li><a href="#tab3default" data-toggle="tab"><span style="font-weight:bold;color:#0A4256">Thông báo</span></a></li>
 			</ul>
 		</div>
 		<div class="panel-body">
@@ -20,11 +20,38 @@
 					<!-- TAB PANEL STARTS -->
 					<div class="row">
 						<div class="row" style="margin: auto">
-							<div class="col-sm-4 homepageTabImage">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/core/tab4.png"
-									alt="Image">
+							<div class="col-sm-4 homepageTabImage" >
+							
+							
+							
+							
+	<div class="col-xs-12" style="background:#F6F6F6; height:470px; overflow:hidden; padding:0px">
+								
+		<h4 class="Header" style="padding:0px 10px;">
+			<a>Biểu đồ thị trường</a>
+		</h4>
+	<div class="col-xs-12" style="position:relative;overflow:hidden; background:#fff">
+	
+	<div style="position:absolute; top:0px;right:0px; width:100px; height:50px; z-index:99999; background: rgba(0,0,0,0.0)">&nbsp;</div>
+		<iframe width="700px" style="margin:auto;position:relative; left:-30px; height:230px; padding:3px 0px" class="" scrolling="no" frameborder="3px"  src="http://tcsc.vn:8080/TCSCIframe/chart/hcmchart#hnxindex" frameborder="0" allowfullscreen="1"></iframe>
+		<iframe width="700px" style="margin:auto;position:relative; left:-408px; height:230px; padding:3px 0px" class="" scrolling="no" frameborder="3px"  src="http://tcsc.vn:8080/TCSCIframe/chart/hcmchart#hnxindex" frameborder="0" allowfullscreen="1"></iframe>
+	</div>
+	</div>
+	
+							
+							<%-- 
+							
+								<img src="${pageContext.request.contextPath}/resources/images/core/tab4.png" alt="Image">
+									 --%>
+									
+									
+									
+									
 							</div>
+							
+							
+							
+							
 							<div class="col-sm-8 homepageTabArticle">
 
 								<!-- ARTICLE STARTS -->
@@ -74,7 +101,7 @@
 						<div class="row" style="margin: auto">
 							<div class="col-sm-4 homepageTabImage">
 								<img
-									src="${pageContext.request.contextPath}/resources/images/core/tab3.png"
+									src="${pageContext.request.contextPath}/resources/images/core/tab4.png"
 									alt="Image">
 							</div>
 							<div class="col-sm-8 homepageTabArticle">
@@ -129,7 +156,7 @@
 						<div class="row" style="margin: auto">
 							<div class="col-sm-4 homepageTabImage">
 								<img
-									src="${pageContext.request.contextPath}/resources/images/core/tab2.png"
+									src="${pageContext.request.contextPath}/resources/images/core/tab3.png"
 									alt="Image">
 							</div>
 							<div class="col-sm-8 homepageTabArticle">

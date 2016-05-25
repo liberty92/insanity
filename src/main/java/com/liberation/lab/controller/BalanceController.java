@@ -7,8 +7,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,11 +28,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.liberation.lab.model.Balance;
+import com.liberation.lab.model.Portfolio;
+import com.liberation.lab.model.PriceBoard;
+import com.liberation.lab.model.Stock;
 import com.liberation.lab.model.Balance;
 import com.liberation.lab.service.BalanceService;
+import com.liberation.lab.service.PortfolioService;
+import com.liberation.lab.service.StockService;
 import com.liberation.lab.service.UserService;
 
-import antlr.collections.List;
 
 @Controller
 public class BalanceController {
@@ -41,7 +48,6 @@ public class BalanceController {
 	public void setUserService(UserService us) {
 		this.userService = us;
 	}
-  
 
 	private BalanceService balanceService;
 
@@ -50,8 +56,71 @@ public class BalanceController {
 	public void setBalanceService(BalanceService us) {
 		this.balanceService = us;
 	}
- 
-  
+
+	private PortfolioService portfolioService;
+
+	@Autowired(required = true)
+	@Qualifier(value = "portfolioService")
+	public void setPortfolioService(PortfolioService us) {
+		this.portfolioService = us;
+	}
+
+	private StockService stockService;
+
+	@Autowired(required = true)
+	@Qualifier(value = "stockService")
+	public void setStockService(StockService us) {
+		this.stockService = us;
+	}
+
+	@RequestMapping(value = { "/user/balance" }, method = RequestMethod.GET)
+	public String listBalancesByUser(Model model,HttpServletRequest request, HttpServletResponse response) throws ServletException, Exception {
+		model.addAttribute("balance", new Balance());
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		
+		int userId = 0;
+		
+		if(session.getAttribute("userId") == null || session.getAttribute("userId").toString().length() <=0){
+			req.getRequestDispatcher("/403").forward(req, res);
+		}
+		else {
+			 userId = Integer.parseInt(session.getAttribute("userId").toString());
+		}
+		
+		List<Balance> listBalance = this.balanceService.getBalanceByUserId(userId);
+		for (int i = 0; i < listBalance.size(); i++) {
+			int balanceId = listBalance.get(i).getBalanceId();
+			List<Portfolio> listPortfolio = this.portfolioService.getPortfolioByBalanceId(balanceId);
+			double portfolioValue = 0;
+			for (int j = 0; j < listPortfolio.size(); j++) {
+				int StockId = listPortfolio.get(j).getStockId();
+				Stock s = this.stockService.getStockById(StockId);
+				String StockName = s.getStockName();
+				String StockExchange = s.getStockExchangeId();
+				
+				OrdersController oc = new OrdersController();
+				PriceBoard pb = oc.getStockPriceByStockname(StockId, StockName, StockExchange);
+				double stockCurrentPrice = 0;
+				if(pb.getMatchPrice() != 0)
+					stockCurrentPrice = pb.getMatchPrice();
+				else
+					stockCurrentPrice = pb.getPrice();
+				
+				portfolioValue += listPortfolio.get(j).getQuantity()*stockCurrentPrice*1000;
+			}
+			listBalance.get(i).setBalanceTotalAssets(listBalance.get(i).getBalanceCash()+ portfolioValue);
+			listBalance.get(i).setBalanceNAV(listBalance.get(i).getBalanceTotalAssets());
+			this.balanceService.updateBalance(listBalance.get(i));
+		}
+		
+		
+		model.addAttribute("user", this.userService.getUserById(userId));
+		model.addAttribute("listBalances", listBalance);
+		return "user/balance";
+	}
+
 	@RequestMapping(value = { "/core/balance" }, method = RequestMethod.GET)
 	public String listBalances(Model model) {
 		model.addAttribute("balance", new Balance());
@@ -59,7 +128,67 @@ public class BalanceController {
 		model.addAttribute("listUsers", this.userService.listUsers());
 		return "core/coreBalance";
 	}
+	
+
+	@RequestMapping(value = "/user/addBalance", method = RequestMethod.POST)
+	public String userAddBalance(Model model, HttpServletRequest request, HttpServletResponse response) {
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		int userId = 0;
+		if (request.getParameter("userId") != null) {
+			userId = Integer.parseInt(request.getParameter("userId"));
+		}
+		// ELSE DIE IMMEDIATELY DUE TO FOREIGN KEY CONSTRAINT!!!
+
+		String balanceName = request.getParameter("balanceName");
+		double balanceInitialNAV = 0;
+		if (request.getParameter("balanceInitialNAV") != null) {
+			balanceInitialNAV = Double.parseDouble(request.getParameter("balanceInitialNAV"));
+		}
+		double balanceCash = balanceInitialNAV;
+		 
+		double balanceTotalAssets = balanceCash;
+		 
+		double balanceNAV = balanceCash;
+		 
+		double balanceMarginRate = 0;
+		 
+		int balanceState = 1;
+		 
+		Timestamp balanceCreatedDate;
+		java.util.Date date = new java.util.Date();
+		balanceCreatedDate = new Timestamp(date.getTime());
+		 
  
+
+		Balance b = new Balance();
+		b.setUserId(userId);
+		b.setBalanceName(balanceName);
+		b.setBalanceCreatedDate(balanceCreatedDate);
+		b.setBalanceInitialNAV(balanceInitialNAV);
+		b.setBalanceCash(balanceCash);
+		b.setBalanceTotalAssets(balanceTotalAssets);
+		b.setBalanceNAV(balanceNAV);
+		b.setBalanceMarginRate(balanceMarginRate);
+		b.setBalanceState(balanceState);
+ 
+		this.balanceService.addBalance(b);
+	 
+		return "redirect:/user/balance";
+	}
+	
+	@RequestMapping("/user/removeBalance/{balanceId}")
+	public String userRemoveBalance(@PathVariable("balanceId") int id) {
+		Balance b = balanceService.getBalanceById(id);
+		b.setBalanceState(0);
+		this.balanceService.updateBalance(b);
+		return "redirect:/user/balance";
+	}
+
 	@RequestMapping(value = "/core/addBalance", method = RequestMethod.POST)
 	public String addBalance(Model model, HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -73,7 +202,7 @@ public class BalanceController {
 			userId = Integer.parseInt(request.getParameter("userId"));
 		}
 		// ELSE DIE IMMEDIATELY DUE TO FOREIGN KEY CONSTRAINT!!!
-		
+
 		String balanceName = request.getParameter("balanceName");
 		double balanceInitialNAV = 0;
 		if (request.getParameter("balanceInitialNAV") != null) {
@@ -100,10 +229,10 @@ public class BalanceController {
 			balanceState = Integer.parseInt(request.getParameter("balanceState"));
 		}
 		Timestamp balanceCreatedDate;
-		java.util.Date date= new java.util.Date();
+		java.util.Date date = new java.util.Date();
 		balanceCreatedDate = new Timestamp(date.getTime());
 		String balanceCreatedDateParam = request.getParameter("balanceCreatedDate").replaceAll("/", "-");
-		if(balanceCreatedDateParam != null){
+		if (balanceCreatedDateParam != null) {
 			String oldFormat = "dd-MM-yyyy HH:mm:ss";
 			String newFormat = "yyyy-MM-dd HH:mm:ss";
 			SimpleDateFormat sdf1 = new SimpleDateFormat(oldFormat);
@@ -116,13 +245,12 @@ public class BalanceController {
 				e.printStackTrace();
 			}
 		}
-		
+
 		int balanceId = 0;
 		if (request.getParameter("balanceId") != null && !request.getParameter("balanceId").equals("0")) {
 			// UPDATING
 			balanceId = Integer.parseInt(request.getParameter("balanceId"));
-		}
-		else{
+		} else {
 			balanceCash = balanceInitialNAV;
 			balanceTotalAssets = balanceInitialNAV;
 			balanceNAV = balanceInitialNAV;
@@ -166,7 +294,23 @@ public class BalanceController {
 		model.addAttribute("listUsers", this.userService.listUsers());
 		return "/core/coreBalance";
 	}
-
- 
+	
+	@RequestMapping("user/ajaxGetBalanceInfo")
+	public void ajaxGetBalanceInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpServletRequest req = (HttpServletRequest) request;
+    	HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		
+		int balanceId = 0;
+		if(req.getParameter("balanceId") != null && Integer.parseInt(req.getParameter("balanceId")) >0){
+			balanceId = Integer.parseInt(req.getParameter("balanceId"));
+			Balance balance = this.balanceService.getBalanceById(balanceId);
+			double cash = balance.getBalanceCash();
+			NumberFormat formatter = new DecimalFormat("###");
+			String result = formatter.format(cash);
+			response.setContentType("text/plain");
+	        response.getWriter().write(result);
+		}
+	}
 
 }

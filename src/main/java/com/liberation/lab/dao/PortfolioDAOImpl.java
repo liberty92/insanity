@@ -55,7 +55,16 @@ public class PortfolioDAOImpl implements PortfolioDAO {
     @Override
     public List<Portfolio> getPortfolioByBalanceId(int balanceId) {
         Session session = this.sessionFactory.getCurrentSession();  
-        List <Portfolio> listPortfolioByBalanceId = session.createQuery("from Portfolio where balanceId =:balanceId").setParameter("balanceId", balanceId).list();
+        List <Portfolio> listPortfolioByBalanceId = session.createQuery("from Portfolio where balanceId =:balanceId and sellPrice=0").setParameter("balanceId", balanceId).list();
+		for (Portfolio b : listPortfolioByBalanceId) {
+			logger.info("Portfolio List::" + b);
+		}
+        return listPortfolioByBalanceId;
+    }
+    @Override
+    public List<Portfolio> getPortfolioHistoryByBalanceId(int balanceId) {
+        Session session = this.sessionFactory.getCurrentSession();  
+        List <Portfolio> listPortfolioByBalanceId = session.createQuery("from Portfolio where balanceId =:balanceId and sellPrice!=0").setParameter("balanceId", balanceId).list();
 		for (Portfolio b : listPortfolioByBalanceId) {
 			logger.info("Portfolio List::" + b);
 		}

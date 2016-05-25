@@ -55,7 +55,7 @@ public class BalanceDAOImpl implements BalanceDAO {
     @Override
     public List<Balance> getBalanceByUserId(int userId) {
         Session session = this.sessionFactory.getCurrentSession();  
-        List <Balance> listBalanceByUserId = session.createQuery("from Balance where userId =:userId").setParameter("userId", userId).list();
+        List <Balance> listBalanceByUserId = session.createQuery("from Balance where userId =:userId and balanceState=1").setParameter("userId", userId).list();
 		for (Balance b : listBalanceByUserId) {
 			logger.info("Balance List::" + b);
 		}

@@ -60,51 +60,100 @@ LOCAL
 
 		 
 
+			 	<br/>
+					<div id="menuList" class="row" style="color: white"> 
+						<div class="col-lg-offset-1 col-lg-1 col-md-2 col-sm-3 col-xs-4">
+							<a target="_blank" href="${pageContext.request.contextPath}/core/user">
+								<i class="fa fa-users fa-3x" style="color:white"></i><div>User</div>
+							</a>
+						</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+							<a target="_blank" href="${pageContext.request.contextPath}/core/userRole">
+								<i class="fa fa-braille fa-3x" style="color:white"></i><div>User role</div> 
+							</a>
+						</div>
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+							<a target="_blank" href="${pageContext.request.contextPath}/core/balance">
+								<i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Balance</div> 
+							</a>
+						</div>
+						
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+							<a target="_blank" href="${pageContext.request.contextPath}/core/portfolio">
+								<i class="fa fa-list-alt  fa-3x" style="color:white"></i><div>Portfolio</div> 
+							</a>
+						</div>
+						
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+							<a target="_blank" href="${pageContext.request.contextPath}/core/company">
+								<i class="fa fa-building fa-3x" style="color:white"></i><div>Company</div> 
+							</a>
+						</div>
+						
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+							<a target="_blank" href="${pageContext.request.contextPath}/core/companyCategory">
+								<i class="fa fa-cubes fa-3x" style="color:white"></i><div>Company Category</div> 
+							</a>
+						</div>
+						
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+							<a target="_blank" href="${pageContext.request.contextPath}/core/stock">
+								<i class="fa fa-first-order fa-3x" style="color:white"></i><div>Stock</div>
+							</a>
+						</div> 
+						
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+							<a target="_blank" href="${pageContext.request.contextPath}/core/priceBoard">
+								<i class="fa fa-bank fa-3x" style="color:white"></i><div>Price board</div> 
+							</a>
+						</div>
+						
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+							<a target="_blank" href="${pageContext.request.contextPath}/core/orders">
+								<i class="fa fa-gitlab fa-3x" style="color:white"></i><div>Order</div> 
+							</a>
+						</div>
+						
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
+							<a target="_blank" href="${pageContext.request.contextPath}/core/article">
+								<i class="fa fa-list fa-3x" style="color:white"></i><div>Articles</div>
+							</a>
+						</div> 
+						
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"></div>
+					</div>
 					
-				<!-- 	<br/>
+					
+					<!--
+					<br/>
 					<div class="row" style="color: white">
-						<div class="col-sm-1"></div>
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"></div>
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"></div>
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"></div>
 					</div>
 					<br/>
 					<div class="row" style="color: white">
-						<div class="col-sm-1"></div>
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"></div>
-					</div>
-					<br/>
-					<div class="row" style="color: white">
-						<div class="col-sm-1"></div>
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"><i class="fa fa-credit-card fa-4x" style="color:white"></i>Tạo công ty</div> 
-						<div class="col-sm-1"></div>
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"></div>
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"><i class="fa fa-credit-card fa-3x" style="color:white"></i><div>Tạo công ty</div> 
+						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4"></div>
 					</div>
 		 
  -->
@@ -126,8 +175,16 @@ LOCAL
 </html>
 
 <script type="text/javascript">
+
+
 	$(document).ready(
+			
+			
 		function() {
+			$("#menuList").hide();
+			$(".insanity").click(function(){
+			    $("#menuList").toggle();
+			});
 			var glow = $('.insanity');
 			setInterval(function() {
 				glow.hasClass('glow') ? glow.removeClass('glow') : glow

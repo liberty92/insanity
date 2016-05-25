@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.math3.util.Precision;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,7 +42,7 @@ import org.json.simple.parser.ParseException;
 
 @Controller
 public class Transaction {
-	
+
 	private StockService stockService;
 
 	@Autowired(required = true)
@@ -49,9 +50,46 @@ public class Transaction {
 	public void setStockService(StockService us) {
 		this.stockService = us;
 	}
-	
-	
-	public TransactionResult transaction(Orders o,Stock ss) throws Exception{
+
+	// NEW SOLUTION - 1 PARAMETER
+	public TransactionResult transaction(Orders o) throws Exception {
+		TransactionResult result = new TransactionResult();
+		result.setResult(false);
+
+		Orders order = o;
+		int stockId = order.getStockId();
+		Stock s = this.stockService.getStockById(stockId);
+		String stockName = s.getStockName();
+		String stockExhange = s.getStockExchangeId();
+		String action = order.getAction();
+		String orderType = order.getOrderType();
+
+		PriceBoard currentStockPrice = this.getStockPriceByStockname(stockId, stockName, stockExhange);
+		
+		TransactionResult getResult = null;
+		
+		
+		if (action.equals("BUY") && orderType.equals("MP")) {
+			getResult = this.buyMP(order, currentStockPrice);
+		}
+		if (action.equals("SELL") && orderType.equals("MP")) {
+			getResult = this.sellMP(order, currentStockPrice);
+		}
+		if (action.equals("BUY") && orderType.equals("LO")) {
+			getResult = this.buyLO(order, currentStockPrice);
+		}
+		if (action.equals("SELL") && orderType.equals("LO")) {
+			getResult = this.sellLO(order, currentStockPrice);
+		}
+		
+		result.setResult(getResult.isResult());
+		result.setMatchedPrice(Precision.round(getResult.getMatchedPrice(), 3));
+		result.setMatchQuantity(getResult.getMatchQuantity());
+
+		return result;
+	}
+
+	public TransactionResult transaction(Orders o, Stock ss) throws Exception {
 		TransactionResult result = new TransactionResult();
 		result.setResult(false);
 
@@ -62,294 +100,323 @@ public class Transaction {
 		String stockExhange = s.getStockExchangeId();
 		String action = order.getAction();
 		String orderType = order.getOrderType();
-		
+
 		PriceBoard currentStockPrice = this.getStockPriceByStockname(stockId, stockName, stockExhange);
-		
-		if(action.equals("BUY") && orderType.equals("MP")){
+
+		if (action.equals("BUY") && orderType.equals("MP")) {
 			TransactionResult getResult = this.buyMP(order, currentStockPrice);
 			result.setResult(getResult.isResult());
-			result.setMatchedPrice(getResult.getMatchedPrice());
+			result.setMatchedPrice(Precision.round(getResult.getMatchedPrice(), 3));
 			result.setMatchQuantity(getResult.getMatchQuantity());
 		}
-		if(action.equals("SELL") && orderType.equals("MP")){
+		if (action.equals("SELL") && orderType.equals("MP")) {
 			TransactionResult getResult = this.sellMP(order, currentStockPrice);
 			result.setResult(getResult.isResult());
-			result.setMatchedPrice(getResult.getMatchedPrice());
+			result.setMatchedPrice(Precision.round(getResult.getMatchedPrice(), 3));
 			result.setMatchQuantity(getResult.getMatchQuantity());
 		}
-		if(action.equals("BUY") && orderType.equals("LO")){
+		if (action.equals("BUY") && orderType.equals("LO")) {
 			TransactionResult getResult = this.buyLO(order, currentStockPrice);
 			result.setResult(getResult.isResult());
-			result.setMatchedPrice(getResult.getMatchedPrice());
+			result.setMatchedPrice(Precision.round(getResult.getMatchedPrice(), 3));
 			result.setMatchQuantity(getResult.getMatchQuantity());
 		}
-		if(action.equals("SELL") && orderType.equals("LO")){
+		if (action.equals("SELL") && orderType.equals("LO")) {
 			TransactionResult getResult = this.sellLO(order, currentStockPrice);
 			result.setResult(getResult.isResult());
-			result.setMatchedPrice(getResult.getMatchedPrice());
+			result.setMatchedPrice(Precision.round(getResult.getMatchedPrice(), 3));
 			result.setMatchQuantity(getResult.getMatchQuantity());
 		}
-		
+
 		return result;
 	}
-	
-	public TransactionResult buyMP(Orders o, PriceBoard pb){
+
+	public TransactionResult buyMP(Orders o, PriceBoard pb) {
 		TransactionResult result = new TransactionResult();
 		result.setResult(false);
 		Orders order = o;
-		PriceBoard currentStockPrice =pb;
-		
-		if(currentStockPrice.getSell1() == 0){
+		PriceBoard currentStockPrice = pb;
+
+		if (currentStockPrice.getSell1() == 0) {
 			// NOBODY BUY - NOTHING MATCHED
 			return result;
 		}
-		
-		if(order.getQuantity() <= currentStockPrice.getSell1Quantity()){
+
+		if (order.getQuantity() <= currentStockPrice.getSell1Quantity()) {
 			// MATCHED ALL IN PRICE 1- JUST RETURN
 			result.setResult(true);
 			result.setMatchedPrice(currentStockPrice.getSell1());
 			result.setMatchQuantity(order.getQuantity());
 			return result;
-		}
-		else{
+		} else {
 			// COULDN'T MATCH ALL WITH SELL PRICE 1
-			double remain1 = (order.getQuantity()- currentStockPrice.getSell1Quantity());
-			if(remain1 <= currentStockPrice.getSell2Quantity()){
+			double remain1 = (order.getQuantity() - currentStockPrice.getSell1Quantity());
+			if (remain1 <= currentStockPrice.getSell2Quantity()) {
 				// MATCH ALL THE REMAINED IN SELL PRICE 2
 				result.setResult(true);
-				result.setMatchedPrice((currentStockPrice.getSell2()*remain1 + currentStockPrice.getSell1()*currentStockPrice.getSell1Quantity())/(order.getQuantity()));
+				result.setMatchedPrice((currentStockPrice.getSell2() * remain1
+						+ currentStockPrice.getSell1() * currentStockPrice.getSell1Quantity()) / (order.getQuantity()));
 				result.setMatchQuantity(order.getQuantity());
 				return result;
-			}
-			else{
+			} else {
 				// COULDN'T MATCH ALL WITH SELL PRICE 2
-				double remain2 = (order.getQuantity()- currentStockPrice.getSell1Quantity() - currentStockPrice.getSell2Quantity());
-				if(remain2 <= currentStockPrice.getSell3Quantity() ){
+				double remain2 = (order.getQuantity() - currentStockPrice.getSell1Quantity()
+						- currentStockPrice.getSell2Quantity());
+				if (remain2 <= currentStockPrice.getSell3Quantity()) {
 					// MATCH ALL THE REMAINED IN SELL PRICE 3
 					result.setResult(true);
-					result.setMatchedPrice((currentStockPrice.getSell3()*remain2 + currentStockPrice.getSell2()*remain1 + currentStockPrice.getSell1()*currentStockPrice.getSell1Quantity())/(order.getQuantity()));
+					result.setMatchedPrice(
+							(currentStockPrice.getSell3() * remain2 + currentStockPrice.getSell2() * remain1
+									+ currentStockPrice.getSell1() * currentStockPrice.getSell1Quantity())
+									/ (order.getQuantity()));
 					result.setMatchQuantity(order.getQuantity());
 					return result;
-				}
-				else{
+				} else {
 					// COULDN'T MATCH ALL WITH SELL PRICE 3
-					double totalMatch = currentStockPrice.getSell1() + currentStockPrice.getSell2() + currentStockPrice.getSell3();
+					double totalMatch = currentStockPrice.getSell1() + currentStockPrice.getSell2()
+							+ currentStockPrice.getSell3();
 					result.setResult(true);
-					result.setMatchedPrice((currentStockPrice.getSell3()*remain2 + currentStockPrice.getSell2()*remain1 + currentStockPrice.getSell1()*currentStockPrice.getSell1Quantity())/(totalMatch));
+					result.setMatchedPrice(
+							(currentStockPrice.getSell3() * remain2 + currentStockPrice.getSell2() * remain1
+									+ currentStockPrice.getSell1() * currentStockPrice.getSell1Quantity())
+									/ (totalMatch));
 					result.setMatchQuantity(totalMatch);
-					return result; 
+					return result;
 				}
 			}
 		}
 	}
-	
-	public TransactionResult buyLO(Orders o, PriceBoard pb){
+
+	public TransactionResult buyLO(Orders o, PriceBoard pb) {
 		TransactionResult result = new TransactionResult();
 		result.setResult(false);
 		Orders order = o;
 		PriceBoard currentStockPrice = pb;
-		
-		if(currentStockPrice.getSell1() == 0){
+
+		if (currentStockPrice.getSell1() == 0) {
 			// NOBODY SELL, VERYSIMPLE
 			return result;
 		}
-		
-		if(order.getPrice() >= currentStockPrice.getSell1()){
+
+		if (order.getPrice() >= currentStockPrice.getSell1()) {
 			// SOMETHING MATCHED - REACHED SELL1
-			if(order.getQuantity() <= currentStockPrice.getSell1Quantity()){
+			if (order.getQuantity() <= currentStockPrice.getSell1Quantity()) {
 				// ALL MATCHED
 				result.setResult(true);
 				result.setMatchedPrice(currentStockPrice.getSell1());
 				result.setMatchQuantity(order.getQuantity());
 				return result;
-			}
-			else{
-				// 2 CASES: SELL 1 PARTIAL MATCHED ONLY    OR    SELL 1 AND OTHER
-				double remain1 = (order.getQuantity()- currentStockPrice.getSell1Quantity());
-				if(order.getPrice() >= currentStockPrice.getSell2() && currentStockPrice.getSell2Quantity()>0){
+			} else {
+				// 2 CASES: SELL 1 PARTIAL MATCHED ONLY OR SELL 1 AND OTHER
+				double remain1 = (order.getQuantity() - currentStockPrice.getSell1Quantity());
+				if (order.getPrice() >= currentStockPrice.getSell2() && currentStockPrice.getSell2Quantity() > 0) {
 					// MATCH IN PRICE 1 AND 2 FOR SURE
-					if(remain1 <= currentStockPrice.getSell2Quantity()){
+					if (remain1 <= currentStockPrice.getSell2Quantity()) {
 						// MATCHED ALL IN PRICE 1 AND 2
 						result.setResult(true);
-						result.setMatchedPrice((currentStockPrice.getSell1()*currentStockPrice.getSell1Quantity() +currentStockPrice.getSell2()*remain1 )/ order.getQuantity() );
+						result.setMatchedPrice((currentStockPrice.getSell1() * currentStockPrice.getSell1Quantity()
+								+ currentStockPrice.getSell2() * remain1) / order.getQuantity());
 						result.setMatchQuantity(order.getQuantity());
 						return result;
-					}
-					else{
-						// 2 CASES: SELL 1 AND 2 PARTIAL MATCHED ONLY    OR    ALSO REACHED SELL 3
-						double remain2 = (order.getQuantity()- currentStockPrice.getSell1Quantity()- currentStockPrice.getSell2Quantity()  );
-						if(order.getPrice() >= currentStockPrice.getSell3() && currentStockPrice.getSell3Quantity()>0){
+					} else {
+						// 2 CASES: SELL 1 AND 2 PARTIAL MATCHED ONLY OR ALSO
+						// REACHED SELL 3
+						double remain2 = (order.getQuantity() - currentStockPrice.getSell1Quantity()
+								- currentStockPrice.getSell2Quantity());
+						if (order.getPrice() >= currentStockPrice.getSell3()
+								&& currentStockPrice.getSell3Quantity() > 0) {
 							// MATCHED IN ALL 3 PRICES
-							if(remain2 <= currentStockPrice.getSell3Quantity()){
+							if (remain2 <= currentStockPrice.getSell3Quantity()) {
 								// MATCHED ALL IN 3 PRICES
 								result.setResult(true);
-								result.setMatchedPrice((currentStockPrice.getSell1()*currentStockPrice.getSell1Quantity() +currentStockPrice.getSell2()*currentStockPrice.getSell2Quantity() +currentStockPrice.getSell3()*remain2)/ order.getQuantity() );
+								result.setMatchedPrice(
+										(currentStockPrice.getSell1() * currentStockPrice.getSell1Quantity()
+												+ currentStockPrice.getSell2() * currentStockPrice.getSell2Quantity()
+												+ currentStockPrice.getSell3() * remain2) / order.getQuantity());
 								result.setMatchQuantity(order.getQuantity());
 								return result;
-							}
-							else{
-								//MATCHED PARITAL IN 3 PRICES
+							} else {
+								// MATCHED PARITAL IN 3 PRICES
 								result.setResult(true);
-								double totalMatch = currentStockPrice.getSell1Quantity() + currentStockPrice.getSell2Quantity() + currentStockPrice.getSell3Quantity();
-								result.setMatchedPrice((currentStockPrice.getSell1()*currentStockPrice.getSell1Quantity() +currentStockPrice.getSell2()*currentStockPrice.getSell2Quantity() +currentStockPrice.getSell3()*currentStockPrice.getSell3Quantity())/totalMatch );
+								double totalMatch = currentStockPrice.getSell1Quantity()
+										+ currentStockPrice.getSell2Quantity() + currentStockPrice.getSell3Quantity();
+								result.setMatchedPrice(
+										(currentStockPrice.getSell1() * currentStockPrice.getSell1Quantity()
+												+ currentStockPrice.getSell2() * currentStockPrice.getSell2Quantity()
+												+ currentStockPrice.getSell3() * currentStockPrice.getSell3Quantity())
+												/ totalMatch);
 								result.setMatchQuantity(totalMatch);
 								return result;
 							}
-						}
-						else{
+						} else {
 							// MATCHED PARTIAL IN SELL 1 AND 2 ONLY
 							result.setResult(true);
-							result.setMatchedPrice((currentStockPrice.getSell1()*currentStockPrice.getSell1Quantity() +currentStockPrice.getSell2()*currentStockPrice.getSell2Quantity() )/ (currentStockPrice.getSell1Quantity() + currentStockPrice.getSell2Quantity()) );
-							result.setMatchQuantity(currentStockPrice.getSell1Quantity() + currentStockPrice.getSell2Quantity());
+							result.setMatchedPrice((currentStockPrice.getSell1() * currentStockPrice.getSell1Quantity()
+									+ currentStockPrice.getSell2() * currentStockPrice.getSell2Quantity())
+									/ (currentStockPrice.getSell1Quantity() + currentStockPrice.getSell2Quantity()));
+							result.setMatchQuantity(
+									currentStockPrice.getSell1Quantity() + currentStockPrice.getSell2Quantity());
 							return result;
 						}
 					}
-				}
-				else{
-					// SELL 1 PARTIAL MATCHED ONLY 
+				} else {
+					// SELL 1 PARTIAL MATCHED ONLY
 					result.setResult(true);
 					result.setMatchedPrice(currentStockPrice.getSell1());
 					result.setMatchQuantity(currentStockPrice.getSell1Quantity());
 					return result;
 				}
 			}
-		}
-		else{
+		} else {
 			// NOTHING MATCHED - COUNDN'T REACHED SELL 1
 			return result;
 		}
 	}
-	
-	public TransactionResult sellMP(Orders o, PriceBoard pb){
+
+	public TransactionResult sellMP(Orders o, PriceBoard pb) {
 		TransactionResult result = new TransactionResult();
 		result.setResult(false);
 		Orders order = o;
-		PriceBoard currentStockPrice =pb;
-		
-		if(currentStockPrice.getBuy1() == 0){
+		PriceBoard currentStockPrice = pb;
+
+		if (currentStockPrice.getBuy1() == 0) {
 			// NOBODY BUY - NOTHING MATCHED
 			return result;
 		}
-		
-		if(order.getQuantity() <= currentStockPrice.getBuy1Quantity()){
+
+		if (order.getQuantity() <= currentStockPrice.getBuy1Quantity()) {
 			// MATCHED ALL IN PRICE 1- JUST RETURN
 			result.setResult(true);
 			result.setMatchedPrice(currentStockPrice.getBuy1());
 			result.setMatchQuantity(order.getQuantity());
 			return result;
-		}
-		else{
+		} else {
 			// COULDN'T MATCH ALL WITH BUY PRICE 1
-			double remain1 = (order.getQuantity()- currentStockPrice.getBuy1Quantity());
-			if(remain1 <= currentStockPrice.getBuy2Quantity()){
+			double remain1 = (order.getQuantity() - currentStockPrice.getBuy1Quantity());
+			if (remain1 <= currentStockPrice.getBuy2Quantity()) {
 				// MATCH ALL THE REMAINED IN BUY PRICE 2
 				result.setResult(true);
-				result.setMatchedPrice((currentStockPrice.getBuy2()*remain1 + currentStockPrice.getBuy1()*currentStockPrice.getBuy1Quantity())/(order.getQuantity()));
+				result.setMatchedPrice((currentStockPrice.getBuy2() * remain1
+						+ currentStockPrice.getBuy1() * currentStockPrice.getBuy1Quantity()) / (order.getQuantity()));
 				result.setMatchQuantity(order.getQuantity());
 				return result;
-			}
-			else{
+			} else {
 				// COULDN'T MATCH ALL WITH BUY PRICE 2
-				double remain2 = (order.getQuantity()- currentStockPrice.getBuy1Quantity() - currentStockPrice.getBuy2Quantity());
-				if(remain2 <= currentStockPrice.getBuy3Quantity() ){
+				double remain2 = (order.getQuantity() - currentStockPrice.getBuy1Quantity()
+						- currentStockPrice.getBuy2Quantity());
+				if (remain2 <= currentStockPrice.getBuy3Quantity()) {
 					// MATCH ALL THE REMAINED IN BUY PRICE 3
 					result.setResult(true);
-					result.setMatchedPrice((currentStockPrice.getBuy3()*remain2 + currentStockPrice.getBuy2()*remain1 + currentStockPrice.getBuy1()*currentStockPrice.getBuy1Quantity())/(order.getQuantity()));
+					result.setMatchedPrice(
+							(currentStockPrice.getBuy3() * remain2 + currentStockPrice.getBuy2() * remain1
+									+ currentStockPrice.getBuy1() * currentStockPrice.getBuy1Quantity())
+									/ (order.getQuantity()));
 					result.setMatchQuantity(order.getQuantity());
 					return result;
-				}
-				else{
+				} else {
 					// COULDN'T MATCH ALL WITH BUY PRICE 3
-					double totalMatch = currentStockPrice.getBuy1() + currentStockPrice.getBuy2() + currentStockPrice.getBuy3();
+					double totalMatch = currentStockPrice.getBuy1() + currentStockPrice.getBuy2()
+							+ currentStockPrice.getBuy3();
 					result.setResult(true);
-					result.setMatchedPrice((currentStockPrice.getBuy3()*remain2 + currentStockPrice.getBuy2()*remain1 + currentStockPrice.getBuy1()*currentStockPrice.getBuy1Quantity())/(totalMatch));
+					result.setMatchedPrice(
+							(currentStockPrice.getBuy3() * remain2 + currentStockPrice.getBuy2() * remain1
+									+ currentStockPrice.getBuy1() * currentStockPrice.getBuy1Quantity())
+									/ (totalMatch));
 					result.setMatchQuantity(totalMatch);
-					return result; 
+					return result;
 				}
 			}
 		}
 	}
-	
-	public TransactionResult sellLO(Orders o, PriceBoard pb){
+
+	public TransactionResult sellLO(Orders o, PriceBoard pb) {
 		TransactionResult result = new TransactionResult();
 		result.setResult(false);
 		Orders order = o;
-		PriceBoard currentStockPrice =pb;
-		
-		if(currentStockPrice.getBuy1() == 0){
+		PriceBoard currentStockPrice = pb;
+
+		if (currentStockPrice.getBuy1() == 0) {
 			// NOBODY BUY, VERYSIMPLE
 			return result;
 		}
-		
-		if(order.getPrice() <= currentStockPrice.getBuy1()){
+
+		if (order.getPrice() <= currentStockPrice.getBuy1()) {
 			// SOMETHING MATCHED - REACHED BUY1
-			if(order.getQuantity() <= currentStockPrice.getBuy1Quantity()){
+			if (order.getQuantity() <= currentStockPrice.getBuy1Quantity()) {
 				// ALL MATCHED
 				result.setResult(true);
 				result.setMatchedPrice(currentStockPrice.getBuy1());
 				result.setMatchQuantity(order.getQuantity());
 				return result;
-			}
-			else{
-				// 2 CASES: BUY 1 PARTIAL MATCHED ONLY    OR    BUY 1 AND OTHER
-				double remain1 = (order.getQuantity()- currentStockPrice.getBuy1Quantity());
-				if(order.getPrice() <= currentStockPrice.getBuy2() && currentStockPrice.getBuy2Quantity()>0){
+			} else {
+				// 2 CASES: BUY 1 PARTIAL MATCHED ONLY OR BUY 1 AND OTHER
+				double remain1 = (order.getQuantity() - currentStockPrice.getBuy1Quantity());
+				if (order.getPrice() <= currentStockPrice.getBuy2() && currentStockPrice.getBuy2Quantity() > 0) {
 					// MATCH IN PRICE 1 AND 2 FOR SURE
-					if(remain1 <= currentStockPrice.getBuy2Quantity()){
+					if (remain1 <= currentStockPrice.getBuy2Quantity()) {
 						// MATCHED ALL IN PRICE 1 AND 2
 						result.setResult(true);
-						result.setMatchedPrice((currentStockPrice.getBuy1()*currentStockPrice.getBuy1Quantity() +currentStockPrice.getBuy2()*remain1 )/ order.getQuantity() );
+						result.setMatchedPrice((currentStockPrice.getBuy1() * currentStockPrice.getBuy1Quantity()
+								+ currentStockPrice.getBuy2() * remain1) / order.getQuantity());
 						result.setMatchQuantity(order.getQuantity());
 						return result;
-					}
-					else{
-						// 2 CASES: BUY 1 AND 2 PARTIAL MATCHED ONLY    OR    ALSO REACHED BUY 3
-						double remain2 = (order.getQuantity()- currentStockPrice.getBuy1Quantity()- currentStockPrice.getBuy2Quantity()  );
-						if(order.getPrice() <= currentStockPrice.getBuy3() && currentStockPrice.getBuy3Quantity()>0){
+					} else {
+						// 2 CASES: BUY 1 AND 2 PARTIAL MATCHED ONLY OR ALSO
+						// REACHED BUY 3
+						double remain2 = (order.getQuantity() - currentStockPrice.getBuy1Quantity()
+								- currentStockPrice.getBuy2Quantity());
+						if (order.getPrice() <= currentStockPrice.getBuy3()
+								&& currentStockPrice.getBuy3Quantity() > 0) {
 							// MATCHED IN ALL 3 PRICES
-							if(remain2 <= currentStockPrice.getBuy3Quantity()){
+							if (remain2 <= currentStockPrice.getBuy3Quantity()) {
 								// MATCHED ALL IN 3 PRICES
 								result.setResult(true);
-								result.setMatchedPrice((currentStockPrice.getBuy1()*currentStockPrice.getBuy1Quantity() +currentStockPrice.getBuy2()*currentStockPrice.getBuy2Quantity() +currentStockPrice.getBuy3()*remain2)/ order.getQuantity() );
+								result.setMatchedPrice(
+										(currentStockPrice.getBuy1() * currentStockPrice.getBuy1Quantity()
+												+ currentStockPrice.getBuy2() * currentStockPrice.getBuy2Quantity()
+												+ currentStockPrice.getBuy3() * remain2) / order.getQuantity());
 								result.setMatchQuantity(order.getQuantity());
 								return result;
-							}
-							else{
-								//MATCHED PARITAL IN 3 PRICES
-								double totalMatch = currentStockPrice.getBuy1Quantity() + currentStockPrice.getBuy2Quantity() + currentStockPrice.getBuy3Quantity();
+							} else {
+								// MATCHED PARITAL IN 3 PRICES
+								double totalMatch = currentStockPrice.getBuy1Quantity()
+										+ currentStockPrice.getBuy2Quantity() + currentStockPrice.getBuy3Quantity();
 								result.setResult(true);
-								result.setMatchedPrice((currentStockPrice.getBuy1()*currentStockPrice.getBuy1Quantity() +currentStockPrice.getBuy2()*currentStockPrice.getBuy2Quantity() +currentStockPrice.getBuy3()*currentStockPrice.getBuy3Quantity())/totalMatch );
+								result.setMatchedPrice(
+										(currentStockPrice.getBuy1() * currentStockPrice.getBuy1Quantity()
+												+ currentStockPrice.getBuy2() * currentStockPrice.getBuy2Quantity()
+												+ currentStockPrice.getBuy3() * currentStockPrice.getBuy3Quantity())
+												/ totalMatch);
 								result.setMatchQuantity(totalMatch);
 								return result;
 							}
-						}
-						else{
+						} else {
 							// MATCHED PARTIAL IN BUY 1 AND 2 ONLY
 							result.setResult(true);
-							result.setMatchedPrice((currentStockPrice.getBuy1()*currentStockPrice.getBuy1Quantity() +currentStockPrice.getBuy2()*currentStockPrice.getBuy2Quantity() )/ (currentStockPrice.getBuy1Quantity() + currentStockPrice.getBuy2Quantity()) );
-							result.setMatchQuantity(currentStockPrice.getBuy1Quantity() + currentStockPrice.getBuy2Quantity());
+							result.setMatchedPrice((currentStockPrice.getBuy1() * currentStockPrice.getBuy1Quantity()
+									+ currentStockPrice.getBuy2() * currentStockPrice.getBuy2Quantity())
+									/ (currentStockPrice.getBuy1Quantity() + currentStockPrice.getBuy2Quantity()));
+							result.setMatchQuantity(
+									currentStockPrice.getBuy1Quantity() + currentStockPrice.getBuy2Quantity());
 							return result;
 						}
 					}
-				}
-				else{
-					// BUY 1 PARTIAL MATCHED ONLY 
+				} else {
+					// BUY 1 PARTIAL MATCHED ONLY
 					result.setResult(true);
 					result.setMatchedPrice(currentStockPrice.getBuy1());
 					result.setMatchQuantity(currentStockPrice.getBuy1Quantity());
 					return result;
 				}
 			}
-		}
-		else{
+		} else {
 			// NOTHING MATCHED - COUNDN'T REACHED BUY 1
 			return result;
 		}
 	}
 
-//	@RequestMapping(value = { "/price" }, method = RequestMethod.GET)
-	public PriceBoard getStockPriceByStockname(int StockId, String StockName,
-			String StockExchange) throws Exception, Exception {
+	public PriceBoard getStockPriceByStockname(int StockId, String StockName, String StockExchange)
+			throws Exception, Exception {
 		String urlHSX = "http://banggia.cafef.vn/stockhandler.ashx?center=1";
 		String urlHNX = "http://banggia.cafef.vn/stockhandler.ashx?center=2";
 		String url = urlHSX;
@@ -379,7 +446,7 @@ public class Transaction {
 					JSONObject loadedData = (JSONObject) o;
 
 					String name = (String) loadedData.get("a");
-//					System.out.println("Stock name : " + name);
+					// System.out.println("Stock name : " + name);
 
 					if (name.equals(stockName)) {
 
@@ -431,7 +498,7 @@ public class Transaction {
 
 						currentPriceInfo.setHighest(highest);
 						currentPriceInfo.setLowest(lowest);
-						
+
 						break;
 					}
 
@@ -448,8 +515,8 @@ public class Transaction {
 
 		return currentPriceInfo;
 	}
-	
 
+	// DEPRECATED
 	public String test(Model model, HttpServletRequest request) throws Exception, Exception {
 		String url = "http://202.160.124.68/priceservice/secinfo/snapshot/q=floorCode:10";
 		String roughContent = "";

@@ -4,6 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://ckeditor.com" prefix="ckeditor" %>
 <%@ page session="true"%>
 <!DOCTYPE html>
 <head>
@@ -17,6 +18,8 @@
 <link rel="stylesheet" type="text/css"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 	
+	<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
 
@@ -255,5 +258,6 @@
 
 						});
 	</script>
+	<ckeditor:replace replace="input" basePath="${pageContext.request.contextPath}/resources/js/ckeditor2/" />
 </body>
 </html>

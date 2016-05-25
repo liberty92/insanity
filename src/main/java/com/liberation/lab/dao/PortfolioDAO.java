@@ -11,5 +11,6 @@ public interface PortfolioDAO {
     public List<Portfolio> listPortfolios();
     public Portfolio getPortfolioById(int id);
     public List<Portfolio> getPortfolioByBalanceId(int balanceId);
+    public List<Portfolio> getPortfolioHistoryByBalanceId(int balanceId);
     public void removePortfolio(int id);
 }

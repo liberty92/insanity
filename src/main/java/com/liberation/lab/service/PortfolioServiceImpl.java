@@ -50,4 +50,10 @@ public class PortfolioServiceImpl implements PortfolioService{
 	public List<Portfolio> getPortfolioByBalanceId(int balanceId) {
 		return this.portfolioDAO.getPortfolioByBalanceId(balanceId);
 	}
+
+	@Override
+	@Transactional
+	public List<Portfolio> getPortfolioHistoryByBalanceId(int balanceId) {
+		return this.portfolioDAO.getPortfolioHistoryByBalanceId(balanceId);
+	}
 }

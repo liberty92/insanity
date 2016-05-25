@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -7,14 +7,14 @@ pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>I N S A N I T Y | Admin</title>
-	<!-- Meta data -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I N S A N I T Y | Admin</title>
+<!-- Meta data -->
 
-	<!-- CDN -->
-	<!-- <link rel="stylesheet"
+<!-- CDN -->
+<!-- <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
@@ -26,25 +26,31 @@ pageEncoding="UTF-8"%>
 
 <c:if test="${empty sessionScope.theme}">
 	<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/css/style2.css">
+		href="${pageContext.request.contextPath}/resources/css/style2.css">
 </c:if>
 <c:if test="${!empty sessionScope.theme}">
 	<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/css/${sessionScope.theme}">
+		href="${pageContext.request.contextPath}/resources/css/${sessionScope.theme}">
 </c:if>
-	
-	<link rel="shortcut icon"
+
+<link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/resources/images/core/favicon.ico">
-	<!-- JS -->
-	<script
+<!-- JS -->
+<script
 	src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/js/bk.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/bk.js"></script>
 <!-- 
 LOCAL -->
-<link href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet">
-<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"> 
-<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+<link
+	href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css"
+	rel="stylesheet">
+<link
+	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<div class="container-fluid">
@@ -57,52 +63,72 @@ LOCAL -->
 
 
 
-			<div class="row" style="margin:0px">
+			<div class="row" style="margin: 0px">
 
 
-			
-			<object style="overflow: hidden; display: block;" width="100%"
-							height="491px" data="${pageContext.request.contextPath}/resources/slide/slide.htm"></object>
-			<!-- 
+
+				<object style="overflow: hidden; display: block;" width="100%"
+					height="491px"
+					data="${pageContext.request.contextPath}/resources/slide/slide.htm"></object>
+				<!-- 
 			<div class="listArticle" style="margin:0px 10px; padding:10px 0px; min-height:830px;"> -->
-			<div class="col-md-9" style="padding-left:10px; padding-right:0px">
-							<!-- <div class="Page-body"> -->
-							<!--2.3.1.1 Main body 3 tabs-->
-							<%@ include file="template/frontend/homepage-tabs.jsp"%>
-							
-							<%-- <!--2.3.1.2 Main body article-->
+				<div class="col-md-9" style="padding-left: 10px; padding-right: 0px">
+					<!-- <div class="Page-body"> -->
+					<!--2.3.1.1 Main body 3 tabs-->
+					<%@ include file="template/frontend/homepage-tabs.jsp"%>
+
+					<%-- <!--2.3.1.2 Main body article-->
 							<%@ include file="template/frontend/homepage-articles.jsp"%> --%>
-						
-							
-							<img src="${pageContext.request.contextPath}/resources/images/core/head.png" class="img-responsive" style="min-height:100px" alt="Image">
-							
-						</div>
-						
-						
-						<div class="col-md-3">
-							<div class="Side-bar">
-								<%@ include file="template/frontend/rightside.jsp"%>
+
+
+					<%-- <img src="${pageContext.request.contextPath}/resources/images/core/head.png" 
+							class="img-responsive" style="min-height:100px" alt="Image"> --%>
+
+					<!-- 	<iframe width="100%" 
+								style="margin:auto; height:230px;" 
+								class="img-responsive" scrolling="no" frameborder="3px"  
+								src="http://tcsc.vn:8080/TCSCIframe/chart/hcmchart#hnxindex" 
+								frameborder="0" allowfullscreen="1">
+								</iframe>
+								 -->
+
+					<div class="col-xs-12">
+						<div class="row insanityHome" >
+							<div class="title" style="margin-top:100px">
+								<div class="insanity">Insanity</div>
 							</div>
+
+
 						</div>
-			
-			
-			<!-- 
+					</div>
+
+				</div>
+
+
+				<div class="col-md-3">
+					<div class="Side-bar">
+						<%@ include file="template/frontend/rightside.jsp"%>
+					</div>
+				</div>
+
+
+				<!-- 
 					</div> -->
-			
-			</div>
-
-
-
-
 
 			</div>
 
-			<!-- ====================== BODY ENDS =================================== -->
-			<!--3. Footer include-->
+
+
+
+
 		</div>
-		<div class="col-xs-12" style="margin-top:10px">
-			<%@ include file="template/backend/footer.jsp"%>
-		</div>
+
+		<!-- ====================== BODY ENDS =================================== -->
+		<!--3. Footer include-->
+	</div>
+	<div class="col-xs-12" style="margin-top: 10px">
+		<%@ include file="template/backend/footer.jsp"%>
+	</div>
 	</div>
 </body>
 </html>

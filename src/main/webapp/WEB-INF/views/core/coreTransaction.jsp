@@ -27,7 +27,8 @@
 <link
 	href="${pageContext.request.contextPath}/resources/css/select2.min.css"
 	rel="stylesheet">
-
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <%-- 

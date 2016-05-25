@@ -22,7 +22,8 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	
+	<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
 <link
 	href="${pageContext.request.contextPath}/resources/css/select2.min.css"
 	rel="stylesheet">
@@ -161,7 +162,7 @@ td {
 										<option value="HSX"
 											<c:if test="${stock.stockExchangeId == HSX}"> selected="selected" </c:if>>
 											HSX</option>
-										<option value="HSX"
+										<option value="HNX"
 											<c:if test="${stock.stockExchangeId == HNX}"> selected="selected" </c:if>>
 											HNX</option>
 									</select>

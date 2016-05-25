@@ -14,6 +14,8 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
@@ -53,8 +55,8 @@
 									<tr>
 										<th width="100">User ID</th>
 										<th width="100">Username</th>
-										<th width="80">Password</th>
-										<th>User full name</th>
+										<!-- <th width="80">Password</th> -->
+										<th width="100">User full name</th>
 										<th width="80">User role</th>
 										<th width="100">User profile picture</th>
 										<th width="50">User age</th>
@@ -71,7 +73,7 @@
 										<td>${u.username}</td>
 										<!-- SENSITIVE DATA -->
 										<!-- <td>${u.password}</td> -->
-										<td>**********</td>
+										<!-- <td>**********</td> -->
 										<td>${u.userFullName}</td>
 										<td>
 											<c:forEach items="${listUserRoles}" var="ur">

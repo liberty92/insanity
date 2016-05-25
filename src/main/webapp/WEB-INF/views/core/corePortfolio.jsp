@@ -14,8 +14,13 @@
 <!-- Meta data -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+	<script
+	src="${pageContext.request.contextPath}/resources/js/accounting.min.js"></script>
 
 <link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
 <link href="${pageContext.request.contextPath}/resources/css/select2.min.css" rel="stylesheet">
@@ -56,12 +61,13 @@
 										<th width="50">Index</th>
 										<th width="50">ID</th>
 										<th width="150">Balance ID & Owner info</th>
-										<th width="100">Stock ID</th>
-										<th width="100">Buy price</th>
-										<th width="100">Sell price</th>
-										<th width="100">Quantity</th>
-										<th width="100">Buy date</th>
-										<th width="100">Sell date</th>
+										<th width="50">Stock ID</th>
+										<th width="50">Buy price</th>
+										<th width="50">Buy value</th>
+										<th width="50">Sell price</th>
+										<th width="50">Quantity</th>
+										<th width="50">Buy date</th>
+										<th width="50">Sell date</th>
 										<th width="50">Edit</th>
 										<th width="50">Delete</th>
 									</tr>
@@ -91,20 +97,22 @@
 											</c:forEach> 
 											
 										</td>
-										<td class="formatNummber" style="text-align:right;color: blue">
-											<span style="clear:both">${u.buyPrice}</span><br/>&nbsp;
-												<fmt:parseNumber var="i" type="number" value="${(u.buyPrice)*(u.quantity)*1000}" pattern="#,###"/>
-												<c:out value="${i}"/> đ
+										<td class="" style="text-align:right;color: blue">
+											<span style="clear:both">${u.buyPrice}</span> 
 										
 										</td>
-										<td class="formatNummber" style="text-align:right;color: blue">
+										<td  class="formatNummber" >
+										${(u.buyPrice)*(u.quantity)*1000}
+										</td>
+										<td class="" style="text-align:right;color: blue">
 											<span style="clear:both">${u.sellPrice}</span><br/>&nbsp;
 												<fmt:parseNumber var="i" type="number" value="${(u.sellPrice)*(u.quantity)*1000}" pattern="#,###"/>
 												<c:out value="${i}"/> đ
 										
 										</td>
-										<td class="formatNummber" style="text-align:right; color:green; <c:if test="${ (u.sellPrice*u.quantity - u.buyPrice*u.quantity)<0 && (u.sellPrice != 0)  }">  color: red </c:if>    ">
-											<span style="clear:both">${u.quantity}</span><br/>&nbsp;
+										<td class="" style="text-align:right; color:green; <c:if test="${ (u.sellPrice*u.quantity - u.buyPrice*u.quantity)<0 && (u.sellPrice != 0)  }">  color: red </c:if>    ">
+											<span  class="formatQuantity" style="clear:both">${u.quantity}</span>
+											<br/>
 											<c:if test="${u.sellPrice != 0}"> 
 												<fmt:parseNumber var="i" type="number" value="${(u.sellPrice*u.quantity - u.buyPrice*u.quantity)*1000 }" pattern="#,###"/>
 												<c:out value="${i}"/> đ<br/>&nbsp;
@@ -284,18 +292,49 @@
 		    })
 		}
 		
+		$.fn.formatQuantity = function() {
+			return this.each(function() {
+				 
+				
+				var a = parseInt($(this).text());
+				var str = accounting.formatMoney(a);
+				$(this).text(str.substring(0, str.length - 2));
+			})
+		};
 		 
+		$.fn.digits2 = function() {
+			return this.each(function() {
+				var a = parseFloat($(this).text());
+				$(this).text(accounting.formatMoney(a));
+			})
+		};
+		accounting.settings = {
+			currency : {
+				symbol : " đ", // default currency symbol is '$'
+				format : "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
+				decimal : ".", // decimal point separator
+				thousand : ",", // thousands separator
+				precision : 0
+			// decimal places
+			},
+			number : {
+				precision : 0, // default precision on numbers is 0
+				thousand : ",",
+				decimal : "."
+			}
+		};
 
 		$(document)
 				.ready(
 						function() { 
 							$('#dataTable').DataTable();
 							$(".dropdownSelect").select2();
-							$(".formatNummber").digits();
+							$(".formatNummber").digits2();
+							$(".formatQuantity").formatQuantity();
 							
-							$("a").click(function(){
+							/* $("a").click(function(){
 								$(".formatNummber").digits();
-							});
+							}); */
 							/* $(".formatNummber").breakLine(); */
 
 							var $datetimepicker = $('#datetimepicker');

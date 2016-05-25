@@ -4,7 +4,7 @@
         <div class="col-sm-1">
             <img src="${pageContext.request.contextPath}/resources/images/core/logo2.png" style="width: 100%; height: 100%; max-height: 200px; max-width: 200px; margin:auto" alt="Image">
         </div>
-        <div class="col-sm-11">
+        <div class="col-sm-11" style="padding-top:10px">
             <div style="font-size: small">
                 <strong>INSANITY Project</strong> 
                 <br />

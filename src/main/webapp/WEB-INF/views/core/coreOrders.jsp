@@ -14,8 +14,12 @@
 <!-- Meta data -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/accounting.min.js"></script>
 
 <link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
 <link href="${pageContext.request.contextPath}/resources/css/select2.min.css" rel="stylesheet">
@@ -78,7 +82,7 @@
 													<c:forEach items="${listUsers}" var="user">
 														<c:if test="${balance.userId == user.userId}"><br/> ${user.userFullName} </c:if> 
 													</c:forEach>
-													<br/>${balance.balanceName}
+													<br/>${balance.balanceName} - ${balance.balanceCash}
 	                                           	</c:if> 
 											</c:forEach>
 
@@ -100,18 +104,16 @@
 										</c:if>
 										</td>
 										<td>${u.orderType}</td>
-										<td class="formatNummber" style="text-align:right;color: blue">
+										<td  style="text-align:right;color: blue">
 											<%-- <span style="clear:both">${u.price}</span><br/> --%> 
-												<fmt:parseNumber var="i" type="number" value="${u.price}" pattern="#,###"/>
+												<fmt:parseNumber var="i" type="number" value="${u.price}" pattern="#,###.##"/>
 												<c:out value="${i}"/>
 										</td>
-										<td class="formatNummber" style="text-align:right;color: blue">
-												<fmt:parseNumber var="i2" type="number" value="${(u.quantity)}" pattern="#,###"/>
-												<c:out value="${i2}"/>
-										
+										<td style="text-align:right;color: blue" class="formatQuantity">
+												${(u.quantity)}
 										</td>
 										<td class="formatNummber" style="text-align:right;color: blue">
-												<fmt:parseNumber var="i3" type="number" value="${(u.quantity * u.price *1000)}" pattern="#,###"/>
+												<fmt:parseNumber var="i3" type="number" value="${(u.quantity * u.price *1000)}" pattern="#,###.##"/>
 												<c:out value="${i3}"/> đ
 										
 										</td> 
@@ -130,8 +132,192 @@
 				</c:if>
 
 				<br />
+				 
+				
+						<div class="panel panel-default" style="color: #167AC6">
+							<div class="panel-body">
+							<div style="color:#00aeef; font-weight:bold; font-size:1.2em">
+								<span class="col-sm-2" style="float:left; color:red">Đặt lệnh</span><span id="balanceInfo" class="col-sm-4 formatNummber" >Sức mua:</span><span class="col-sm-1" id="stockInfo">Giá:</span> 
+								<span id="p1" class="col-sm-1" style="color:orange">&nbsp;</span>
+								<span id="p2" class="col-sm-1" style="color:violet;padding:0px">&nbsp;</span>
+								<span id="p3" class="col-sm-1" style="color:aqua">&nbsp;</span>
+								<span id="p4" class="col-sm-1" style="color:#00aeef;">&nbsp;</span>
+							</div>
 
-				<div class="panel panel-default">
+								<div>
+									<form id="orderForm"
+										action="${pageContext.servletContext.contextPath}/core/addOrder"
+										method="POST" role="form">
+										<legend style="color: red;padding:2px 16px">
+											<%
+												if (request.getParameter("validationError") != null)
+													out.println(request.getParameter("validationError"));
+											%></b>
+										</legend>
+
+										<div class="col-sm-5">
+
+
+											<div class="form-group">
+												<div>
+												<label for="">Balance Id</label> 
+												</div>
+												
+												<input type="hidden"
+													class="form-control" name="orderId"
+													value="${order.orderId}" id="" placeholder="Demo content">
+												<%-- 
+										<input type="number"
+										class="form-control" name="balanceId" value="${order.balanceId}"
+										id="" placeholder="Demo content"> --%>
+
+												<select name="balanceId" id="inputBalanceId"
+													class="form-control dropdownSelect" required="required">
+													<option value="0" selected="selected">Chọn tài khoản</option>
+													<c:forEach items="${listBalances}" var="balance">
+														<option value="${balance.balanceId}" onclick="alert(${balance.balanceCash})"
+															<c:if test="${balance.balanceId == order.balanceId}"> selected="selected" </c:if>>
+															<c:forEach items="${listUsers}" var="u">
+																<c:if test="${balance.userId == u.userId}"> ${u.userFullName} </c:if>
+															</c:forEach> - ${balance.balanceId} - ${balance.balanceName} - Cash: ${balance.balanceCash}
+														</option>
+													</c:forEach>
+												</select>
+											</div>
+
+											<div class="form-group">
+												<label for="">Stock ID</label> <select name="stockId"
+													id="inputStockId" class="form-control dropdownSelect"
+													required="required">
+													<option value="0" selected="selected">Chọn mã chứng khoán</option>
+													<c:forEach items="${listStocks}" var="stock">
+														<option style="font-family: Consolas, monospace;"
+															value="${stock.stockId}">
+															${stock.stockName}
+															<c:if test="${stock.stockMarginRate > 0}">Margin:${stock.stockMarginRate}%</c:if>
+														</option>
+													</c:forEach>
+												</select>
+
+											</div>
+
+											<div class="form-group">
+												<label for="">Action</label> <select class="form-control"
+													name="action">
+													<option value="BUY">Buy</option>
+													<option value="SELL">Sell</option>
+												</select>
+
+											</div>
+
+
+											<div class="form-group">
+												<label for="">Using margin</label> <select
+													class="form-control" name="marginState">
+													<option value="NO">No</option>
+													<option value="YES">Yes</option>
+												</select>
+
+											</div>
+
+											<div class="form-group">
+												<label for="">Order type</label> <select
+													class="form-control" name="orderType">
+													<option value="LO">LO</option>
+													<option value="MP">MP</option>
+													<option value="ATO">ATO</option>
+													<option value="ATC">ATC</option>
+												</select>
+											</div>
+
+										</div>
+
+										<div class="col-sm-5">
+
+
+
+
+											<div class="form-group">
+												<label for="">Price</label> <input type="number" step="0.1"
+													class="form-control" name="price" value="${order.price}"
+													id="orderPrice" placeholder="Demo content">
+											</div>
+
+											<div class="form-group">
+												<label for="">Quantity</label> <input type="number"
+													step="10" class="form-control" name="quantity"
+													value="${order.quantity}" id="orderQuantity" placeholder="Demo content">
+											</div>
+											
+											
+								<label for="">Created time</label>
+								<div class='input-group date'>
+									<input type='text' id='datetimepicker2'
+										name="createdTime"
+										value="${order.createdTime}" class="form-control" />
+									<span class="input-group-addon"> <span
+										id="datetimepickericon" class="glyphicon glyphicon-calendar"></span>
+									</span>
+								</div> 
+
+								<div class="form-group">
+									<label for="">Order state</label> 
+									<select class="form-control" name="orderState">
+											<option value="WAITING" selected="selected">WAITING</option>
+											<option value="SUCCEEDED">SUCCEEDED</option>
+											<option value="CANCELLED">CANCELLED</option>
+											<option value="UNSUCCEEDED">UNSUCCEEDED</option>
+										</select>
+								</div>
+
+											<div class="form-group">
+												<button type="submit" style="float:left" class="btn btn-primary">Submit</button>
+												<span  id="tradeValue" class="formatNumber" style="float:right;font-weight:bold">Giá trị: 0đ</span>
+											</div>
+
+										</div>
+
+
+								<div class="panel panel-default col-sm-2" style="min-height:330px;padding: 0px">
+									<div class="panel-body ">
+										<label>
+											TRANSACTION CONTROL
+										</label style="border-bottm: 1px solid rgba(0,0,0,0.3)">
+										
+										<div class="col-xs-12" style="border: 1px solid rgba(0,0,0,0.3); margin-bottom:12px;  box-shadow: 0px 0px 6px rgba(0,0,0,0.3)">
+											<a href="${pageContext.request.contextPath}/core/updateAllTransaction">
+												<i class="fa fa-cloud-download  fa-4x col-xs-12" style="color: rgba(0,0,0,0.3)"></i><div>Update all transactions</div>
+											</a>
+										</div> 
+										
+										
+										<div class="col-xs-12" style="border: 1px solid rgba(0,0,0,0.3);  box-shadow: 0px 0px 6px rgba(0,0,0,0.3)">
+											<a href="${pageContext.request.contextPath}/core/timeoutCancelAllTransaction">
+												<i class="fa fa-empire   fa-4x col-xs-12" style="color: rgba(0,0,0,0.3)"></i><div>Stop trading session</div>
+											</a>
+										</div> 
+											
+											
+										</div>
+										</div>
+
+
+
+
+
+										<br />
+
+									</form>
+
+									<br />
+
+								</div>
+							</div>
+						</div>
+				
+						
+
+				<%-- <div class="panel panel-default">
 					<div class="panel-body">
 						<h2>Add order</h2>
 
@@ -139,16 +325,16 @@
 							<form
 								action="${pageContext.servletContext.contextPath}/core/addOrder"
 								method="POST" role="form">
-								<legend>Add new order item</legend>
+								<legend style="color:red"><% if(request.getParameter("validationError")!= null) out.println(request.getParameter("validationError")); %></b></legend>
 
 								<div class="form-group">
 									<label for="">Balance Id</label> <input type="hidden"
 										class="form-control" name="orderId" value="${order.orderId}"
 										id="" placeholder="Demo content"> 
-										<%-- 
+										
 										<input type="number"
 										class="form-control" name="balanceId" value="${order.balanceId}"
-										id="" placeholder="Demo content"> --%>
+										id="" placeholder="Demo content">
 										
 										<select name="balanceId" id="input" class="form-control dropdownSelect" required="required">
 										<c:forEach items="${listBalances}" var="balance">
@@ -156,7 +342,7 @@
 												<c:forEach items="${listUsers}" var="u">
 													<c:if test="${balance.userId == u.userId}"> ${u.userFullName} </c:if> 
 												</c:forEach>
-												- ${balance.balanceId}
+												- ${balance.balanceId} - Cash: ${balance.balanceCash}
 											</option>
 										</c:forEach> 
 										</select>
@@ -173,9 +359,9 @@
 										</select>
 									
 									
-									<%-- <input type="number"
+									<input type="number"
 										class="form-control" name="stockId" value="${order.stockId}"
-										id="" placeholder="Demo content"> --%>
+										id="" placeholder="Demo content">
 										
 								</div>
 
@@ -253,7 +439,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+ --%>			</div>
 
 		</div>
 	</div>
@@ -271,6 +457,95 @@
 	<script type="text/javascript">
 		// $('#datetimepicker').datetimepicker();
 
+		var priceBoard  = [0.0,0.0,0.0];
+	var cash = 0;
+	
+	$('#orderForm').on('submit', function() {
+	    // check validation
+		   var p = $("#orderPrice").val();
+		   var q = $("#orderQuantity").val();
+		   var stockId = $('#inputStockId').val();
+		   var balanceId = $('#inputBalanceId').val();
+		 	
+		   stockId = parseInt(stockId);
+		   balanceId = parseInt(balanceId);
+
+		   if( balanceId<=0){
+			   bootbox.alert("Bạn chưa chọn tài khoản!", function() {
+				});
+			   return false
+		   }
+
+		   if(stockId<=0){
+			   bootbox.alert("Bạn chưa chọn mã chứng khoán!", function() {
+				});
+			   return false
+		   }
+		   
+		   if(p > priceBoard[1] ){
+			   bootbox.alert("Bạn đã đặt giá mua lớn hơn giá trần!", function() {
+				});
+			   return false
+		   }
+		   if(p < priceBoard[2] ){
+			   bootbox.alert("Bạn đã đặt giá mua nhỏ hơn giá sàn!", function() {
+				});
+			   return false
+		   }
+	        return true;
+	});
+	
+	$('#orderQuantity').on('blur', function (e) {
+		var p = $("#orderPrice").val();
+	    var q = $("#orderQuantity").val();
+	    var value1 = p*q*1000;
+	    
+	    var a = parseFloat(value1);
+		 
+	    $('#tradeValue').text(accounting.formatMoney(a));
+	   	 
+	}); 
+	
+	$('#inputBalanceId').on('change', function (e) {
+	    var balanceId = this.value;
+	    
+	    $.ajax({
+            url : '${pageContext.request.contextPath}/user/ajaxGetBalanceInfo',
+            data : {
+            	balanceId : balanceId
+            },
+            success : function(responseText) {
+            	cash = parseFloat(responseText);
+            	$('#balanceInfo').text("Sức mua: " + accounting.formatMoney(responseText));
+            }
+        });
+	   	 
+	}); 
+
+	
+	$('#inputStockId').on('change', function (e) {
+	    var stockId = this.value;
+	    
+	    $.ajax({
+            url : '${pageContext.request.contextPath}/user/ajaxGetStockInfo',
+            data : {
+            	stockId : stockId
+            },
+            success : function(responseText) {
+            	var tempArray = responseText.split("|");
+            	priceBoard[0] = parseFloat(tempArray[0]);
+            	priceBoard[1] = parseFloat(tempArray[1]);
+            	priceBoard[2] = parseFloat(tempArray[2]);
+            	
+            	$('#p1').text("TC: "+tempArray[0]);
+            	$('#p2').text("Trần: "+tempArray[1]);
+            	$('#p3').text("Sàn: "+tempArray[2]);
+            	$('#p4').text("Max: "+(cash/priceBoard[1]/1000).toFixed(0));
+            }
+        });
+	   	 
+	}); 
+		
 		function formatDate(value) {
 			if (value) {
 				Number.prototype.padLeft = function(base, chr) {
@@ -296,31 +571,82 @@
 			format : 'DD-MM-YYYY HH:mm:ss'
 		});
 		
+		$.fn.digits2 = function() {
+			return this.each(function() {
+				var a = parseFloat($(this).text());
+				$(this).text(accounting.formatMoney(a));
+			})
+		};
+
+		$.fn.formatPercent = function() {
+			return this.each(function() {
+				var a = parseFloat($(this).text());
+				var b = Math.round(a * 100) / 100;
+				$(this).text(b + "%");
+			})
+		};
+		
+		accounting.settings = {
+				currency : {
+					symbol : " đ", // default currency symbol is '$'
+					format : "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
+					decimal : ".", // decimal point separator
+					thousand : ",", // thousands separator
+					precision : 0
+				// decimal places
+				},
+				number : {
+					precision : 0, // default precision on numbers is 0
+					thousand : ",",
+					decimal : "."
+				}
+			};
+		
 		$.fn.digits = function(){ 
 		    return this.each(function(){ 
 		        $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") ); 
 		    })
-		}
+		};
 		
 		$.fn.breakLine = function(){  
 		    return this.each(function(){ 
 		        $(this).html( $(this).html().replace(/&nbsp;/g,"<br/>")); 
 		        $(this).html( $(this).html().replace(".0","")); 
 		    })
-		}
+		};
+		
+
+		$.fn.formatQuantity = function() {
+			return this.each(function() {
+				 
+				
+				var a = parseInt($(this).text());
+				var str = accounting.formatMoney(a);
+				$(this).text(str.substring(0, str.length - 2));
+			})
+		};
 		
 		 
 
 		$(document)
 				.ready(
 						function() { 
+							$('#cashInput').keyup(function() {
+								var raw_num = $(this).val();
+								var form_num = accounting.formatMoney(raw_num);
+								$('#cashDisplay').html(form_num);
+							});
+							
+							$(".formatNummber").digits2();
+							$(".formatPercent").formatPercent();
+							$(".formatQuantity").formatQuantity();
+							
 							$('#dataTable').DataTable();
 							$(".dropdownSelect").select2();
-							$(".formatNummber").digits();
 							
-							$("a").click(function(){
+						/* 	$("a").click(function(){
 								$(".formatNummber").digits();
-							});
+							}); */
 							/* $(".formatNummber").breakLine(); */
 
 							var $datetimepicker = $('#datetimepicker');

@@ -48,7 +48,7 @@
 						<ul class="dropdown-menu" style="min-width:300px">
 							<li>
 								<p>
-									<a href="{pageContext.request.contextPath}/trading/securities">
+									<a href="${pageContext.request.contextPath}/user/trading">
 									Giao dịch chứng khoán
 									<span class="desc">
 									Securities trading
@@ -57,22 +57,11 @@
 								</p>
 							</li>
 							<li class="divider"></li>
+							 
 							
 							<li>
 								<p>
-									<a href="{pageContext.request.contextPath}/trading/securities">
-									Giao dịch tiền
-									<span class="desc">
-									Money trading
-									</span>
-									</a>
-								</p>
-							</li>
-							<li class="divider"></li>
-							
-							<li>
-								<p>
-									<a href="{pageContext.request.contextPath}/trading/balance_management">
+									<a href="${pageContext.request.contextPath}/user/balance">
 									Quản lý tài khoản
 									<span class="desc">
 									Balance management
@@ -462,7 +451,7 @@
                                                             <h3 class="text-right" style="padding-top:0px; border-bottom: 1px solid #555;"><i class="fa fa-user"></i> ${sessionScope.userFullName}</h3>
                                                             <br>
                                                             <c:if test="${!empty sessionScope.userProfilePicture}">
-                                                            <img src="${sessionScope.userProfilePicture}" class="img-responsible" />
+                                                            <img src="${sessionScope.userProfilePicture}" class="img-responsible" style="max-height:300px; float:right"/>
                                                             </c:if>
                                                             <c:if test="${empty sessionScope.userProfilePicture}">
                                                             <img src="${pageContext.request.contextPath}/resources/images/core/defaultProfilePicture.jpg" class="img-responsible" />

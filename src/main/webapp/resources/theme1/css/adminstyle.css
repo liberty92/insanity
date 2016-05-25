@@ -72,31 +72,31 @@ body {
 	text-shadow: 0px 0px 12px white;
 }
 
-table {
+.libertyTable table {
 	width: 100%;
 	border-collapse: collapse;
 	font-size: 1em !important;
 }
 
-th {
+.libertyTable th {
 	padding: 10px;
 	margin: 0;
 	text-align: left;
 	max-width: 400px;
 }
 
-tr, td {
+.libertyTable tr, td {
 	padding: 8px;
 	margin: auto;
 	text-align: left;
 	max-width: 400px;
 }
 
-table, th {
-	border: 1px solid #cbcbcb;
+.libertyTable table, th {
+	border: 1px solid rgba(221, 221, 221, 0)
 }
 
-th {
+.libertyTable th {
 	border-left: none;
 	border-right: none;
 	background: #0099ff;
@@ -104,15 +104,15 @@ th {
 	cursor: default;
 }
 
-tr:nth-child(odd) {
+.libertyTable tr:nth-child(odd) {
 	background: #ffffff;
 }
 
-tr:nth-child(even) {
+.libertyTable tr:nth-child(even) {
 	background: #ebedfa;
 }
 
-tr:hover {
+.libertyTable tr:hover {
 	background: #c9f9f9;
 	/*cursor: pointer;*/
 }
@@ -123,3 +123,12 @@ tr:hover {
 	margin: 10px 0px 0px;
 	min-height:460px;
 }
+a{
+	color:#0A86F1;
+}
+a:hover{
+	color:rgb(4, 106, 195);
+}
+h2{
+	border-bottom: 1px solid rgba(0,0,0,0.3);
+} 

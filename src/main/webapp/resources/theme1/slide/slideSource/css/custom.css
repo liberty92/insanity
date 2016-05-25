@@ -1719,10 +1719,14 @@ body {
 
 .hp07imgslide img {
   position: absolute;
-  left: 50%;
-  margin-left: -938px;
+  /*left: 50%;*/
+  /*margin-left: -938px;*/
   display: block;
-  width: 1920px; }
+/*   width: 1920px; 
+LIBERTY EDITED */
+width: 100%;
+height: 100%;
+}
 
 .cslide div {
   display: block; }
@@ -1921,7 +1925,7 @@ body {
 
   .hp07imgslide img {
     left: 0;
-    margin-left: -377px;
+    /*margin-left: -377px;*/
     height: 434px; } }
 @media (min-width: 601px) {
   .hp07nav ul {
@@ -1957,9 +1961,10 @@ body {
     height: 392px; }
 
   .hp07imgslide img {
-    margin-left: -400px;
-    height: 240px;
-    left: 50%; }
+ /*    margin-left: -400px;
+ height: 240px;
+ left: 50%;  */
+  }
 
   .hp07 {
     height: 222px; }

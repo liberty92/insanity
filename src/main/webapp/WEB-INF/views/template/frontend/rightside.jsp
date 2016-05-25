@@ -7,9 +7,27 @@
 		</h4>
 		<iframe style="margin:auto" class="img-responsive" src="https://www.youtube.com/embed/UDVtMYqUAyw?t=1m29s?rel=0;autoplay=0&amp;loop=1&amp" frameborder="0" allowfullscreen="1"></iframe>
 	  
+		<h4 class="Header">
+			<a>Thị trường</a>
+		</h4>
+	
+		<iframe style="margin:auto; height:230px; padding:3px 10px" class="img-responsive" scrolling="no" frameborder="3px"  src="https://finance.fsc.com.vn/TopStock.aspx" frameborder="0" allowfullscreen="1"></iframe>
+	
+	
+	<!-- 	
+		<h4 class="Header">
+			<a>Thị trường</a>
+		</h4>
+	<div class="col-xs-12" style="position:relative;overflow:hidden">
+	
+		<iframe width="700px" style="margin:auto;position:relative; left:-30px; height:230px; padding:3px 0px" class="" scrolling="no" frameborder="3px"  src="http://tcsc.vn:8080/TCSCIframe/chart/hcmchart#hnxindex" frameborder="0" allowfullscreen="1"></iframe>
+	</div>
+	 -->
+	
 		<!-- 3. HOTLINE -->
-		<h4 class="Header"><a >Hotline</a></h4>
-		<img style="margin:auto;max-height:134px;width:100%" src="${pageContext.request.contextPath}/resources/images/core/banner4.jpg" class="img-responsive" alt="Image">
+		<%-- <h4 class="Header"><a >Hotline</a></h4>
+		<img style="margin:auto;max-height:180px;width:100%" src="${pageContext.request.contextPath}/resources/images/core/banner4.jpg" class="img-responsive" alt="Image">
+		 --%>
 		<!-- 4.FANPAGE -->
 		<h4 class="Header">
 			<a >Fanpage</a>
@@ -24,7 +42,7 @@
 		<h4 class="Header">
 			<a >Liên hệ</a>
 		</h4>
-		<div class="col-xs-12" style="color:rgba(33, 33, 33, 0.8);background:rgba(153, 153, 153, 0.7);">
+		<div class="col-xs-12 contactFrame">
 			<div class="row contact">
 				<div style="overflow:hidden">
 					<strong>Địa chỉ:</strong>

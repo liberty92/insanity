@@ -77,8 +77,8 @@ label, .dataTables_info{
 
 
 					<div class="table-responsive" style="margin: 0px 10px">
-						<table id="dataTable"
-							class="table table-responsive table-hover table-striped table-bordered">
+						<table id="dataTable" style="min-height: 280px !important";
+							class="libertyTable table table-responsive table-hover table-striped table-bordered">
 							<thead>
 								<tr>
 									<th width="50">Index</th>

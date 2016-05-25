@@ -19,12 +19,20 @@ pageEncoding="UTF-8"%>
 
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
-<div class="adminHeader">
-	
-</div>
+	pageEncoding="UTF-8"%>
+  <div class="adminHeader">
+	<img alt="" style="height: 100px; width: 120px; position:absolute; top:10px; right:120px" class="img-responsive"
+			src="${pageContext.request.contextPath}/resources/images/core/hdgLogo.png">
+  </div>
 
+ 
 
+<%-- <div class="adminHeader" style="max-height: 120px">
+	<div class="col-xs-offset-10 col-xs-2" style="padding: 15px">
+		<img alt="" style="height: 100px; width: 120px" class="img-responsive"
+			src="${pageContext.request.contextPath}/resources/images/core/hdgLogo.png">
+	</div>
+</div> --%>
 
 <!-- <div class="row">
 	<div id="Banner">

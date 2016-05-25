@@ -26,6 +26,11 @@
 <link
 	href="${pageContext.request.contextPath}/resources/css/select2.min.css"
 	rel="stylesheet">
+	
+	<script
+	src="${pageContext.request.contextPath}/resources/js/accounting.min.js"></script>
+	<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
 <script
 	src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
 
@@ -94,22 +99,18 @@
 											</td>
 											<td>${u.balanceName}</td>
 											<td>${u.balanceCreatedDate}</td>
-											<td class="formatNummber"
-												style="text-align: right; color: blue"><fmt:parseNumber
-													var="i" type="number" value="${u.balanceInitialNAV}"
-													pattern="#,###" /> <c:out value="${i}" /> đ</td>
-											<td class="formatNummber"
-												style="text-align: right; color: blue"><fmt:parseNumber
-													var="i" type="number" value="${u.balanceCash}"
-													pattern="#,###" /> <c:out value="${i}" /> đ</td>
-											<td class="formatNummber"
-												style="text-align: right; color: blue"><fmt:parseNumber
-													var="i" type="number" value="${u.balanceTotalAssets}"
-													pattern="#,###" /> <c:out value="${i}" /> đ</td>
-											<td class="formatNummber"
-												style="text-align: right; color: blue"><fmt:parseNumber
-													var="i" type="number" value="${u.balanceNAV}"
-													pattern="#,###" /> <c:out value="${i}" /> đ</td>
+											<td class="formatNummber" style="text-align: right; color: blue">
+											 	${u.balanceInitialNAV}
+											 </td>
+											<td class="formatNummber" style="text-align: right; color: blue">
+												${u.balanceCash}
+											</td>
+											<td class="formatNummber" style="text-align: right; color: blue">
+												${u.balanceTotalAssets}
+											</td>
+											<td class="formatNummber" style="text-align: right; color: blue">
+												${u.balanceNAV}
+											</td>
 											<td>${u.balanceMarginRate}</td>
 											<td>${u.balanceState}</td>
 											<td><a
@@ -263,12 +264,34 @@
 								"$1,"));
 			})
 		}
+		
+		$.fn.digits2 = function() {
+			return this.each(function() {
+				var a = parseFloat($(this).text());
+				$(this).text(accounting.formatMoney(a));
+			})
+		};
+		accounting.settings = {
+			currency : {
+				symbol : " đ", // default currency symbol is '$'
+				format : "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
+				decimal : ".", // decimal point separator
+				thousand : ",", // thousands separator
+				precision : 0
+			// decimal places
+			},
+			number : {
+				precision : 0, // default precision on numbers is 0
+				thousand : ",",
+				decimal : "."
+			}
+		};
 
 		$(document)
 				.ready(
 						function() {
 							$('#dataTable').DataTable();
-							$(".formatNummber").digits();
+							$(".formatNummber").digits2();
 							$(".dropdownSelect").select2();
 
 							var $datetimepicker = $('#datetimepicker');
