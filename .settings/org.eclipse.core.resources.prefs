@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/main/java/com/liberation/lab/controller/CenterController.java=UTF-8
 encoding//src/main/java/com/liberation/lab/controller/UserAuthentication.java=UTF-8
+encoding//src/main/java/com/liberation/lab/controller/UserController.java=UTF-8
 encoding//src/main/webapp/WEB-INF/views/login.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/template/frontend/footer.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/template/frontend/header.jsp=UTF-8
