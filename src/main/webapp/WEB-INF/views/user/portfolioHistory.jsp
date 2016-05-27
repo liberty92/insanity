@@ -72,7 +72,7 @@ LOCAL -->
 
 <style>
 table {
-	color: black;
+	color: blue;
 }
 </style>
 
@@ -85,15 +85,38 @@ table {
 			<!--2. Main body-->
 
 			<div class="row " style="margin: 0px 10px">
-				<div class="col-md-9 listArticle"
+				<div class="col-md-12 listArticle"
 					style="padding-left: 10px; padding-right: 10px;">
 					<div
 						style="border-bottom: 1px solid #00aeef; padding-top: 0px; padding-bottom: 10px; margin-top: 0px; margin-bottom: 5px;">
 						<span
 							style="text-transform: uppercase; font-size: 23px; font-weight: bold; color: #00aeef; float: left">
-							Lịch sử danh mục</span> &nbsp; <span
+							Lịch sử danh mục</span> &nbsp; 
+							
+							
+							
+							
+							<a id="btn1" style="float:right; margin-left: 6px; padding:3px 12px;"
+									href="${pageContext.request.contextPath}/user/balance"
+									 class="btn btn-primary">
+									 <i class="fa fa-list-alt" >
+									 Quản lý tài khoản
+									 </i>
+									 </a>
+							
+							<a id="btn1"  style="float:right; margin-left: 6px; padding:3px 12px;"
+									href="${pageContext.request.contextPath}/user/trading"
+									 class="btn btn-primary">
+									 <i class="fa fa-sign-in" > &nbsp;
+									 Đặt lệnh
+									 </i>
+									 </a>
+							
+							
+							<span
 							style="float: right; margin-top: 10px">Balance ID:
 							${balance.balanceId} - ${balance.balanceName}</span>
+							
 					</div>
 
 
@@ -162,7 +185,7 @@ table {
 												style="padding-left: 0px; padding-right: 0px; text-align: center;">
 												<a onclick="return confirm('Xác nhận xóa tài khoản?')"
 												style="color: red !important; font-weight: bold"
-												href="<c:url value='/user/removeBalance/${balance.balanceId}' />">Delete</a>
+												href="<c:url value='/user/removeBalance/${balance.balanceId}' />"> <i class="fa fa-trash "></i></a>
 											</td>
 										</tr>
 								</table>
@@ -177,16 +200,16 @@ table {
 										<tr>
 											<th width="30">STT</th>
 											<th width="30">ID</th>
-											<th width="50">Mã CK</th>
+											<th width="80">Mã CK</th>
 											<th width="80">Số lượng</th>
 											<th width="80">Giá mua</th>
 											<th width="80">Giá bán</th>
-											<th width="80">GT mua</th>
-											<th width="80">GT bán</th>
-											<th width="30">+/-</th>
-											<th width="30">%</th>
-											<th width="80">Ngày mua</th>
-											<th width="80">Ngày bán</th>
+											<th width="100">Giá trị mua</th>
+											<th width="100">Giá trị bán</th>
+											<th width="100" style="min-width:100px !important">+/-</th>
+											<th width="40" style="max-width:40px !important">%</th>
+											<th width="80" style="min-width:110px !important">Ngày mua</th>
+											<th width="80" style="min-width:110px !important">Ngày bán</th>
 										</tr>
 									</thead>
 									
@@ -204,18 +227,18 @@ table {
 											</td>
 											<td style="text-align: right">${u.quantity}</td>
 											<td style="text-align: right">${u.buyPrice}</td>
-											<td style="text-align: right">${u.sellPrice}</td>
+											<td style="text-align: right; color:green; <c:if test="${((u.sellPrice * u.quantity*1000 - u.buyPrice * u.quantity*1000)) < 0}"> color:red</c:if>">${u.sellPrice}</td>
 											<td class="formatNummber" style="text-align: right">${u.buyPrice * u.quantity*1000}</td>
-											<td class="formatNummber" style="text-align: right">${u.sellPrice * u.quantity*1000}</td>
+											<td class="formatNummber" style="text-align: right; color: green; <c:if test="${((u.sellPrice * u.quantity*1000 - u.buyPrice * u.quantity*1000)) < 0}"> color:red</c:if>">${u.sellPrice * u.quantity*1000}</td>
 											<td class="formatNummber" style="text-align: right">${u.sellPrice * u.quantity*1000 - u.buyPrice * u.quantity*1000}</td>
 											 
-											<td class="formatPercent"  style="font-weight: bold;text-align: right ; color: green; <c:if test="${((u.sellPrice * u.quantity*1000 - u.buyPrice * u.quantity*1000)) < 0}"> color:red</c:if>">
+											<td class="formatPercent"  style="max-width:60px;font-weight: bold;text-align: center ; color: green; <c:if test="${((u.sellPrice * u.quantity*1000 - u.buyPrice * u.quantity*1000)) < 0}"> color:red</c:if>">
 											
 												${(u.sellPrice * u.quantity*1000 - u.buyPrice * u.quantity*1000)/(u.buyPrice * u.quantity*1000)*100}
 											
 											</td> 
-											<td>${u.buyDate}</td>
-											<td>${u.sellDate}</td>
+											<td class="formatTime">${u.buyDate}</td>
+											<td class="formatTime">${u.sellDate}</td>
 										</tr>
 									</c:forEach>
 								</table>
@@ -238,14 +261,14 @@ table {
 
 
 				</div>
-
+<%-- 
 				<div class="col-md-3" style="padding-right: 0px">
 					<div class="col-xs-12 sideBarWrapper">
 						<div class="Side-bar">
 							<%@ include file="../template/frontend/rightside.jsp"%>
 						</div>
 					</div>
-				</div>
+				</div> --%>
 			</div>
 		</div>
 		<!-- ====================== BODY ENDS =================================== -->
@@ -286,6 +309,13 @@ table {
 			var a = parseFloat($(this).text());
 			var b = Math.round(a * 100) / 100;
 			$(this).text(b +"%");
+		})
+	};
+	
+	$.fn.formatTime = function() {
+		return this.each(function() {
+			var a = ($(this).text());
+			$(this).text(a.substring(10, 19) + " "+ a.substring(8, 10) + "/"+a.substring(5, 7)+"/"+a.substring(0, 4) );
 		})
 	};
 
@@ -337,6 +367,7 @@ table {
 				// $(".formatNummber").digits();
 				$(".formatNummber").digits2();
 				$(".formatPercent").formatPercent();
+				$(".formatTime").formatTime();
 				var glow = $('.insanity');
 				setInterval(function() {
 					glow.hasClass('glow') ? glow.removeClass('glow') : glow

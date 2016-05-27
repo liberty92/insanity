@@ -17,7 +17,7 @@ body {
 	width: 98%;
 	background-image: url(../images/core/backgroundAdmin.png);
 	background-size: 100% 100%;
-	min-height: 520px;
+	/* min-height: 520px; */
 	text-align: center;
 	margin: 10px auto 10px;
 	padding: 0px 0px;
@@ -253,3 +253,27 @@ tr:hover {
 	background-size:100% 100%;
 	
 }
+table{
+	border: 1px solid rgba(28, 165, 206, 0.45) !important;
+}
+.table-bordered>thead>tr>th {
+    border: 1px solid rgba(15, 117, 189, 0.09) !important;
+}
+.panel{
+	border-radius: 0px !important;
+	background-color: rgba(21, 29, 45, 0.56) !important;
+	border:  1px solid rgba(168, 159, 239, 0.15) !important;
+}
+/* .form-control{
+	border-radius: 0px !important;
+	background-color: rgba(249, 247, 247, 0) !important;
+	border:  1px solid rgba(46, 157, 236, 0.47) !important;
+	color:#fff !important;
+}
+.select2-container--default .select2-selection--single{
+	border-radius: 0px !important;
+	background-color: rgba(249, 247, 247, 0) !important;
+	border:  1px solid rgba(46, 157, 236, 0.47) !important;
+	color:#fff !important;
+} */
+

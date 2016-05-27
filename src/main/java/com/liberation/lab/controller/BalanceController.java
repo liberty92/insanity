@@ -171,6 +171,7 @@ public class BalanceController {
 		b.setBalanceCreatedDate(balanceCreatedDate);
 		b.setBalanceInitialNAV(balanceInitialNAV);
 		b.setBalanceCash(balanceCash);
+		b.setBalanceAvailableCash(balanceCash);
 		b.setBalanceTotalAssets(balanceTotalAssets);
 		b.setBalanceNAV(balanceNAV);
 		b.setBalanceMarginRate(balanceMarginRate);
@@ -265,6 +266,7 @@ public class BalanceController {
 		b.setBalanceCreatedDate(balanceCreatedDate);
 		b.setBalanceInitialNAV(balanceInitialNAV);
 		b.setBalanceCash(balanceCash);
+		b.setBalanceAvailableCash(balanceCash);
 		b.setBalanceTotalAssets(balanceTotalAssets);
 		b.setBalanceNAV(balanceNAV);
 		b.setBalanceMarginRate(balanceMarginRate);
@@ -306,8 +308,10 @@ public class BalanceController {
 			balanceId = Integer.parseInt(req.getParameter("balanceId"));
 			Balance balance = this.balanceService.getBalanceById(balanceId);
 			double cash = balance.getBalanceCash();
+			// ADD AVAILABLE CASH
+			double availableCash = balance.getBalanceAvailableCash();
 			NumberFormat formatter = new DecimalFormat("###");
-			String result = formatter.format(cash);
+			String result = formatter.format(cash)+"|"+formatter.format(availableCash);
 			response.setContentType("text/plain");
 	        response.getWriter().write(result);
 		}

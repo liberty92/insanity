@@ -31,6 +31,9 @@ public class Balance {
     @Column(name = "balanceInitialNAV")
 	private double balanceInitialNAV;
 	
+    @Column(name = "balanceAvailableCash")
+	private double balanceAvailableCash;
+	
     @Column(name = "balanceCash")
 	private double balanceCash;
 	
@@ -116,6 +119,18 @@ public class Balance {
 
 	public void setBalanceCash(double balanceCash) {
 		this.balanceCash = balanceCash;
+	}
+
+	
+
+	public double getBalanceAvailableCash() {
+		return balanceAvailableCash;
+	}
+
+
+
+	public void setBalanceAvailableCash(double balanceAvailableCash) {
+		this.balanceAvailableCash = balanceAvailableCash;
 	}
 
 

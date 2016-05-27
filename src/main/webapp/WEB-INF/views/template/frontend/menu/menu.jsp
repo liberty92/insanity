@@ -76,9 +76,21 @@
 							<li>
 								<p>
 									<a href="${pageContext.request.contextPath}/user/tradingHistory">
-									Lịch sử giao dịch
+									Lịch sử đặt lệnh
 									<span class="desc">
 									Trading history
+									</span>
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li>
+							
+							<li>
+								<p>
+									<a href="${pageContext.request.contextPath}/user/tradingAndTaxFee">
+									Thống kê thuế & phí giao dịch
+									<span class="desc">
+									Trading and Tax fee
 									</span>
 									</a>
 								</p>
@@ -323,7 +335,7 @@
 							<li>
 								<p>
 									<a href="${pageContext.request.contextPath}/listArticle/announcement">
-									Tất cả  hông báo 
+									Tất cả  thông báo 
 									</a>
 								</p>
 							</li>

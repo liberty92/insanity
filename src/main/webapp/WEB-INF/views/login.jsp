@@ -17,7 +17,7 @@
 	<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
 	<style type="text/css"> 
 		body{
-		background-image: url('${pageContext.request.contextPath}/resources/images/core/loginBg.jpg') !important;
+		background-image: url('${pageContext.request.contextPath}/resources/slide/slideSource/slideImage/b6.jpg') !important;
 	} 
 </style>
 </head>
@@ -73,8 +73,8 @@
 			<div class="row">
 				<div class="no-print" style="color: white !important">
 					<b>Liberation Lab © 2016</b> | 
-					<a  href="https://fb.com/liberty4692">Terms and conditions</a> | 
-					<a  href="#">Contact us</a> 
+					<a  href="http://www.nth7.com/viewArticle/82">Terms and conditions</a> | 
+					<a  href="https://fb.com/liberty4692">Contact us</a> 
 				</div>
 			</div>
 		</footer>

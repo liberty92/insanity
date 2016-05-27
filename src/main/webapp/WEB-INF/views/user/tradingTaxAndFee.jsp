@@ -83,7 +83,7 @@ table {
 						style="border-bottom: 1px solid #00aeef; padding-top: 0px; padding-bottom: 10px; margin-top: 0px; margin-bottom: 5px;">
 						<span
 							style="text-transform: uppercase; font-size: 23px; font-weight: bold; color: #00aeef; float: left">
-							Lịch sử đặt lệnh</span> &nbsp; <span
+							Thống kê thuế và phí giao dịch</span> &nbsp; <span
 							style="float: right; margin-top: 10px">Balance ID:
 							${user.userId} - ${user.userFullName}</span>
 					</div>
@@ -120,17 +120,18 @@ table {
 									class="table table-hover table-striped table-bordered">
 									<thead>
 										<tr>
-											<th width="20">STT</th>
+											<th width="10" style="text-align: left; max-width: 30px !important; font-weight: bold">STT</th>
 											<th width="30">TK</th>
-											<th width="30">ID</th>
-											<th width="50">Mã CK</th>
+											<th width="10">ID</th>
+											<th width="40">Mã CK</th>
 											<th width="80" style="max-width: 80px !important; padding-right:2px;">Hành động</th>
-											<th width="80">Loại lệnh</th>
-											<th width="80">Giá</th>
-											<th width="80">Khối lượng</th>
+											<th width="50">Loại lệnh</th>
+											<th width="20">Giá</th>
+											<th width="70">Khối lượng</th>
 											<th width="80" style="max-width: 100px !important; padding-right:8px;">Tổng GT</th>
+											<th width="70">Phí giao dịch</th>
+											<th width="50">Thuế bán</th>
 											<th width="90" >Thời gian</th>
-											<th width="80">Trạng thái</th>
 										</tr>
 									</thead>
 
@@ -150,15 +151,11 @@ table {
 											<td style="text-align: right">${u.price}</td>
 											<td class="formatQuantity" style="text-align: right">${u.quantity}</td>
 											<td class="formatNummber"  style="text-align: right;max-width: 100px !important;">${u.price * u.quantity*1000}</td>
+											
+											<td class="formatNummber" style="text-align:right; color: red">${u.orderTradingFee}</td>
+											<td class="formatNummber" style="text-align:right; color: red">${u.orderSellTax}</td>
 											<td class="formatTime" >${u.createdTime}</td>
-											<td style="text-align: center; color:red;<c:if test="${u.orderState == 'WAITING'}">color: orange;</c:if> <c:if test="${u.orderState == 'SUCCEEDED'}">color: green;</c:if>">
-											
-												<c:if test="${u.orderState == 'SUCCEEDED'}">Đã khớp</c:if>
-												<c:if test="${u.orderState == 'UNSUCCEEDED'}">Không khớp</c:if>
-												<c:if test="${u.orderState == 'WAITING'}">Chờ khớp</c:if>
-												<c:if test="${u.orderState == 'CANCELLED'}">Đã hủy</c:if>
-											
-											</td>
+											 
 										</tr>
 									</c:forEach>
 								</table>

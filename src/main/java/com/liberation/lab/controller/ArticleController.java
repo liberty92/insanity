@@ -75,7 +75,15 @@ public class ArticleController {
      	String articleTitle = request.getParameter("articleTitle");
     	model.addAttribute("listArticles", this.articleService.listArticlesByArticleTitle(articleTitle));
     	model.addAttribute("keyword", articleTitle);
-    	return "admin/searchArticle";
+    	return "admin/listArticle";
+    }
+    
+     
+    @RequestMapping("/admin/removeArticle/{articleId}")
+    public String adminRemoveArticle(@PathVariable("articleId") int id){
+         
+        this.articleService.removeArticle(id);
+        return "redirect:/admin/article";
     }
      
      

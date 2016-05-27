@@ -44,7 +44,15 @@ public class Orders {
     private double margin; 
     
     @Column(name = "orderState")
-    private String orderState;
+    private String orderState; 
+    
+    @Column(name = "orderTradingFee")
+    private double orderTradingFee;
+    
+    @Column(name = "orderSellTax")
+    private double orderSellTax;
+	 
+  
 	 
   
  
@@ -164,6 +172,30 @@ public class Orders {
 
 	public void setOrderState(String orderState) {
 		this.orderState = orderState;
+	}
+
+	
+
+	public double getOrderTradingFee() {
+		return orderTradingFee;
+	}
+
+
+
+	public void setOrderTradingFee(double orderTradingFee) {
+		this.orderTradingFee = orderTradingFee;
+	}
+
+
+
+	public double getOrderSellTax() {
+		return orderSellTax;
+	}
+
+
+
+	public void setOrderSellTax(double orderSellTax) {
+		this.orderSellTax = orderSellTax;
 	}
 
 

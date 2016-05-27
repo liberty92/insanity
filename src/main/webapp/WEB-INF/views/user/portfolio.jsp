@@ -61,7 +61,7 @@ LOCAL -->
 
 <style>
 table {
-	color: black;
+	color: blue;
 }
 </style>
 
@@ -81,13 +81,22 @@ table {
 						<span
 							style="text-transform: uppercase; font-size: 23px; font-weight: bold; color: #00aeef; float: left">
 							Danh mục đầu tư</span> &nbsp; 
-							<button id="btn1" type="button" style="float:right; margin-left: 6px; padding:3px 12px;"
-									onclick="window.location.href='${pageContext.request.contextPath}/user/portfolioHistory/${balance.balanceId}'"
+							
+							<a id="btn1" style="float:right; margin-left: 6px; padding:3px 12px;"
+									href="${pageContext.request.contextPath}/user/portfolioHistory/${balance.balanceId}"
 									 class="btn btn-primary">
 									 <i class="fa fa-history" >
 									 Lịch sử danh mục
 									 </i>
-									 </button>
+									 </a>
+							
+							<a id="btn1"  style="float:right; margin-left: 6px; padding:3px 12px;"
+									href="${pageContext.request.contextPath}/user/trading"
+									 class="btn btn-primary">
+									 <i class="fa fa-sign-in" > &nbsp;
+									 Đặt lệnh
+									 </i>
+									 </a>
 							<span
 							style="float: right; margin-top: 10px">Balance ID:
 							${balance.balanceId} - ${balance.balanceName}</span>
@@ -131,7 +140,7 @@ table {
 										<tr>
 											<th width="30">ID</th>
 											<th width="100">Tên TK</th>
-											<th width="30">Ngày tạo</th>
+											<th width="120">Ngày tạo</th>
 											<th width="80">NAV gốc</th>
 											<th width="80">Tiền mặt</th>
 											<th width="80">Tổng TS</th>
@@ -143,7 +152,7 @@ table {
 										<tr>
 											<td>${balance.balanceId}</td>
 											<td>${balance.balanceName} </td>
-											<td>${balance.balanceCreatedDate}</td>
+											<td class="formatTime">${balance.balanceCreatedDate}</td>
 											<td id="n1" class="formatNummber"
 												style="text-align: right; color: blue">
 												${balance.balanceInitialNAV}</td>
@@ -160,7 +169,7 @@ table {
 												style="padding-left: 0px; padding-right: 0px; text-align: center;">
 												<a onclick="return confirm('Xác nhận xóa tài khoản?')"
 												style="color: red !important; font-weight: bold"
-												href="<c:url value='/user/removeBalance/${balance.balanceId}' />">Delete</a>
+												href="<c:url value='/user/removeBalance/${balance.balanceId}' />"><i class="fa fa-trash "></i></a>
 											</td>
 										</tr>
 								</table>
@@ -173,23 +182,24 @@ table {
 									class="table table-hover table-striped table-bordered">
 									<thead>
 										<tr>
-											<th width="30">STT</th>
+											<th width="25" style="max-width:25px !important;padding-left:2px; padding-right:2px;">STT</th>
 											<th width="30">ID</th>
 											<th width="50">Mã CK</th>
-											<th width="80">Số lượng</th>
-											<th width="80">Giá mua</th>
-											<th width="80">Tổng GT</th>
-											<th width="80">Giá hiện tại</th>
-											<th width="80">Tổng GT</th>
+											<th width="50" style="max-width:50px !important;padding-left:2px; padding-right:2px">S/Lượng</th>
+											<th width="50" style="max-width:50px !important;padding-left:2px; padding-right:2px">K/Dụng</th>
+											<th width="50">Giá mua</th>
+											<th width="80">Tổng GT Mua</th>
+											<th width="50" style="padding-left:2px; padding-right:2px">Giá HT</th>
+											<th width="80">Tổng GT HT</th>
 											<th width="30">+/-</th>
-											<th width="30">%</th>
-											<th width="80">Ngày mua</th>
+											<th width="40" style="mix-width:40px !important;">%</th>
+											<th width="100" style="min-width:100px !important; padding-right:2px; padding-left:2px">Ngày mua</th>
 										</tr>
 									</thead>
 									
 									<c:forEach items="${listPortfolios}" var="u" varStatus="loop">
 										<tr>
-											<td style="text-align: center; font-weight: bold">${loop.index +1}</td>
+											<td style="max-width:20px !important;text-align: center; font-weight: bold">${loop.index +1}</td>
 											<td>${u.portfolioId}</td>
 											<td style="color: blue; font-weight:bold">
 												<c:forEach items="${listStocks}" var="stock">  
@@ -200,9 +210,10 @@ table {
 											
 											</td>
 											<td style="text-align: right" class="formatQuantity">${u.quantity}</td>
+											<td style="text-align: right" class="formatQuantity">${u.availableQuantity}</td>
 											<td style="text-align: right">${u.buyPrice}</td>
 											<td class="formatNummber" style="text-align: right">${u.buyPrice * u.quantity*1000}</td>
-											<td  style="text-align: right">
+											<td  style="text-align: center; padding-left:2px; padding-right:2px">
 											
 												<c:forEach items="${listPriceBoard}" var="pb">
 													<c:if test="${pb.stockId == u.stockId}">
@@ -219,12 +230,11 @@ table {
 														<c:set var="temp3" scope="session" value="${temp2/(u.buyPrice*u.quantity*1000)*100 }"/>
 													</c:if>
 												</c:forEach>
-											
 											</td>
-											<td class="formatNummber"   style="text-align: right; color: green; ">${temp1}</td>
+											<td class="formatNummber"   style="text-align: right; color: blue; ">${temp1}</td>
 											<td class="formatNummber"  style="text-align: right ; color: green;<c:if test="${temp2 < 0}"> color:red</c:if>">${temp2}</td> 
-											<td class="formatPercent"  style="font-weight: bold;text-align: right ; color: green; <c:if test="${temp2 < 0}"> color:red</c:if>">${temp3}</td> 
-											<td>${u.buyDate}</td>
+											<td class="formatPercent"  style="max-width:30px !important;  padding-left:2px; padding-right:2px;font-weight: bold;text-align: center ; color: green; <c:if test="${temp2 < 0}"> color:red</c:if>">${temp3}</td> 
+											<td class="formatTime">${u.buyDate}</td>
 										</tr>
 									</c:forEach>
 								</table>
@@ -269,49 +279,6 @@ table {
 
 
 
-	<div class="modal fade" id="changeInfo">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Tạo tài khoản</h4>
-				</div>
-				<div class="modal-body">
-
-					<form action="${pageContext.request.contextPath}/user/addBalance"
-						method="POST" role="form" data-toggle="validator">
-
-						<input type="hidden" value="${user.userId}" name="userId">
-
-						<div class="form-group">
-							<label for="">Tên tài khoản</label> <input type="text"
-								data-minlength="3" required value="" class="form-control"
-								name="balanceName" id="" placeholder="demo 1">
-						</div>
-
-						<div class="form-group">
-							<div>
-								<label for=""><span style="float: left">NAV ban
-										đầu</span> </label><span id="cashDisplay"
-									style="color: blue; float: right; font-weight: bold">0</span>
-							</div>
-							<input type="number" pattern="[0-9]*" min="100000" max="10e9"
-								required value="" class="form-control" name="balanceInitialNAV"
-								id="cashInput" placeholder="10,000,000">
-						</div>
-
-
-						<button type="submit" class="btn btn-primary">Submit</button>
-					</form>
-
-
-
-				</div>
-			</div>
-		</div>
-	</div>
-
 
 
 </body>
@@ -335,12 +302,19 @@ table {
 			$(this).text(accounting.formatMoney(a));
 		})
 	};
+	
+	$.fn.formatTime = function() {
+		return this.each(function() {
+			var a = ($(this).text());
+			$(this).text(a.substring(10, 19) + " "+ a.substring(8, 10) + "/"+a.substring(5, 7)+"/"+a.substring(0, 4) );
+		})
+	};
 
 	$.fn.formatPercent = function() {
 		return this.each(function() {
 			var a = parseFloat($(this).text());
 			var b = Math.round(a * 100) / 100;
-			$(this).text(b +"%");
+			$(this).text(b);
 		})
 	};
 	
@@ -404,6 +378,7 @@ table {
 				$(".formatQuantity").formatQuantity();
 				$(".formatNummber").digits2();
 				$(".formatPercent").formatPercent();
+				$(".formatTime").formatTime();
 				var glow = $('.insanity');
 				setInterval(function() {
 					glow.hasClass('glow') ? glow.removeClass('glow') : glow

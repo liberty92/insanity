@@ -39,6 +39,9 @@ public class Portfolio {
 	
     @Column(name = "quantity")
 	private double quantity; 
+	
+    @Column(name = "availableQuantity")
+	private double availableQuantity; 
 	 
   
 
@@ -150,6 +153,20 @@ public class Portfolio {
 
 	public void setQuantity(double quantity) {
 		this.quantity = quantity;
+	}
+
+	
+
+
+	public double getAvailableQuantity() {
+		return availableQuantity;
+	}
+
+
+
+
+	public void setAvailableQuantity(double availableQuantity) {
+		this.availableQuantity = availableQuantity;
 	}
 
 

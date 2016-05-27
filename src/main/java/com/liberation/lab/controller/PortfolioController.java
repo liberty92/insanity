@@ -186,7 +186,7 @@ public class PortfolioController {
 		if (request.getParameter("quantity") != null) {
 			quantity = Double.parseDouble(request.getParameter("quantity"));
 		}
-
+		
 		Timestamp buyDate;
 		java.util.Date date = new java.util.Date();
 		buyDate = new Timestamp(date.getTime());
@@ -234,6 +234,7 @@ public class PortfolioController {
 		b.setBuyPrice(buyPrice);
 		b.setSellPrice(sellPrice);
 		b.setQuantity(quantity);
+		b.setAvailableQuantity(quantity);
 
 		if (portfolioId == 0) {
 			// new portfolio, add it

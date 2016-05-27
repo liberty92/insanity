@@ -41,11 +41,13 @@ import com.liberation.lab.model.Orders;
 import com.liberation.lab.model.Portfolio;
 import com.liberation.lab.model.PriceBoard;
 import com.liberation.lab.model.Stock;
+import com.liberation.lab.model.TradingFee;
 import com.liberation.lab.model.TransactionResult;
 import com.liberation.lab.model.Orders;
 import com.liberation.lab.service.OrdersService;
 import com.liberation.lab.service.PortfolioService;
 import com.liberation.lab.service.StockService;
+import com.liberation.lab.service.TradingFeeService;
 import com.liberation.lab.service.UserService;
 import com.liberation.lab.service.BalanceService;
 
@@ -85,6 +87,14 @@ public class OrdersController {
 	@Qualifier(value = "portfolioService")
 	public void setPortfolioService(PortfolioService us) {
 		this.portfolioService = us;
+	}
+
+	private TradingFeeService tradingFeeService;
+
+	@Autowired(required = true)
+	@Qualifier(value = "tradingFeeService")
+	public void setTradingFeeService(TradingFeeService us) {
+		this.tradingFeeService = us;
 	}
 
 	private OrdersService ordersService;
@@ -157,6 +167,39 @@ public class OrdersController {
 		model.addAttribute("listUsers", this.userService.listUsers());
 		model.addAttribute("listBalances", this.balanceService.getBalanceByUserId(userId));
 		return "user/tradingHistory";
+	}
+
+	@RequestMapping(value = { "/user/tradingAndTaxFee" }, method = RequestMethod.GET)
+	public String userTradingAndTaxFee(Model model, HttpServletRequest request, HttpServletResponse response) {
+
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+
+		int userId = 0;
+		if (session.getAttribute("userId") != null) {
+			userId = Integer.parseInt(session.getAttribute("userId").toString());
+		}
+		User u = this.userService.getUserById(userId);
+
+		List<Balance> listBalance = this.balanceService.getBalanceByUserId(userId);
+		List<Orders> listOrders = new ArrayList();
+		for (int i = 0; i < listBalance.size(); i++) {
+			int balanceId = listBalance.get(i).getBalanceId();
+			List<Orders> thisBalanceOrders = this.ordersService.getOrdersByBalanceId(balanceId);
+			for (int j = 0; j < thisBalanceOrders.size(); j++) {
+				if(thisBalanceOrders.get(j).getOrderState().equals("SUCCEEDED"))
+					listOrders.add(thisBalanceOrders.get(j));
+			}
+		}
+
+		model.addAttribute("user", u);
+		model.addAttribute("order", new Orders());
+		model.addAttribute("listOrders", listOrders);
+		model.addAttribute("listStocks", this.stockService.listStock());
+		model.addAttribute("listUsers", this.userService.listUsers());
+		model.addAttribute("listBalances", this.balanceService.getBalanceByUserId(userId));
+		return "user/tradingTaxAndFee";
 	}
 
 	@RequestMapping(value = "/user/addOrder", method = RequestMethod.POST)
@@ -385,6 +428,21 @@ public class OrdersController {
 		return "/core/coreOrders";
 	}
 	
+	public double tradingFee(double tv){
+		double tradingValue = tv;
+		List<TradingFee> listTradingFee = this.tradingFeeService.listTradingFees();
+		for (int i = 1; i < listTradingFee.size(); i++) {
+			if(tradingValue > listTradingFee.get(i).getFromValue() && tradingValue <= listTradingFee.get(i).getThroughValue()){
+				return listTradingFee.get(i).getValue()/100;
+			}
+		}
+		return listTradingFee.get(listTradingFee.size()).getValue()/100;
+	}
+	
+	public double sellingTaxFee(){
+		TradingFee firstSettingItem = this.tradingFeeService.getTradingFeeById(1);
+		return firstSettingItem.getValue()/100;
+	}
 
 	public void timeoutCancelAllWaitingOrders() {
 		System.out.println(new java.util.Date()+ " TIMEOUT CANCELLING ALL TRANSACTION");
@@ -420,10 +478,12 @@ public class OrdersController {
 		Balance balance = this.balanceService.getBalanceById(order.getBalanceId());
 		if (order.getAction().equals("BUY")) {
 			double requiredCash = order.getPrice() * order.getQuantity() * 1000;
-			double havingCash = balance.getBalanceCash();
+//			double havingCash = balance.getBalanceCash();
+			double havingCash = balance.getBalanceAvailableCash();
 			if (havingCash >= requiredCash) {
 				// TEMPORARY REDUCE CASH
-				balance.setBalanceCash(balance.getBalanceCash() - order.getPrice() * order.getQuantity() * 1000);
+//				balance.setBalanceCash(balance.getBalanceCash() - order.getPrice() * order.getQuantity() * 1000);
+				balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() - order.getPrice() * order.getQuantity() * 1000);
 				this.balanceService.updateBalance(balance);
 				return true;
 			}
@@ -439,10 +499,11 @@ public class OrdersController {
 				if (havingPortfolio.get(i).getStockId() == stockId) {
 					// THERE CAN BE ONLY 1 RESULT LIKE THAT
 					if (havingPortfolio.get(i).getSellPrice() <= 0) {
-						havingStock = havingPortfolio.get(i).getQuantity();
+						//havingStock = havingPortfolio.get(i).getQuantity();
+						havingStock = havingPortfolio.get(i).getAvailableQuantity();
 						if (havingStock >= requiredStock) {
 							// TEMPORARY REDUCE STOCK QUANTITY
-							havingPortfolio.get(i).setQuantity(havingStock - order.getQuantity());
+							havingPortfolio.get(i).setAvailableQuantity(havingStock - order.getQuantity());
 							this.portfolioService.updatePortfolio(havingPortfolio.get(i));
 							return true;
 						}
@@ -459,7 +520,7 @@ public class OrdersController {
 		Balance balance = this.balanceService.getBalanceById(order.getBalanceId());
 		if (order.getAction().equals("BUY")) {
 			// RESTORE CASH
-			balance.setBalanceCash(balance.getBalanceCash() + order.getPrice() * order.getQuantity() * 1000);
+			balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() + order.getPrice() * order.getQuantity() * 1000);
 			this.balanceService.updateBalance(balance);
 		}
 
@@ -469,9 +530,9 @@ public class OrdersController {
 				if (havingPortfolio.get(i).getStockId() == order.getStockId()) {
 					// THERE CAN BE ONLY 1 RESULT LIKE THAT
 					if (havingPortfolio.get(i).getSellPrice() <= 0) {
-						double havingStock = havingPortfolio.get(i).getQuantity();
+						double havingStock = havingPortfolio.get(i).getAvailableQuantity();
 						// RESTORE STOCK QUANTITY
-						havingPortfolio.get(i).setQuantity(havingStock + order.getQuantity());
+						havingPortfolio.get(i).setAvailableQuantity(havingStock + order.getQuantity());
 						this.portfolioService.updatePortfolio(havingPortfolio.get(i));
 					}
 				}
@@ -487,7 +548,7 @@ public class OrdersController {
 		Balance balance = this.balanceService.getBalanceById(order.getBalanceId());
 		if (order.getAction().equals("BUY")) {
 			// RESTORE CASH
-			balance.setBalanceCash(balance.getBalanceCash() + order.getPrice() * order.getQuantity() * 1000);
+			balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() + order.getPrice() * order.getQuantity() * 1000);
 			this.balanceService.updateBalance(balance);
 		}
 
@@ -497,9 +558,9 @@ public class OrdersController {
 				if (havingPortfolio.get(i).getStockId() == order.getStockId()) {
 					// THERE CAN BE ONLY 1 RESULT LIKE THAT
 					if (havingPortfolio.get(i).getSellPrice() <= 0) {
-						double havingStock = havingPortfolio.get(i).getQuantity();
+						double havingStock = havingPortfolio.get(i).getAvailableQuantity();
 						// RESTORE STOCK QUANTITY
-						havingPortfolio.get(i).setQuantity(havingStock + order.getQuantity());
+						havingPortfolio.get(i).setAvailableQuantity(havingStock + order.getQuantity());
 						this.portfolioService.updatePortfolio(havingPortfolio.get(i));
 					}
 				}
@@ -516,7 +577,19 @@ public class OrdersController {
 
 		if (order.getAction().equals("BUY")) {
 			double buyCash = order.getPrice() * order.getQuantity() * 1000;
-			balance.setBalanceCash(balance.getBalanceCash() - buyCash);
+			
+			// TRADING FEE
+			double tradingFeeRate = this.tradingFee(buyCash);
+			double tradingFee = buyCash*tradingFeeRate;
+			
+			order.setOrderTradingFee(tradingFee);
+			this.ordersService.updateOrders(order);
+			
+			double realPayment = buyCash + tradingFee;
+			
+			// SET REAL CASH AND AVAILABLE CASH & TAX AND FEE PAYMENT
+			balance.setBalanceCash(balance.getBalanceCash() - realPayment);
+			balance.setBalanceAvailableCash(balance.getBalanceAvailableCash()  - realPayment);
 			this.balanceService.updateBalance(balance);
 
 			List<Portfolio> havingPortfolio = this.portfolioService.getPortfolioByBalanceId(balance.getBalanceId());
@@ -531,9 +604,11 @@ public class OrdersController {
 
 						havingPortfolio.get(i)
 								.setBuyPrice(Precision
-										.round((oldPrice * oldQuantity + order.getPrice() * order.getQuantity())
+										//.round((oldPrice * oldQuantity + order.getPrice() * order.getQuantity())
+										.round((oldPrice * oldQuantity + (realPayment/1000))
 												/ (oldQuantity + order.getQuantity()), 3));
 						havingPortfolio.get(i).setQuantity(oldQuantity + order.getQuantity());
+						havingPortfolio.get(i).setAvailableQuantity(havingPortfolio.get(i).getAvailableQuantity() + order.getQuantity());
 
 						this.portfolioService.updatePortfolio(havingPortfolio.get(i));
 						break;
@@ -545,8 +620,9 @@ public class OrdersController {
 				Portfolio portfolio = new Portfolio();
 				portfolio.setBalanceId(balance.getBalanceId());
 				portfolio.setStockId(order.getStockId());
-				portfolio.setBuyPrice(Precision.round(order.getPrice(), 3));
+				portfolio.setBuyPrice(Precision.round(((realPayment/1000) / order.getQuantity()), 3));
 				portfolio.setQuantity(order.getQuantity());
+				portfolio.setAvailableQuantity(order.getQuantity());
 
 				Timestamp createdTime;
 				java.util.Date date = new java.util.Date();
@@ -560,7 +636,22 @@ public class OrdersController {
 
 		if (order.getAction().equals("SELL")) {
 			double sellCash = order.getPrice() * order.getQuantity() * 1000;
-			balance.setBalanceCash(balance.getBalanceCash() + sellCash);
+			
+			// TRADING FEE
+			double tradingFeeRate = this.tradingFee(sellCash);
+			double tradingFee = sellCash*tradingFeeRate;
+			
+			double taxRate = this.sellingTaxFee();
+			double taxFee = sellCash*taxRate;
+			
+			double realPayment = sellCash - tradingFee - taxFee;
+			
+			order.setOrderTradingFee(tradingFee);
+			order.setOrderSellTax(taxFee);
+			this.ordersService.updateOrders(order);
+			
+			balance.setBalanceCash(balance.getBalanceCash() + realPayment);
+			balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() + realPayment);
 			this.balanceService.updateBalance(balance);
 
 			List<Portfolio> havingPortfolio = this.portfolioService.getPortfolioByBalanceId(balance.getBalanceId());
@@ -577,8 +668,10 @@ public class OrdersController {
 
 						// CASE 1: SELL ALL:
 						if (havingPortfolio.get(i).getQuantity() == order.getQuantity()) {
-							havingPortfolio.get(i).setSellPrice(Precision.round(order.getPrice(), 3));
+							// havingPortfolio.get(i).setSellPrice(Precision.round(order.getPrice(), 3));
+							havingPortfolio.get(i).setSellPrice(Precision.round(((realPayment/1000)/ order.getQuantity()), 3));
 							havingPortfolio.get(i).setSellDate(createdTime);
+							havingPortfolio.get(i).setAvailableQuantity(havingPortfolio.get(i).getAvailableQuantity() - order.getQuantity());
 							this.portfolioService.updatePortfolio(havingPortfolio.get(i));
 							break;
 						}
@@ -590,10 +683,13 @@ public class OrdersController {
 							remain.setBuyPrice(Precision.round(havingPortfolio.get(i).getBuyPrice(), 3));
 							remain.setBuyDate(havingPortfolio.get(i).getBuyDate());
 							remain.setQuantity(havingPortfolio.get(i).getQuantity() - order.getQuantity());
+							remain.setAvailableQuantity(havingPortfolio.get(i).getAvailableQuantity() - order.getQuantity());
 							this.portfolioService.addPortfolio(remain);
 
 							havingPortfolio.get(i).setQuantity(order.getQuantity());
-							havingPortfolio.get(i).setSellPrice(Precision.round(order.getPrice(), 3));
+							havingPortfolio.get(i).setAvailableQuantity(havingPortfolio.get(i).getAvailableQuantity() - order.getQuantity());
+							// havingPortfolio.get(i).setSellPrice(Precision.round(order.getPrice(), 3));
+							havingPortfolio.get(i).setSellPrice(Precision.round(((realPayment/1000)/ order.getQuantity()), 3));
 							havingPortfolio.get(i).setSellDate(createdTime);
 
 							this.portfolioService.updatePortfolio(havingPortfolio.get(i));
@@ -652,7 +748,8 @@ public class OrdersController {
 			// MATCHED ALL
 			if (result.getMatchQuantity() == o.getQuantity()) {
 				if (o.getAction().equals("BUY")) {
-					balance.setBalanceCash(balance.getBalanceCash() + o.getPrice() * o.getQuantity()*1000);
+//					balance.setBalanceCash(balance.getBalanceCash() + o.getPrice() * o.getQuantity()*1000);
+					balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() + o.getPrice() * o.getQuantity()*1000);
 					this.balanceService.updateBalance(balance);
 				} else {
 					List<Portfolio> havingPortfolio = this.portfolioService
@@ -661,9 +758,9 @@ public class OrdersController {
 						if (havingPortfolio.get(i).getStockId() == stockId) {
 							// THERE CAN BE ONLY 1 RESULT LIKE THAT
 							if (havingPortfolio.get(i).getSellPrice() <= 0) {
-								double havingStock = havingPortfolio.get(i).getQuantity();
+								double havingStock = havingPortfolio.get(i).getAvailableQuantity();
 								// TEMPORARY REDUCE STOCK QUANTITY
-								havingPortfolio.get(i).setQuantity(havingStock + order.getQuantity());
+								havingPortfolio.get(i).setAvailableQuantity(havingStock + order.getQuantity());
 								this.portfolioService.updatePortfolio(havingPortfolio.get(i));
 							}
 						}
@@ -680,7 +777,8 @@ public class OrdersController {
 			else {
 				double remainQuantity = o.getQuantity() - result.getMatchQuantity();
 				if (o.getAction().equals("BUY")) {
-					balance.setBalanceCash(balance.getBalanceCash() + o.getPrice() * result.getMatchQuantity()*1000);
+//					balance.setBalanceCash(balance.getBalanceCash() + o.getPrice() * result.getMatchQuantity()*1000);
+					balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() + o.getPrice() * result.getMatchQuantity()*1000);
 					this.balanceService.updateBalance(balance);
 				} else {
 					List<Portfolio> havingPortfolio = this.portfolioService
@@ -689,9 +787,9 @@ public class OrdersController {
 						if (havingPortfolio.get(i).getStockId() == stockId) {
 							// THERE CAN BE ONLY 1 RESULT LIKE THAT
 							if (havingPortfolio.get(i).getSellPrice() <= 0) {
-								double havingStock = havingPortfolio.get(i).getQuantity();
+								double havingStock = havingPortfolio.get(i).getAvailableQuantity();
 								// TEMPORARY REDUCE STOCK QUANTITY
-								havingPortfolio.get(i).setQuantity(havingStock + result.getMatchQuantity());
+								havingPortfolio.get(i).setAvailableQuantity(havingStock + result.getMatchQuantity());
 								this.portfolioService.updatePortfolio(havingPortfolio.get(i));
 							}
 						}
@@ -1111,6 +1209,11 @@ public class OrdersController {
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession(true);
 
+		
+		double quantity = 0;
+		double availableQuantity = 0;
+		
+		int balanceId = 0;
 		int stockId = 0;
 		if (req.getParameter("stockId") != null && Integer.parseInt(req.getParameter("stockId")) > 0) {
 			stockId = Integer.parseInt(req.getParameter("stockId"));
@@ -1119,10 +1222,28 @@ public class OrdersController {
 			String stockExchange = s.getStockExchangeId();
 
 			PriceBoard pb = this.getStockPriceByStockname(stockId, stockName, stockExchange);
+			
+			
+			if (req.getParameter("balanceId") != null && Integer.parseInt(req.getParameter("balanceId")) > 0) {
+				balanceId = Integer.parseInt(req.getParameter("balanceId"));
+				List<Portfolio> havingPortfolio = this.portfolioService.getPortfolioByBalanceId(balanceId);
+				for (int i = 0; i < havingPortfolio.size(); i++) {
+					if (havingPortfolio.get(i).getStockId() == stockId) {
+						// THERE CAN BE ONLY 1 RESULT LIKE THAT
+						if (havingPortfolio.get(i).getSellPrice() <= 0) {
+							//havingStock = havingPortfolio.get(i).getQuantity();
+							quantity = havingPortfolio.get(i).getQuantity();
+							availableQuantity = havingPortfolio.get(i).getAvailableQuantity();
+							}
+						}
+					}
+				}
 
 			String result = "";
-			result = pb.getPrice().toString() + "|" + pb.getCeil().toString() + "|" + pb.getFloor().toString();
-
+			result = pb.getPrice().toString() + "|" + pb.getCeil().toString() + "|" + pb.getFloor().toString()+
+					"|" +String.valueOf(quantity)+"|"+String.valueOf(availableQuantity);
+			
+			System.out.println(result);
 			response.setContentType("text/plain");
 			response.getWriter().write(result);
 		}

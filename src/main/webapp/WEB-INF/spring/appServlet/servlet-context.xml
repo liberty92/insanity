@@ -72,6 +72,8 @@
 				<beans:value>com.liberation.lab.model.PriceBoard</beans:value>
 				<beans:value>com.liberation.lab.model.Orders</beans:value>
 				<beans:value>com.liberation.lab.model.TransactionUpdater</beans:value>
+				<beans:value>com.liberation.lab.model.TradingFee</beans:value>
+				<beans:value>com.liberation.lab.model.SystemConfig</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
@@ -183,7 +185,7 @@
 		<beans:property name="ordersDAO" ref="ordersDAO"></beans:property>
 	</beans:bean>
 	
-	<!-- ORDERS BEAN -->
+	<!-- TRANSACTION UPDATER BEAN - DEPRECATED!!! -->
 	<beans:bean id="transactionUpdaterDAO" class="com.liberation.lab.dao.TransactionUpdaterDAOImpl">
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
@@ -191,6 +193,26 @@
 	<beans:bean id="transactionUpdaterService"
 		class="com.liberation.lab.service.TransactionUpdaterServiceImpl">
 		<beans:property name="transactionUpdaterDAO" ref="transactionUpdaterDAO"></beans:property>
+	</beans:bean>
+	
+	<!-- TRADING FEE SETTING BEAN -->
+	<beans:bean id="tradingFeeDAO" class="com.liberation.lab.dao.TradingFeeDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="tradingFeeService"
+		class="com.liberation.lab.service.TradingFeeServiceImpl">
+		<beans:property name="tradingFeeDAO" ref="tradingFeeDAO"></beans:property>
+	</beans:bean>
+	
+	<!-- SYSTEM CONFIG SETTING BEAN -->
+	<beans:bean id="systemConfigDAO" class="com.liberation.lab.dao.SystemConfigDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="systemConfigService"
+		class="com.liberation.lab.service.SystemConfigServiceImpl">
+		<beans:property name="systemConfigDAO" ref="systemConfigDAO"></beans:property>
 	</beans:bean>
 	
 	<!-- BEANS DECLARATION ENDS -->

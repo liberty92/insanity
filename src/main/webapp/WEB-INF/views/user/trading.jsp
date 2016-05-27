@@ -24,7 +24,9 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 
 
-<link href="${pageContext.request.contextPath}/resources/css/select2.min.css" rel="stylesheet">
+<link
+	href="${pageContext.request.contextPath}/resources/css/select2.min.css"
+	rel="stylesheet">
 <c:if test="${empty sessionScope.theme}">
 	<link rel="stylesheet" type="text/css"
 		href="${pageContext.request.contextPath}/resources/css/style2.css">
@@ -44,8 +46,9 @@ LOCAL -->
 <link
 	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
 	rel="stylesheet">
-	
-	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <!-- JS -->
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
@@ -65,6 +68,14 @@ LOCAL -->
 table {
 	color: black;
 }
+
+.libertyForm, .select2-container--default .select2-selection--single {
+	border-radius: 0px !important;
+	height: 28px;
+	border: 1px solid rgba(46, 157, 236, 0.47) !important;
+	/* background-color: rgba(249, 247, 247, 0) !important;
+	color:blue !important; */
+}
 </style>
 
 <body>
@@ -80,18 +91,32 @@ table {
 					style="padding-left: 10px; padding-right: 10px;">
 					<div
 						style="border-bottom: 1px solid #00aeef; padding-top: 0px; padding-bottom: 10px; margin-top: 0px; margin-bottom: 5px;">
+						
 						<span
 							style="text-transform: uppercase; font-size: 23px; font-weight: bold; color: #00aeef; float: left">
-							Giao dịch trực tuyến</span> &nbsp; <span
-							style="float: right; margin-top: 10px">User ID:
-							${user.userId} - ${user.userFullName}</span>
+							Giao dịch trực tuyến</span> &nbsp; 
+							
+							
+							<a id="btn1" style="float:right; margin-left: 6px; padding:3px 12px;"
+									href="${pageContext.request.contextPath}/user/balance"
+									 class="btn btn-primary">
+									 <i class="fa fa-list-alt" > &nbsp;
+									 Quản lý tài khoản
+									 </i>
+									 </a>
+							
+							
+							<span
+							style="float: right; margin-top: 10px"> &nbsp; User ID:
+							${user.userId} - ${user.userFullName}</span> &nbsp; 
+							
+							<span
+							style="float: right; margin-top: 10px" id="balanceCash">&nbsp;</span>
+							
+							
 					</div>
 
-
-
 					<div class="col-xs-12">
-
-
 						<c:if test="${!empty sessionScope.updateMessage}">
 							<div class="alert alert-success">
 								<a href="#" class="close" data-dismiss="alert"
@@ -113,209 +138,197 @@ table {
 							</div>
 						</c:if>
 
+						<div class="row">
+							<div class="panel panel-default" style="color: #167AC6; padding-bottom:10px; margin-bottom:0px">
+								<div class="panel-body">
+									<div
+										style="color: #00aeef; font-weight: bold; font-size: 1.2em">
+										<span class="col-sm-2" style="float: left; color: red">Đặt
+											lệnh</span><span id="balanceAvailableCash"
+											class="col-sm-4 formatNummber">Sức mua:</span><span
+											class="col-sm-1" id="stockInfo">Giá:</span> <span id="p1"
+											class="col-sm-1" style="color: orange">&nbsp;</span> <span
+											id="p2" class="col-sm-1" style="color: #FF00FF">&nbsp;</span>
+										<span id="p3" class="col-sm-1" style="color: #01D5F4">&nbsp;</span>
+										<span id="p4" class="col-sm-1" style="color: #00aeef;">&nbsp;</span>
+									</div>
+
+									<div>
+										<form id="orderForm"
+											action="${pageContext.servletContext.contextPath}/user/addOrder"
+											method="POST" role="form">
+											<legend style="color: red; padding: 2px 16px">
+												<%
+													if (request.getParameter("validationError") != null)
+														out.println("Tài khoản của bạn không có đủ tiền mặt hoặc chứng khoán khả dụng để thực hiện thao tác này!");
+												%></b>
+											</legend>
+
+											<div class="col-sm-6">
 
 
+												<div class="form-group">
+													<div>
+														<label for="">Tài khoản</label>
+													</div>
 
-<div class="row">
-						<div class="panel panel-default" style="color: #167AC6">
-							<div class="panel-body">
-							<div style="color:#00aeef; font-weight:bold; font-size:1.2em">
-								<span class="col-sm-2" style="float:left; color:red">Đặt lệnh</span><span id="balanceInfo" class="col-sm-4 formatNummber" >Sức mua:</span><span class="col-sm-1" id="stockInfo">Giá:</span> 
-								<span id="p1" class="col-sm-1" style="color:orange">&nbsp;</span>
-								<span id="p2" class="col-sm-1" style="color:#FF00FF">&nbsp;</span>
-								<span id="p3" class="col-sm-1" style="color:#01D5F4">&nbsp;</span>
-								<span id="p4" class="col-sm-1" style="color:#00aeef;">&nbsp;</span>
-							</div>
-
-								<div>
-									<form id="orderForm"
-										action="${pageContext.servletContext.contextPath}/user/addOrder"
-										method="POST" role="form">
-										<legend style="color: red;padding:2px 16px">
-											<%
-												if (request.getParameter("validationError") != null)
-													out.println(request.getParameter("validationError"));
-											%></b>
-										</legend>
-
-										<div class="col-sm-6">
-
-
-											<div class="form-group">
-												<div>
-												<label for="">Balance Id</label> 
-												</div>
-												
-												<input type="hidden"
-													class="form-control" name="orderId"
-													value="${order.orderId}" id="" placeholder="Demo content">
-												<%-- 
+													<input type="hidden" class="form-control libertyForm"
+														name="orderId" value="${order.orderId}" id=""
+														placeholder="Demo content">
+													<%-- 
 										<input type="number"
-										class="form-control" name="balanceId" value="${order.balanceId}"
+										class="form-control libertyForm" name="balanceId" value="${order.balanceId}"
 										id="" placeholder="Demo content"> --%>
 
-												<select name="balanceId" id="inputBalanceId"
-													class="form-control dropdownSelect" required="required">
-													<option value="0" selected="selected">Chọn tài khoản</option>
-													<c:forEach items="${listBalances}" var="balance">
-														<option value="${balance.balanceId}" onclick="alert(${balance.balanceCash})"
-															<c:if test="${balance.balanceId == order.balanceId}"> selected="selected" </c:if>>
-															<c:forEach items="${listUsers}" var="u">
-																<c:if test="${balance.userId == u.userId}"> ${u.userFullName} </c:if>
-															</c:forEach> - ${balance.balanceId} - ${balance.balanceName} - Cash: ${balance.balanceCash}
-														</option>
-													</c:forEach>
-												</select>
+													<select name="balanceId" id="inputBalanceId"
+														class="form-control libertyForm dropdownSelect"
+														required="required">
+														<option value="0" selected="selected">Chọn tài
+															khoản</option>
+														<c:forEach items="${listBalances}" var="balance">
+															<option value="${balance.balanceId}"
+																onclick="alert(${balance.balanceCash})"
+																<c:if test="${balance.balanceId == order.balanceId}"> selected="selected" </c:if>>
+																<c:forEach items="${listUsers}" var="u">
+																	<c:if test="${balance.userId == u.userId}"> ${u.userFullName} </c:if>
+																</c:forEach> - ${balance.balanceId} - ${balance.balanceName} - Cash:
+																${balance.balanceCash}
+															</option>
+														</c:forEach>
+													</select>
+												</div>
+
+												<div class="form-group">
+													<label for="">Mã chứng khoán</label> <select name="stockId"
+														id="inputStockId"
+														class="form-control libertyForm dropdownSelect"
+														required="required">
+														<option value="0" selected="selected">Chọn mã
+															chứng khoán</option>
+														<c:forEach items="${listStocks}" var="stock">
+															<option style="font-family: Consolas, monospace;"
+																value="${stock.stockId}">${stock.stockName}
+																<c:if test="${stock.stockMarginRate > 0}">Margin:${stock.stockMarginRate}%</c:if>
+															</option>
+														</c:forEach>
+													</select>
+												</div>
+												
+												<div class="row">
+													<label id="q1" class="col-xs-6">&nbsp;</label>
+													<label id="q2" class="col-xs-6">&nbsp;</label>
+												</div>
 											</div>
 
-											<div class="form-group">
-												<label for="">Stock ID</label> <select name="stockId"
-													id="inputStockId" class="form-control dropdownSelect"
-													required="required">
-													<option value="0" selected="selected">Chọn mã chứng khoán</option>
-													<c:forEach items="${listStocks}" var="stock">
-														<option style="font-family: Consolas, monospace;"
-															value="${stock.stockId}">
-															${stock.stockName}
-															<c:if test="${stock.stockMarginRate > 0}">Margin:${stock.stockMarginRate}%</c:if>
-														</option>
-													</c:forEach>
-												</select>
+											<div class="col-sm-6">
+												<div class="row">
+													<div class="col-sm-4">
+														<div class="form-group">
+															<label for="">Hành động</label> <select
+																class="form-control libertyForm" name="action">
+																<option value="BUY">Mua</option>
+																<option value="SELL">Bán</option>
+															</select>
 
-											</div>
+														</div>
+													</div>
+													<div class="col-sm-4">
+														<div class="form-group">
+															<label for="">Loại lệnh</label> <select
+																class="form-control libertyForm" name="orderType">
+																<option value="LO">LO</option>
+																<option value="MP">MP</option>
+																<option value="ATO">ATO</option>
+																<option value="ATC">ATC</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-sm-4">
 
+														<div class="form-group">
+															<label for="">Margin</label> <select
+																class="form-control libertyForm" name="marginState">
+																<option value="NO">Không</option>
+																<option value="YES">Có</option>
+															</select>
 
-
-
-
-										</div>
-
-										<div class="col-sm-6">
-
-
-									<div class="row">
-										<div class="col-sm-4">
-										
-											<div class="form-group">
-												<label for="">Action</label> <select class="form-control"
-													name="action">
-													<option value="BUY">Buy</option>
-													<option value="SELL">Sell</option>
-												</select>
-
-											</div>
-										</div>
-										<div class="col-sm-4">
-										
-										<div class="form-group">
-												<label for="">Order type</label> <select
-													class="form-control" name="orderType">
-													<option value="LO">LO</option>
-													<option value="MP">MP</option>
-													<option value="ATO">ATO</option>
-													<option value="ATC">ATC</option>
-												</select>
-											</div>
-										
-										</div>
-										<div class="col-sm-4">
-										
-											<div class="form-group">
-												<label for="">Using margin</label> <select
-													class="form-control" name="marginState">
-													<option value="NO">No</option>
-													<option value="YES">Yes</option>
-												</select>
-
-											</div>
-										</div>
-								 
-									
-									
-									</div>
-									 
-									 
-									 <div class="row">
-									 			<div class="col-sm-4">
-										
-											<div class="form-group">
-												<label for="">Price</label> <input type="number" step="0.1"
-													class="form-control" name="price" value="${order.price}"
-													id="orderPrice" placeholder="Demo content">
-											</div>
-										</div>
-										
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-4">
+														<div class="form-group">
+															<label for="">Giá</label> <input type="number"
+																step="0.1" class="form-control libertyForm" name="price"
+																value="${order.price}" id="orderPrice"
+																placeholder="Demo content">
+														</div>
+													</div>
 													<div class="col-sm-8">
-										
-										<div class="form-group">
-												<label for="">Quantity</label> <input type="number"
-													step="10" class="form-control" name="quantity"
-													value="${order.quantity}" id="orderQuantity" placeholder="Demo content">
-											</div>
-										</div>
-									 
-									 
-									 
-									 </div>
-
-											
-
-											
-
-											<div class="form-group">
-												<button type="submit" style="float:left" class="btn btn-primary">Submit</button>
-												<span  id="tradeValue" class="formatNumber" style="float:right;font-weight:bold">Giá trị: 0đ</span>
+														<div class="form-group">
+															<label for="">Khối lượng</label> <input type="number"
+																step="10" class="form-control libertyForm"
+																name="quantity" value="${order.quantity}"
+																id="orderQuantity" placeholder="Demo content">
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<button type="submit" style="float: left"
+														class="btn btn-primary">Xác nhận</button>
+													<span id="tradeValue" class="formatNumber"
+														style="float: right; font-weight: bold">Giá trị: 0đ</span>
+												</div>
 											</div>
 
+											<br />
 
-
-
-										</div>
-
-
-
-
-
-
+										</form>
 
 										<br />
 
-									</form>
-
-									<br />
-
+									</div>
 								</div>
 							</div>
 						</div>
-						</div>
 
-
-
-
-						<div class="row">
+						<div class="row listArticle" style="min-height:520px !important;">
 							<div class="table-responsive">
 								<table id="dataTable" style="color: blue"
 									class="table table-hover table-striped table-bordered">
 									<thead>
 										<tr>
-											<th width="20">STT</th>
-											<th width="30">TK</th>
-											<th width="30">ID</th>
-											<th width="50">CK</th>
-											<th width="80">Action</th>
-											<th width="80">Loại lệnh</th>
-											<th width="80">Giá</th>
-											<th width="80">Khối lượng</th>
-											<th width="80" style="max-width: 100px !important; padding-right:8px;">Tổng GT</th>
-											<th width="80">Thời gian</th>
-											<th width="80">Trạng thái</th>
-											<th width="40">Hủy</th>
+											<th width="20"
+												style="max-width: 60px !important; padding-left: 2px; padding-right: 24px">STT</th>
+											<th width="30" style="padding-left: 2px; padding-right: 24px">TK</th>
+											<th width="30" style="padding-left: 2px; padding-right: 24px">ID</th>
+											<th width="30"
+												style="max-width: 30px !important; padding-left: 2px; padding-right: 24px">CK</th>
+											<th width="50"
+												style="max-width: 50px !important; padding-left: 2px; padding-right: 24px">Action</th>
+											<th width="65"
+												style="max-width: 65px !important; padding-left: 2px; padding-right: 24px">Loại
+												lệnh</th>
+											<th width="30"
+												style="max-width: 30px !important; padding-left: 2px; padding-right: 24px">Giá</th>
+											<th width="80" style="padding-left: 2px; padding-right: 24px">Khối
+												lượng</th>
+											<th style="padding-left: 2px;">Tổng GT</th>
+											<th width="70"
+												style="max-width: 70px !important; padding-left: 2px; padding-right: 24px">Thời
+												gian</th>
+											<th width="90"
+												style="max-width: 90px !important; padding-left: 2px; padding-right: 24px">Trạng
+												thái</th>
+											<th width="30"
+												style="max-width: 30px !important; padding-left: 2px; padding-right: 20px">Hủy</th>
 										</tr>
 									</thead>
 
 									<c:forEach items="${listOrders}" var="u" varStatus="loop">
 										<tr>
-											<td style="text-align: center; font-weight: bold">${loop.index +1}</td>
+											<td
+												style="text-align: left; max-width: 60px !important; font-weight: bold">${loop.index +1}</td>
 											<td>${u.balanceId}</td>
 											<td>${u.orderId}</td>
 											<td style="color: blue; font-weight: bold"><c:forEach
@@ -324,45 +337,40 @@ table {
 														${stock.stockName} 
 													</c:if>
 												</c:forEach></td>
-											<td style="text-align: right">${u.action}</td>
-											<td style="text-align: right">${u.orderType}</td>
-											<td style="text-align: right">${u.price}</td>
+											<td style="text-align: center; max-width: 60px !important;">
+											<c:if test="${u.action == 'BUY'}">Mua</c:if>
+											<c:if test="${u.action == 'SELL'}">Bán</c:if>
+											</td>
+											<td style="text-align: center">${u.orderType}</td>
+											<td style="text-align: center; max-width: 60px !important;">${u.price}</td>
 											<td class="formatQuantity" style="text-align: right">${u.quantity}</td>
-											<td class="formatNummber" style="text-align: right; max-width: 100px !important;">${u.price * u.quantity*1000}</td>
-											<td class="formatTime" >${u.createdTime}</td>
-											<td>${u.orderState}</td>
+											<td class="formatNummber"
+												style="text-align: right; max-width: 100px !important;">${u.price * u.quantity*1000}</td>
+											<td class="formatTime" style="text-align: center;">${u.createdTime}</td>
+											<td style="text-align: center; color:red;<c:if test="${u.orderState == 'WAITING'}">color: orange;</c:if> <c:if test="${u.orderState == 'SUCCEEDED'}">color: green;</c:if>">
+											
+											<c:if test="${u.orderState == 'SUCCEEDED'}">Đã khớp</c:if>
+											<c:if test="${u.orderState == 'UNSUCCEEDED'}">Không khớp</c:if>
+											<c:if test="${u.orderState == 'WAITING'}">Chờ khớp</c:if>
+											<c:if test="${u.orderState == 'CANCELLED'}">Đã hủy</c:if>
+											
+											</td>
 											<td
-												style="padding-left: 0px; padding-right: 0px; text-align: center;">
-												
+												style="padding-left: 0px; padding-right: 0px; text-align: center; max-width: 60px !important;">
+
 												<c:if test="${u.orderState == 'WAITING'}">
-												<a onclick="return confirm('Xác nhận hủy lệnh?')"
-												style="color: red !important; font-weight: bold"
-												href="<c:url value='/user/removeOrder/${u.orderId}' />">Hủy</a>
+													<a onclick="return confirm('Xác nhận hủy lệnh?')"
+														style="color: red !important; font-weight: bold"
+														href="<c:url value='/user/removeOrder/${u.orderId}' />"><i
+														class="fa fa-trash "></i></a>
 												</c:if>
-												
-												
-												
 											</td>
 										</tr>
 									</c:forEach>
 								</table>
 							</div>
 						</div>
-
-
-
-
-
-
-
-
-
-
-
 					</div>
-
-
-
 				</div>
 
 				<div class="col-md-3" style="padding-right: 0px">
@@ -394,13 +402,18 @@ table {
 	src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
-	
-	
-		<script src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
-		<script src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
+
+
+<script
+	src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript">
 	var priceBoard  = [0.0,0.0,0.0];
 	var cash = 0;
+	var availableCash = 0;
+	var balanceId = 0;
+	var stockId = 0;
 	
 	$('#orderForm').on('submit', function() {
 	    // check validation
@@ -449,7 +462,7 @@ table {
 	}); 
 	
 	$('#inputBalanceId').on('change', function (e) {
-	    var balanceId = this.value;
+	    balanceId = this.value;
 	    
 	    $.ajax({
             url : '${pageContext.request.contextPath}/user/ajaxGetBalanceInfo',
@@ -457,8 +470,11 @@ table {
             	balanceId : balanceId
             },
             success : function(responseText) {
-            	cash = parseFloat(responseText);
-            	$('#balanceInfo').text("Sức mua: " + accounting.formatMoney(responseText));
+            	var tempArray = responseText.split("|");
+            	cash = parseFloat(tempArray[0]);
+            	availableCash = parseFloat(tempArray[1]);
+            	$('#balanceCash').text("Tiền mặt: " + accounting.formatMoney(tempArray[0])+" -  ");
+            	$('#balanceAvailableCash').text("Sức mua: " + accounting.formatMoney(tempArray[1]));
                  
             }
         });
@@ -467,12 +483,15 @@ table {
 
 	
 	$('#inputStockId').on('change', function (e) {
-	    var stockId = this.value;
+	    stockId = this.value;
+	    console.log(balanceId);
+	    console.log(stockId);
 	    
 	    $.ajax({
             url : '${pageContext.request.contextPath}/user/ajaxGetStockInfo',
             data : {
-            	stockId : stockId
+            	stockId : stockId,
+            	balanceId : balanceId
             },
             success : function(responseText) {
             	var tempArray = responseText.split("|");
@@ -483,7 +502,15 @@ table {
             	$('#p1').text("TC: "+tempArray[0]);
             	$('#p2').text("Trần: "+tempArray[1]);
             	$('#p3').text("Sàn: "+tempArray[2]);
-            	$('#p4').text("Max: "+(cash/priceBoard[1]/1000).toFixed(0));
+            	$('#p4').text("Max: "+(availableCash/priceBoard[2]/1000).toFixed(0));
+            	$('#q1').text(tempArray[3]);
+            	$('#q2').text(tempArray[4]);
+            	$('#q1').formatQuantity();
+            	$('#q2').formatQuantity();
+            	
+            	
+            	$('#q1').text("Hiện có: "+$('#q1').text());
+            	$('#q2').text("Khả dụng: "+$('#q2').text());
             }
         });
 	   	 
