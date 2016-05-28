@@ -267,7 +267,7 @@ input, select{
 												<div class="row">
 													<div class="col-sm-4">
 														<div class="form-group">
-															<label for="">Giá</label> <input type="number" id="priceInput"
+															<label for="">Giá</label> <input type="number"  
 																step="0.1" class="form-control libertyForm" name="price"
 																value="${order.price}" id="orderPrice"
 																placeholder="Demo content">
@@ -474,6 +474,8 @@ input, select{
 		var p = $("#orderPrice").val();
 	    var q = $("#orderQuantity").val();
 	    var value1 = p*q*1000;
+	    console.log(p);
+	    console.log(q);
 	    
 	    var a = parseFloat(value1);
 		 
@@ -565,10 +567,10 @@ input, select{
 	$('#orderType').on('change', function (e) {
 		if($(this).val().localeCompare("LO") != 0){
 			if($('#orderAction').val().localeCompare("BUY") == 0){
-				$('#priceInput').val(ceil);
+				$('#orderPrice').val(ceil);
 			}
 			else{
-				$('#priceInput').val(floor);
+				$('#orderPrice').val(floor);
 			}
 		} 
 	});
@@ -577,10 +579,10 @@ input, select{
 	$('#orderAction').on('change', function (e) {
 		if($('#orderType').val().localeCompare("LO") != 0){
 			if($('#orderAction').val().localeCompare("BUY") == 0){
-				$('#priceInput').val(ceil);
+				$('#orderPrice').val(ceil);
 			}
 			else{
-				$('#priceInput').val(floor);
+				$('#orderPrice').val(floor);
 			}
 		} 
 	});

@@ -672,7 +672,7 @@ public class OrdersController {
 		Balance balance = this.balanceService.getBalanceById(order.getBalanceId());
 		if (order.getAction().equals("BUY")) {
 			// RESTORE CASH
-			balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() + order.getPrice() * order.getQuantity() * 1000);
+			balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() + order.getPrice() * order.getQuantity() * 1000*order.getMargin());
 			this.balanceService.updateBalance(balance);
 		}
 
@@ -700,7 +700,7 @@ public class OrdersController {
 		Balance balance = this.balanceService.getBalanceById(order.getBalanceId());
 		if (order.getAction().equals("BUY")) {
 			// RESTORE CASH
-			balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() + order.getPrice() * order.getQuantity() * 1000);
+			balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() + order.getPrice() * order.getQuantity() * 1000*order.getMargin());
 			this.balanceService.updateBalance(balance);
 		}
 
