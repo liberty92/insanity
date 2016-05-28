@@ -10,7 +10,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Liberty Invest</title>
+<title>Thông tin tài khoản | Liberty Invest</title>
 <!-- Meta data -->
 
 <!-- CDN -->
@@ -98,7 +98,8 @@ LOCAL -->
 						<div class="col-sm-6">
 
 
-							<div class="col-xs-12">
+							<div class="row">
+							<div class="row">
 								<p>
 									Họ và tên: <span class="userInfo">${user.userFullName}</span>
 								</p>
@@ -115,10 +116,8 @@ LOCAL -->
 									Địa chỉ: <span class="userInfo">${user.userAddress}</span>
 								</p>
 							</div>
-
-
-
-							<div class="col-xs-12">
+							
+							<div class="row">
 								<button id="btn1" type="button" data-toggle="modal"
 									data-target="#changeInfo" class="btn btn-primary">Cập
 									nhật thông tin</button>
@@ -127,6 +126,11 @@ LOCAL -->
 									data-target="#changePassword" class="btn btn-primary">Đổi
 									mật khẩu</button>
 							</div>
+							
+							</div>
+
+
+
 
 						</div>
 
@@ -193,7 +197,7 @@ LOCAL -->
 						<div class="form-group">
 							<label for="">Ảnh đại diện</label> <input type="text"
 								value="${user.userProfilePicture}" class="form-control"
-								name="userProfilePicture" id="" placeholder="Input field">
+								name="userProfilePicture" id="" placeholder="Bạn hãy dán URL ảnh vào đây">
 						</div>
 
 						<div class="form-group">

@@ -83,6 +83,7 @@ th {
 	margin: 0;
 	text-align: left;
 	max-width: 400px;
+	white-space: nowrap !important;
 }
 
 tr, td {
@@ -90,6 +91,7 @@ tr, td {
 	margin: auto;
 	text-align: left;
 	max-width: 400px;
+	white-space: nowrap !important;
 }
 
 table, th {
@@ -277,3 +279,11 @@ table{
 	color:#fff !important;
 } */
 
+.table-responsive{
+	overflow:hidden !important;
+}
+@media screen and (max-width: 670px) {
+    .table-responsive{
+        overflow: scroll !important;
+    }
+}

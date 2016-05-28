@@ -89,6 +89,9 @@ public class PortfolioController {
 		if(userId != userId2){
 			req.getRequestDispatcher("/403").forward(req, res);
 		}
+		
+		this.updateBalanceValue(b);
+		
 		List<PriceBoard> listPriceBoard = new ArrayList();
 		List<Portfolio> listPortfolio = this.portfolioService.getPortfolioByBalanceId(b.getBalanceId());
 		OrdersController t = new OrdersController();
@@ -263,4 +266,49 @@ public class PortfolioController {
 		return "/core/corePortfolio";
 	}
 
+	
+	public double getBalancePortfolioValue(int balanceId) throws Exception{
+		
+		List<Portfolio> listPortfolio = this.portfolioService.getPortfolioByBalanceId(balanceId);
+		double portfolioValue = 0;
+		for (int j = 0; j < listPortfolio.size(); j++) {
+			if( listPortfolio.get(j).getSellPrice() <= 0){
+				int StockId = listPortfolio.get(j).getStockId();
+				Stock s = this.stockService.getStockById(StockId);
+				String StockName = s.getStockName();
+				String StockExchange = s.getStockExchangeId();
+				
+				OrdersController oc = new OrdersController();
+				PriceBoard pb = oc.getStockPriceByStockname(StockId, StockName, StockExchange);
+				double stockCurrentPrice = 0;
+				if(pb.getMatchPrice() != 0)
+					stockCurrentPrice = pb.getMatchPrice();
+				else
+					stockCurrentPrice = pb.getPrice();
+				
+				portfolioValue += listPortfolio.get(j).getQuantity()*stockCurrentPrice*1000;
+			} 
+		}
+		return portfolioValue;
+		
+	}
+	public double getBalanceTotalMarginDebt(int balanceId) throws Exception{
+		List<Portfolio> listPortfolio = this.portfolioService.getPortfolioByBalanceId(balanceId);
+		double marginDebt = 0;
+		for (int j = 0; j < listPortfolio.size(); j++) {
+			if( listPortfolio.get(j).getSellPrice() <= 0){
+				marginDebt += listPortfolio.get(j).getMarginDebt();
+			}
+		} 
+		return marginDebt;
+	}
+	
+	public void updateBalanceValue(Balance b) throws Exception{
+		Balance balance = b;
+		double cash = balance.getBalanceCash();
+		balance.setBalanceTotalAssets(cash + this.getBalancePortfolioValue(balance.getBalanceId()));
+		balance.setBalanceNAV(cash + this.getBalancePortfolioValue(balance.getBalanceId()) 
+			- this.getBalanceTotalMarginDebt(balance.getBalanceId()));
+		this.balanceService.updateBalance(balance);
+	}
 }

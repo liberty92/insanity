@@ -27,6 +27,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,11 +52,14 @@ import com.liberation.lab.service.OrdersService;
 import com.liberation.lab.service.PortfolioService;
 import com.liberation.lab.service.StockService;
 import com.liberation.lab.service.TradingFeeService;
+import com.liberation.lab.service.TransactionUpdaterService;
 import com.liberation.lab.service.UserService;
 import com.liberation.lab.service.BalanceService;
 
 import java.util.List;
-
+@Configuration
+@EnableAsync
+@EnableScheduling
 @Controller
 @Component("orderController")
 public class OrdersController {
@@ -103,6 +110,14 @@ public class OrdersController {
 	@Qualifier(value = "ordersService")
 	public void setOrdersService(OrdersService us) {
 		this.ordersService = us;
+	}
+
+	private TransactionUpdaterService transactionUpdaterService;
+
+	@Autowired(required = true)
+	@Qualifier(value = "transactionUpdaterService")
+	public void setTransactionUpdaterService(TransactionUpdaterService us) {
+		this.transactionUpdaterService = us;
 	}
 
 	@RequestMapping(value = { "/user/trading" }, method = RequestMethod.GET)
@@ -201,6 +216,128 @@ public class OrdersController {
 		model.addAttribute("listBalances", this.balanceService.getBalanceByUserId(userId));
 		return "user/tradingTaxAndFee";
 	}
+	
+	@RequestMapping(value = { "/user/marginStats" }, method = RequestMethod.GET)
+	public String userMarginStats(Model model, HttpServletRequest request, HttpServletResponse response) {
+
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		
+		TradingFee secondSettingItem = this.tradingFeeService.getTradingFeeById(2);
+		double marginRate = secondSettingItem.getValue();
+		
+		
+		
+		int userId = 0;
+		if (session.getAttribute("userId") != null) {
+			userId = Integer.parseInt(session.getAttribute("userId").toString());
+		}
+		User u = this.userService.getUserById(userId);
+		List<Stock> marginDebtList = new ArrayList();
+
+		Timestamp createdTime;
+		java.util.Date date = new java.util.Date();
+		createdTime = new Timestamp(date.getTime());
+		
+		List<Balance> listBalance = this.balanceService.getBalanceByUserId(userId);
+		List<Portfolio> listPortfolio = new ArrayList();
+		for (int i = 0; i < listBalance.size(); i++) {
+			int balanceId = listBalance.get(i).getBalanceId();
+			List<Portfolio> thisBalancePortfolio = this.portfolioService.getPortfolioByBalanceId(balanceId);
+			for (int j = 0; j < thisBalancePortfolio.size(); j++) {
+				if(thisBalancePortfolio.get(j).getMarginDebt() != 0 && thisBalancePortfolio.get(j).getSellPrice() <= 0){
+					listPortfolio.add(thisBalancePortfolio.get(j));
+					double marginDebt = thisBalancePortfolio.get(j).getMarginDebt();
+					Stock s = new Stock();
+					s.setStockId(thisBalancePortfolio.get(j).getStockId());
+					
+					
+					
+					Timestamp startDate = thisBalancePortfolio.get(j).getBuyDate();
+					long sd = startDate.getTime();
+					long nd = createdTime.getTime();
+					float marginTime = Precision.round(((nd-sd)/(86400*1000)),0);
+					if(marginTime <= 0) marginTime =1;
+					
+					double marginFee = marginRate*marginDebt*marginTime/365/100;
+					// YEAH, TEMPORARY STORE MARGIN DATA IN STOCK OBJECT. I HAVE NO CHOICE :/
+					s.setStockPP(marginFee);
+					marginDebtList.add(s);
+				}
+			}
+		}
+		
+		
+
+		model.addAttribute("marginRate", marginRate);
+		model.addAttribute("user", u);
+		model.addAttribute("listPortfolios", listPortfolio);
+		model.addAttribute("listStocks", this.stockService.listStock());
+		model.addAttribute("marginDebtList", marginDebtList);
+		model.addAttribute("listBalances", this.balanceService.getBalanceByUserId(userId));
+		return "user/marginStats";
+	}
+	
+	@RequestMapping(value = { "/user/marginStatsHistory" }, method = RequestMethod.GET)
+	public String userMarginStatsHistory(Model model, HttpServletRequest request, HttpServletResponse response) {
+
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		
+		TradingFee secondSettingItem = this.tradingFeeService.getTradingFeeById(2);
+		double marginRate = secondSettingItem.getValue();
+		
+		
+		
+		int userId = 0;
+		if (session.getAttribute("userId") != null) {
+			userId = Integer.parseInt(session.getAttribute("userId").toString());
+		}
+		User u = this.userService.getUserById(userId);
+		List<Stock> marginDebtList = new ArrayList();
+ 
+		
+		List<Balance> listBalance = this.balanceService.getBalanceByUserId(userId);
+		List<Portfolio> listPortfolio = new ArrayList();
+		for (int i = 0; i < listBalance.size(); i++) {
+			int balanceId = listBalance.get(i).getBalanceId();
+			List<Portfolio> thisBalancePortfolio = this.portfolioService.getPortfolioHistoryByBalanceId(balanceId);
+			for (int j = 0; j < thisBalancePortfolio.size(); j++) {
+				if(thisBalancePortfolio.get(j).getMarginDebt() != 0 && thisBalancePortfolio.get(j).getSellPrice() > 0){
+					listPortfolio.add(thisBalancePortfolio.get(j));
+					double marginDebt = thisBalancePortfolio.get(j).getMarginDebt();
+					Stock s = new Stock();
+					s.setStockId(thisBalancePortfolio.get(j).getStockId());
+					
+					
+					
+					Timestamp startDate = thisBalancePortfolio.get(j).getBuyDate();
+					Timestamp endDate = thisBalancePortfolio.get(j).getSellDate();
+					long sd = startDate.getTime();
+					long nd = endDate.getTime();
+					float marginTime = Precision.round(((nd-sd)/(86400*1000)),0);
+					if(marginTime <= 0) marginTime =1;
+					
+					double marginFee = marginRate*marginDebt*marginTime/365/100;
+					// YEAH, TEMPORARY STORE MARGIN DATA IN STOCK OBJECT. I HAVE NO CHOICE :/
+					s.setStockPP(marginFee);
+					marginDebtList.add(s);
+				}
+			}
+		}
+		
+		
+
+		model.addAttribute("marginRate", marginRate);
+		model.addAttribute("user", u);
+		model.addAttribute("listPortfolios", listPortfolio);
+		model.addAttribute("listStocks", this.stockService.listStock());
+		model.addAttribute("marginDebtList", marginDebtList);
+		model.addAttribute("listBalances", this.balanceService.getBalanceByUserId(userId));
+		return "user/marginStatsHistory";
+	}
 
 	@RequestMapping(value = "/user/addOrder", method = RequestMethod.POST)
 	public String userAddOrders(Model model, HttpServletRequest request, HttpServletResponse response)
@@ -226,7 +363,10 @@ public class OrdersController {
 		String orderState = "WAITING";
 		Stock s = stockService.getStockById(stockId);
 		// FIXED CODE, MARGIN'S NOT ENABLED YET
-		double margin = 0;
+		double margin = 1;
+		if (request.getParameter("marginState").toString().equals("YES")) {
+			margin = s.getStockMarginRate();
+		}
 		double price = 0;
 		if (request.getParameter("price") != null) {
 			price = Double.parseDouble(request.getParameter("price"));
@@ -261,12 +401,17 @@ public class OrdersController {
 		} else {
 			this.ordersService.addOrders(o);
 		}
+		
+		// 3. TRANSACTION
+		this.transactionUpdaterService.executeTransaction(o);
+		
+		
 
 		// 3. TRANSACTION AND UPDATE BALANCE
-		boolean checkingTransaction = this.transaction(o);
+/*		boolean checkingTransaction = this.transaction(o);
 		if (checkingTransaction == true) {
 			this.updateBalanceAndPortfolioAfterTransaction(o);
-		}
+		}*/
 		return "redirect:/user/trading";
 	}
 
@@ -337,7 +482,10 @@ public class OrdersController {
 		Stock s = stockService.getStockById(stockId);
 
 		// FIXED CODE, MARGIN'S NOT ENABLED YET
-		double margin = 0;
+		double margin = 1;
+		if (request.getParameter("marginState").toString().equals("YES")) {
+			margin = this.stockService.getStockById(stockId).getStockMarginRate();
+		}
 
 		double price = 0;
 		if (request.getParameter("price") != null) {
@@ -389,8 +537,11 @@ public class OrdersController {
 			 this.ordersService.updateOrders(o);
 			 return "redirect:/core/orders";
 		}
+		else{
+			this.ordersService.addOrders(o);
+		}
 
-		Balance b = this.balanceService.getBalanceById(balanceId);
+		/*Balance b = this.balanceService.getBalanceById(balanceId);
 
 		// 2. ORDER VALIDATION:
 		boolean validation = this.orderValidation(o);
@@ -406,7 +557,7 @@ public class OrdersController {
 		boolean checkingTransaction = this.transaction(o);
 		if (checkingTransaction == true) {
 			this.updateBalanceAndPortfolioAfterTransaction(o);
-		}
+		}*/
 
 		return "redirect:/core/orders";
 	}
@@ -444,6 +595,7 @@ public class OrdersController {
 		return firstSettingItem.getValue()/100;
 	}
 
+	@Scheduled(cron="0 0 0 * * *", zone="Asia/Ho_Chi_Minh")
 	public void timeoutCancelAllWaitingOrders() {
 		System.out.println(new java.util.Date()+ " TIMEOUT CANCELLING ALL TRANSACTION");
 		List<Orders> listOrders = this.ordersService.listOrders();
@@ -461,14 +613,8 @@ public class OrdersController {
 		for (int i = 0; i < listOrders.size(); i++) {
 			if (listOrders.get(i).getOrderState().equals("WAITING")) {
 				System.out.println(new java.util.Date()+ " - ORDER "+ listOrders.get(i).getOrderId()+" IS BEING PROCESSED");
-				boolean checkOrder = this.transaction(listOrders.get(i));
-				if (checkOrder == true) {
-					this.updateBalanceAndPortfolioAfterTransaction(listOrders.get(i));
-					System.out.println(new java.util.Date()+" - ORDER "+ listOrders.get(i).getOrderId()+" COMPLETED !!!");
-				}
-				else{
-					System.out.println(new java.util.Date()+" - ORDER "+ listOrders.get(i).getOrderId()+" STILL WAITING");
-				}
+				
+				this.transactionUpdaterService.executeTransaction(listOrders.get(i));
 			}
 		}
 	}
@@ -477,13 +623,19 @@ public class OrdersController {
 		Orders order = o;
 		Balance balance = this.balanceService.getBalanceById(order.getBalanceId());
 		if (order.getAction().equals("BUY")) {
-			double requiredCash = order.getPrice() * order.getQuantity() * 1000;
+			double marginRate = o.getMargin();
+
+			// IF MARGIN = DEFAULT (1) THEN NO CHANGE -- IF USING -> MARGIN RATE < 0 --> REDUCE REQUIRED CASD
+			double requiredCash = (order.getPrice() * order.getQuantity() * 1000)*marginRate;
+			
+			
+			
 //			double havingCash = balance.getBalanceCash();
-			double havingCash = balance.getBalanceAvailableCash();
-			if (havingCash >= requiredCash) {
+//			double havingCash = balance.getBalanceAvailableCash();
+			if (balance.getBalanceAvailableCash() >= requiredCash && balance.getBalanceCash() >= requiredCash) {
 				// TEMPORARY REDUCE CASH
 //				balance.setBalanceCash(balance.getBalanceCash() - order.getPrice() * order.getQuantity() * 1000);
-				balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() - order.getPrice() * order.getQuantity() * 1000);
+				balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() - requiredCash); // MARGIN INCLUDED
 				this.balanceService.updateBalance(balance);
 				return true;
 			}
@@ -590,6 +742,8 @@ public class OrdersController {
 			// SET REAL CASH AND AVAILABLE CASH & TAX AND FEE PAYMENT
 			balance.setBalanceCash(balance.getBalanceCash() - realPayment);
 			balance.setBalanceAvailableCash(balance.getBalanceAvailableCash()  - realPayment);
+			balance.setBalanceTotalAssets(balance.getBalanceTotalAssets() - realPayment);
+			balance.setBalanceNAV(balance.getBalanceNAV() - realPayment);
 			this.balanceService.updateBalance(balance);
 
 			List<Portfolio> havingPortfolio = this.portfolioService.getPortfolioByBalanceId(balance.getBalanceId());
@@ -652,6 +806,8 @@ public class OrdersController {
 			
 			balance.setBalanceCash(balance.getBalanceCash() + realPayment);
 			balance.setBalanceAvailableCash(balance.getBalanceAvailableCash() + realPayment);
+			balance.setBalanceTotalAssets(balance.getBalanceTotalAssets() + realPayment);
+			balance.setBalanceNAV(balance.getBalanceNAV() + realPayment);
 			this.balanceService.updateBalance(balance);
 
 			List<Portfolio> havingPortfolio = this.portfolioService.getPortfolioByBalanceId(balance.getBalanceId());
@@ -1220,6 +1376,7 @@ public class OrdersController {
 			Stock s = this.stockService.getStockById(stockId);
 			String stockName = s.getStockName();
 			String stockExchange = s.getStockExchangeId();
+			String margin = String.valueOf(s.getStockMarginRate());
 
 			PriceBoard pb = this.getStockPriceByStockname(stockId, stockName, stockExchange);
 			
@@ -1241,7 +1398,7 @@ public class OrdersController {
 
 			String result = "";
 			result = pb.getPrice().toString() + "|" + pb.getCeil().toString() + "|" + pb.getFloor().toString()+
-					"|" +String.valueOf(quantity)+"|"+String.valueOf(availableQuantity);
+					"|" +String.valueOf(quantity)+"|"+String.valueOf(availableQuantity)+"|"+margin;
 			
 			System.out.println(result);
 			response.setContentType("text/plain");

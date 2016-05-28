@@ -87,10 +87,23 @@
 							
 							<li>
 								<p>
+									<a href="${pageContext.request.contextPath}/user/marginStats">
+									Thống kê margin
+									<span class="desc">
+									Margin using stats
+									</span>
+									</a>
+								</p>
+							</li>
+							<li class="divider"></li>
+							
+							
+							<li>
+								<p>
 									<a href="${pageContext.request.contextPath}/user/tradingAndTaxFee">
 									Thống kê thuế & phí giao dịch
 									<span class="desc">
-									Trading and Tax fee
+									Trading and Tax fee stats
 									</span>
 									</a>
 								</p>

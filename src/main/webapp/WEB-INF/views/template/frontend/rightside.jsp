@@ -11,7 +11,7 @@
 			<a>Thị trường</a>
 		</h4>
 	
-		<iframe style="margin:auto; height:230px; padding:3px 10px" class="img-responsive" scrolling="no" frameborder="3px"  src="https://finance.fsc.com.vn/TopStock.aspx" frameborder="0" allowfullscreen="1"></iframe>
+		<iframe style="margin:auto; height:230px; padding:3px 1px" class="img-responsive" scrolling="no" frameborder="3px"  src="https://finance.fsc.com.vn/TopStock.aspx" frameborder="0" allowfullscreen="1"></iframe>
 	
 	
 	<!-- 	

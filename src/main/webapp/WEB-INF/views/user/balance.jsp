@@ -10,7 +10,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Liberty Invest</title>
+<title>Quản lý tài khoản | Liberty Invest</title>
 <!-- Meta data -->
 
 <!-- CDN -->
@@ -130,7 +130,7 @@ table {
 										<tr>
 											<th width="30" style="max-width:30px !important;padding-right:0px; margin-right:0px;">STT</th>
 											<!-- <th width="30">ID</th> -->
-											<th width="150"  style="min-width:150px !important">Tên TK</th>
+											<th width="120"  style="min-width:120px !important">Tên TK</th>
 											<th width="110" style="min-width:110px !important">Ngày tạo</th>
 											<th width="100" style="min-width:100px !important">NAV gốc</th>
 											<th width="100" style="min-width:100px !important">Tiền mặt</th>
@@ -167,8 +167,8 @@ table {
 												style="text-align: right; color: blue">${u.balanceNAV}</td>
 											<td class="formatNummber" style="text-align: right; color: blue">
 												${u.balanceNAV-u.balanceInitialNAV}</td>
-											<td class="formatPercent" style="color:red; font-weight: bold; text-align:right;  
-												<c:if test="${(u.balanceNAV-u.balanceInitialNAV) >=0}">color:green; text-align:center</c:if>"> 
+											<td class="formatPercent" style="color:red; font-weight: bold; text-align:center;  
+												<c:if test="${(u.balanceNAV-u.balanceInitialNAV) >=0}">color:green; </c:if>"> 
 											${(u.balanceNAV-u.balanceInitialNAV)/u.balanceInitialNAV*100}%</td>
 											<%-- <td>${u.balanceMarginRate}</td> --%>
 											<td

@@ -10,7 +10,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Liberty Invest</title>
+<title>Lịch sử giao dịch | Liberty Invest</title>
 <!-- Meta data -->
 
 <!-- CDN -->
@@ -154,7 +154,7 @@ table {
 											<td style="text-align: center; color:red;<c:if test="${u.orderState == 'WAITING'}">color: orange;</c:if> <c:if test="${u.orderState == 'SUCCEEDED'}">color: green;</c:if>">
 											
 												<c:if test="${u.orderState == 'SUCCEEDED'}">Đã khớp</c:if>
-												<c:if test="${u.orderState == 'UNSUCCEEDED'}">Không khớp</c:if>
+												<c:if test="${u.orderState == 'UNSUCCESSED'}">Không khớp</c:if>
 												<c:if test="${u.orderState == 'WAITING'}">Chờ khớp</c:if>
 												<c:if test="${u.orderState == 'CANCELLED'}">Đã hủy</c:if>
 											

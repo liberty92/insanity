@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="true"%>
 <!DOCTYPE html>
 <html>
@@ -10,7 +11,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Liberty Invest</title>
+<title>Giao dịch trực tuyến | Liberty Invest</title>
 <!-- Meta data -->
 
 <!-- CDN -->
@@ -75,6 +76,9 @@ table {
 	border: 1px solid rgba(46, 157, 236, 0.47) !important;
 	/* background-color: rgba(249, 247, 247, 0) !important;
 	color:blue !important; */
+}
+input, select{
+	border-radius: 0px !important;
 }
 </style>
 
@@ -150,6 +154,7 @@ table {
 											class="col-sm-1" style="color: orange">&nbsp;</span> <span
 											id="p2" class="col-sm-1" style="color: #FF00FF">&nbsp;</span>
 										<span id="p3" class="col-sm-1" style="color: #01D5F4">&nbsp;</span>
+										
 										<span id="p4" class="col-sm-1" style="color: #00aeef;">&nbsp;</span>
 									</div>
 
@@ -191,15 +196,19 @@ table {
 																<c:if test="${balance.balanceId == order.balanceId}"> selected="selected" </c:if>>
 																<c:forEach items="${listUsers}" var="u">
 																	<c:if test="${balance.userId == u.userId}"> ${u.userFullName} </c:if>
-																</c:forEach> - ${balance.balanceId} - ${balance.balanceName} - Cash:
-																${balance.balanceCash}
+																</c:forEach> - ${balance.balanceId} - ${balance.balanceName}
+																 - Tiền mặt: <fmt:formatNumber type="number"  pattern="###,### đ" value="${balance.balanceCash}" />  
 															</option>
 														</c:forEach>
 													</select>
 												</div>
-
 												<div class="form-group">
-													<label for="">Mã chứng khoán</label> <select name="stockId"
+												<div class="row">
+													<label for="" class="col-xs-6">Mã chứng khoán</label> 
+													<span id="p5" class="col-xs-6" style="float:right;color: #00aeef;white-space: nowrap !important;">&nbsp;</span>												
+												</div>
+													
+													<select name="stockId"
 														id="inputStockId"
 														class="form-control libertyForm dropdownSelect"
 														required="required">
@@ -208,7 +217,7 @@ table {
 														<c:forEach items="${listStocks}" var="stock">
 															<option style="font-family: Consolas, monospace;"
 																value="${stock.stockId}">${stock.stockName}
-																<c:if test="${stock.stockMarginRate > 0}">Margin:${stock.stockMarginRate}%</c:if>
+																<%-- <c:if test="${stock.stockMarginRate > 0}">Margin:${stock.stockMarginRate}%</c:if> --%>
 															</option>
 														</c:forEach>
 													</select>
@@ -224,7 +233,7 @@ table {
 												<div class="row">
 													<div class="col-sm-4">
 														<div class="form-group">
-															<label for="">Hành động</label> <select
+															<label for="">Hành động</label> <select id="orderAction"
 																class="form-control libertyForm" name="action">
 																<option value="BUY">Mua</option>
 																<option value="SELL">Bán</option>
@@ -234,7 +243,7 @@ table {
 													</div>
 													<div class="col-sm-4">
 														<div class="form-group">
-															<label for="">Loại lệnh</label> <select
+															<label for="">Loại lệnh</label> <select id="orderType"
 																class="form-control libertyForm" name="orderType">
 																<option value="LO">LO</option>
 																<option value="MP">MP</option>
@@ -246,7 +255,7 @@ table {
 													<div class="col-sm-4">
 
 														<div class="form-group">
-															<label for="">Margin</label> <select
+															<label for="">Margin</label> <select id="marginState"
 																class="form-control libertyForm" name="marginState">
 																<option value="NO">Không</option>
 																<option value="YES">Có</option>
@@ -258,7 +267,7 @@ table {
 												<div class="row">
 													<div class="col-sm-4">
 														<div class="form-group">
-															<label for="">Giá</label> <input type="number"
+															<label for="">Giá</label> <input type="number" id="priceInput"
 																step="0.1" class="form-control libertyForm" name="price"
 																value="${order.price}" id="orderPrice"
 																placeholder="Demo content">
@@ -266,7 +275,7 @@ table {
 													</div>
 													<div class="col-sm-8">
 														<div class="form-group">
-															<label for="">Khối lượng</label> <input type="number"
+															<label for="">Khối lượng</label> <input type="number"  
 																step="10" class="form-control libertyForm"
 																name="quantity" value="${order.quantity}"
 																id="orderQuantity" placeholder="Demo content">
@@ -311,14 +320,14 @@ table {
 												lệnh</th>
 											<th width="30"
 												style="max-width: 30px !important; padding-left: 2px; padding-right: 24px">Giá</th>
-											<th width="80" style="padding-left: 2px; padding-right: 24px">Khối
+											<th width="30" style="max-width: 60px !important;padding-left: 2px; padding-right: 24px">Khối
 												lượng</th>
 											<th style="padding-left: 2px;">Tổng GT</th>
 											<th width="70"
-												style="max-width: 70px !important; padding-left: 2px; padding-right: 24px">Thời
+												style="max-width: 40px !important; padding-left: 2px; padding-right: 24px">Thời
 												gian</th>
 											<th width="90"
-												style="max-width: 90px !important; padding-left: 2px; padding-right: 24px">Trạng
+												style="max-width: 20px !important; padding-left: 2px; padding-right: 4px">Trạng
 												thái</th>
 											<th width="30"
 												style="max-width: 30px !important; padding-left: 2px; padding-right: 20px">Hủy</th>
@@ -342,15 +351,15 @@ table {
 											<c:if test="${u.action == 'SELL'}">Bán</c:if>
 											</td>
 											<td style="text-align: center">${u.orderType}</td>
-											<td style="text-align: center; max-width: 60px !important;">${u.price}</td>
-											<td class="formatQuantity" style="text-align: right">${u.quantity}</td>
+											<td style="text-align: right; max-width: 60px !important;">${u.price}</td>
+											<td class="formatQuantity" style="text-align: right; max-width: 30px !important;">${u.quantity}</td>
 											<td class="formatNummber"
 												style="text-align: right; max-width: 100px !important;">${u.price * u.quantity*1000}</td>
-											<td class="formatTime" style="text-align: center;">${u.createdTime}</td>
-											<td style="text-align: center; color:red;<c:if test="${u.orderState == 'WAITING'}">color: orange;</c:if> <c:if test="${u.orderState == 'SUCCEEDED'}">color: green;</c:if>">
+											<td class="formatTime" style="text-align: center; max-width:40px !important">${u.createdTime}</td>
+											<td style="max-width:20px !important; text-align: center; color:red;<c:if test="${u.orderState == 'WAITING'}">color: orange;</c:if> <c:if test="${u.orderState == 'SUCCEEDED'}">color: green;</c:if>">
 											
 											<c:if test="${u.orderState == 'SUCCEEDED'}">Đã khớp</c:if>
-											<c:if test="${u.orderState == 'UNSUCCEEDED'}">Không khớp</c:if>
+											<c:if test="${u.orderState == 'UNSUCCESSED'}">Không khớp</c:if>
 											<c:if test="${u.orderState == 'WAITING'}">Chờ khớp</c:if>
 											<c:if test="${u.orderState == 'CANCELLED'}">Đã hủy</c:if>
 											
@@ -411,9 +420,14 @@ table {
 <script type="text/javascript">
 	var priceBoard  = [0.0,0.0,0.0];
 	var cash = 0;
+	var ceil = 0;
+	var floor = 0;
 	var availableCash = 0;
 	var balanceId = 0;
 	var stockId = 0;
+	var margin = 1;
+	var max =0;
+	var maxMargin =0;
 	
 	$('#orderForm').on('submit', function() {
 	    // check validation
@@ -450,7 +464,13 @@ table {
 	        return true;
 	});
 	
-	$('#orderQuantity').on('blur', function (e) {
+	$('#cashInput').keyup(function() {
+		var raw_num = $(this).val();
+		var form_num = accounting.formatMoney(raw_num);
+		$('#cashDisplay').html(form_num);
+	});
+	
+	$('#orderQuantity').on('keyup', function (e) {
 		var p = $("#orderPrice").val();
 	    var q = $("#orderQuantity").val();
 	    var value1 = p*q*1000;
@@ -501,8 +521,17 @@ table {
             	
             	$('#p1').text("TC: "+tempArray[0]);
             	$('#p2').text("Trần: "+tempArray[1]);
+            	ceil = tempArray[1];
             	$('#p3').text("Sàn: "+tempArray[2]);
-            	$('#p4').text("Max: "+(availableCash/priceBoard[2]/1000).toFixed(0));
+            	floor = tempArray[2];
+            	max = (availableCash/priceBoard[2]/1000).toFixed(0);
+            	margin =  parseFloat(tempArray[5]);
+            	maxMargin = (max/margin).toFixed(0);
+            	$('#p5').text("Margin: "+(margin));
+            	$('#p4').text((availableCash/priceBoard[2]/1000).toFixed(0));
+            	$('#p4').formatQuantity();
+            	$('#p4').text("Max: "+($('#p4').text() ));
+            	
             	$('#q1').text(tempArray[3]);
             	$('#q2').text(tempArray[4]);
             	$('#q1').formatQuantity();
@@ -515,6 +544,52 @@ table {
         });
 	   	 
 	}); 
+	
+	$('#marginState').on('change', function (e) {
+		if($(this).val().localeCompare("YES") == 0){  
+			$('#p4').text(maxMargin);
+        	$('#p4').formatQuantity();
+        	$('#p4').text("Max: "+($('#p4').text() ));
+        	var temp = availableCash;
+        	
+        	$('#balanceAvailableCash').text("Sức mua: " + accounting.formatMoney(temp/margin));
+		}
+		else{
+			$('#p4').text(max);
+        	$('#p4').formatQuantity();
+        	$('#p4').text("Max: "+($('#p4').text() ));
+        	$('#balanceAvailableCash').text("Sức mua: " + accounting.formatMoney(availableCash));
+		}
+	});
+	
+	$('#orderType').on('change', function (e) {
+		if($(this).val().localeCompare("LO") != 0){
+			if($('#orderAction').val().localeCompare("BUY") == 0){
+				$('#priceInput').val(ceil);
+			}
+			else{
+				$('#priceInput').val(floor);
+			}
+		} 
+	});
+	
+	
+	$('#orderAction').on('change', function (e) {
+		if($('#orderType').val().localeCompare("LO") != 0){
+			if($('#orderAction').val().localeCompare("BUY") == 0){
+				$('#priceInput').val(ceil);
+			}
+			else{
+				$('#priceInput').val(floor);
+			}
+		} 
+	});
+		
+	$('#cashInput').keyup(function() {
+		var raw_num = $(this).val();
+		var form_num = accounting.formatMoney(raw_num);
+		$('#cashDisplay').html(form_num);
+	});
 	
 	$.fn.digits = function() {
 		return this.each(function() {
@@ -539,7 +614,7 @@ table {
 		return this.each(function() {
 			 
 			
-			var a = parseInt($(this).text());
+			var a = parseFloat($(this).text());
 			var str = accounting.formatMoney(a);
 			$(this).text(str.substring(0, str.length - 2));
 		})

@@ -1,6 +1,11 @@
 package com.liberation.lab.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -24,45 +29,58 @@ import com.liberation.lab.service.ArticleServiceImpl;
 
 @Controller
 public class CenterController {
-	
+
 	private ArticleService articleService;
-	
-	@Autowired(required=true)
-    @Qualifier(value="articleService")
-    public void setArticleService(ArticleService as){
-        this.articleService = as;
-    }
-	
-    @RequestMapping(value= "/", method = RequestMethod.GET)
-    public String index(Model model){
-    	model.addAttribute("listArticles", this.articleService.listArticlesForHomepage());
-    	return "index";
-    }
-    
-    
-    @RequestMapping(value= "/changeTheme", method = RequestMethod.GET)
-    public void changeTheme(ServletRequest request, ServletResponse response) throws IOException{
-    	HttpServletRequest req = (HttpServletRequest) request;
-    	HttpServletResponse res = (HttpServletResponse) response;
+
+	@Autowired(required = true)
+	@Qualifier(value = "articleService")
+	public void setArticleService(ArticleService as) {
+		this.articleService = as;
+	}
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String index(Model model) {
+		model.addAttribute("listArticles", this.articleService.listArticlesForHomepage());
+		return "index";
+	}
+
+	@RequestMapping(value = "/changeTheme", method = RequestMethod.GET)
+	public void changeTheme(ServletRequest request, ServletResponse response) throws IOException {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession(true);
-		
+
 		int themeCount = 2;
-		
-		if(session.getAttribute("themeChangingCount") == null){
+
+		if (session.getAttribute("themeChangingCount") == null) {
 			session.setAttribute("themeChangingCount", 2);
 			themeCount = 1;
-		}
-		else{
+		} else {
 			themeCount = Integer.parseInt(session.getAttribute("themeChangingCount").toString());
-			themeCount ++;
+			themeCount++;
 			session.setAttribute("themeChangingCount", themeCount);
 		}
-		String returnTheme = "style2.css"; 
-		if(themeCount %2 != 0){
+		String returnTheme = "style2.css";
+		if (themeCount % 2 != 0) {
 			returnTheme = "style.css";
 		}
 		session.setAttribute("theme", returnTheme);
 		String referrer = req.getHeader("referer");
 		res.sendRedirect(referrer);
-    }
+	}
+
+	public void test() {
+		Date currentTime = new Date();
+		DateFormat vnTime = new SimpleDateFormat("hh:mm:ss MM/dd/yyyy ");
+		vnTime.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+
+		String vietnamCurrentTime = vnTime.format(currentTime);
+		String currentHourInVietnam = vietnamCurrentTime.substring(0, 2);
+		System.out.println(currentHourInVietnam);
+		
+		if(currentHourInVietnam.equals("00")){
+			// DO MY TASK HERE
+		}
+
+	}
 }

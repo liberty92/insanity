@@ -47,7 +47,7 @@
 			<div class="row">
 				<h1>
 					<span style="color: #FF0000;">LIBERATION core engine</span> <span
-						style="float: right;">Trading fee manager</span>
+						style="float: right;">Fees and Interest rates manager</span>
 				</h1>
 			</div>
 			<div class="row">
@@ -57,7 +57,7 @@
 				<c:if test="${!empty listTradingFees}">
 					<div class="panel panel-default">
 						<div class="panel-body">
-							<h2>List Trading fee settings</h2>
+							<h2>Fees and Interest rates setting</h2>
 							<div class="table-responsive">
 								<table id="dataTable"
 									class="table table-hover table-striped table-bordered">
@@ -78,14 +78,14 @@
 											<td style="text-align: center">${loop.index +1}</td>
 											<td>${u.id}</td>
 											<td>${u.name}</td>
-											<td class="formatNummber" style="text-align: right">${u.fromValue}</td>
-											<td class="formatNummber" style="text-align: right">${u.throughValue}</td>
-											<td style="text-align: right">${u.value}%</td>
+											<td class="<c:if test="${u.id > 2}">formatNummber </c:if> " style="text-align: right"><c:if test="${u.id > 2}">${u.fromValue} </c:if></td>
+											<td class="<c:if test="${u.id > 2}">formatNummber </c:if> "" style="text-align: right"><c:if test="${u.id > 2}">${u.throughValue} </c:if> </td>
+											<td style="text-align: right; color:red">${u.value}%</td>
 											<td><a
 												href="<c:url value='/core/editTradingFee/${u.id}' />">Edit</a></td>
 											<td>
 											
-											<c:if test="${u.id != 1 }">
+											<c:if test="${u.id > 2 }">
 											<a
 												href="<c:url value='/core/removeTradingFee/${u.id}' />">Delete</a>
 												</td>
@@ -170,7 +170,13 @@
 	$.fn.digits2 = function() {
 		return this.each(function() {
 			var a = parseFloat($(this).text());
-			$(this).text(accounting.formatMoney(a));
+			if(a <= 10e90){
+				$(this).text(accounting.formatMoney(a));
+			}
+			else{
+				$(this).text("Infinity");
+			}
+				
 		})
 	};
 	

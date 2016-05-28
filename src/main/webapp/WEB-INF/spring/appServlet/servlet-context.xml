@@ -185,16 +185,6 @@
 		<beans:property name="ordersDAO" ref="ordersDAO"></beans:property>
 	</beans:bean>
 	
-	<!-- TRANSACTION UPDATER BEAN - DEPRECATED!!! -->
-	<beans:bean id="transactionUpdaterDAO" class="com.liberation.lab.dao.TransactionUpdaterDAOImpl">
-		<beans:property name="sessionFactory"
-			ref="hibernate4AnnotatedSessionFactory" />
-	</beans:bean>
-	<beans:bean id="transactionUpdaterService"
-		class="com.liberation.lab.service.TransactionUpdaterServiceImpl">
-		<beans:property name="transactionUpdaterDAO" ref="transactionUpdaterDAO"></beans:property>
-	</beans:bean>
-	
 	<!-- TRADING FEE SETTING BEAN -->
 	<beans:bean id="tradingFeeDAO" class="com.liberation.lab.dao.TradingFeeDAOImpl">
 		<beans:property name="sessionFactory"
@@ -215,13 +205,29 @@
 		<beans:property name="systemConfigDAO" ref="systemConfigDAO"></beans:property>
 	</beans:bean>
 	
+	<!-- TRANSACTION UPDATER BEAN - DEPRECATED!!! -->
+	<beans:bean id="transactionUpdaterDAO" class="com.liberation.lab.dao.TransactionUpdaterDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="transactionUpdaterService"
+		class="com.liberation.lab.service.TransactionUpdaterServiceImpl">
+		<beans:property name="transactionUpdaterDAO" ref="transactionUpdaterDAO"></beans:property>
+		<beans:property name="ordersService" ref="ordersService"></beans:property>
+		<beans:property name="balanceService" ref="balanceService"></beans:property>
+		<beans:property name="portfolioService" ref="portfolioService"></beans:property>
+		<beans:property name="stockService" ref="stockService"></beans:property>
+		<beans:property name="tradingFeeService" ref="tradingFeeService"></beans:property>
+	</beans:bean>
+	
+	
 	<!-- BEANS DECLARATION ENDS -->
 
 
 	<context:component-scan base-package="com.liberation.lab" />
 	<task:scheduler id="updateTransaction"/>
     <task:scheduled-tasks scheduler="updateTransaction">
-        <task:scheduled ref="orderController" method="checkTransactionAllWaitingOrders" fixed-delay="180000" />
+        <task:scheduled ref="orderController" method="checkTransactionAllWaitingOrders" fixed-delay="1800000" />
     </task:scheduled-tasks>
 
 	<tx:annotation-driven transaction-manager="transactionManager" />

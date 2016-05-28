@@ -1184,3 +1184,9 @@ html[xmlns] .clearfix {
 	background-size: 100% 100%;
 	min-height: 120px;
 }
+
+@media screen and (max-width: 670px) {
+    .table-responsive{
+        overflow: scroll !important;
+    }
+}

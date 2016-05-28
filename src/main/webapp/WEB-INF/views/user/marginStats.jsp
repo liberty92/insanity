@@ -10,7 +10,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lịch sử danh mục | Liberty Invest</title>
+<title>Thống kê margin | Liberty Invest</title>
 <!-- Meta data -->
 
 <!-- CDN -->
@@ -91,31 +91,31 @@ table {
 						style="border-bottom: 1px solid #00aeef; padding-top: 0px; padding-bottom: 10px; margin-top: 0px; margin-bottom: 5px;">
 						<span
 							style="text-transform: uppercase; font-size: 23px; font-weight: bold; color: #00aeef; float: left">
-							Lịch sử danh mục</span> &nbsp; 
+							Thống kê sử dụng margin</span> &nbsp; 
 							
 							
 							
 							
 							<a id="btn1" style="float:right; margin-left: 6px; padding:3px 12px;"
-									href="${pageContext.request.contextPath}/user/balance"
+									href="${pageContext.request.contextPath}/user/marginStatsHistory"
 									 class="btn btn-primary">
-									 <i class="fa fa-list-alt" >
-									 Quản lý tài khoản
+									 <i class="fa fa-history" >
+									 Lịch sử margin
 									 </i>
 									 </a>
 							
 							<a id="btn1"  style="float:right; margin-left: 6px; padding:3px 12px;"
-									href="${pageContext.request.contextPath}/user/trading"
+									href="${pageContext.request.contextPath}/user/tradingAndTaxFee"
 									 class="btn btn-primary">
-									 <i class="fa fa-sign-in" > &nbsp;
-									 Đặt lệnh
+									 <i class="fa fa-list-alt" > &nbsp;
+									 Thuế và phí giao dịch
 									 </i>
 									 </a>
 							
 							
 							<span
-							style="float: right; margin-top: 10px">Balance ID:
-							${balance.balanceId} - ${balance.balanceName}</span>
+							style="float: right; margin-top: 10px; color: red">Lãi vay margin hiện tại:
+							${marginRate}% / năm</span>
 							
 					</div>
 
@@ -148,49 +148,7 @@ table {
 						<div class="row">
 						
 						
-						
-						<div class="table-responsive">
-								<table id=""
-									class="table table-hover table-striped table-bordered">
-									<thead>
-										<tr>
-											<th width="30">ID</th>
-											<th width="100">Tên TK</th>
-											<th width="30">Ngày tạo</th>
-											<th width="80">NAV gốc</th>
-											<th width="80">Tiền mặt</th>
-											<th width="80">Tổng TS</th>
-											<th width="80">NAV</th>
-											<th width="30">Margin</th>
-											<th width="30">Xóa</th>
-										</tr>
-									</thead>
-										<tr>
-											<td>${balance.balanceId}</td>
-											<td>${balance.balanceName} </td>
-											<td class="formatTime">${balance.balanceCreatedDate}</td>
-											<td id="n1" class="formatNummber"
-												style="text-align: right; color: blue">
-												${balance.balanceInitialNAV}</td>
-											<td class="formatNummber"
-												style="text-align: right; color: blue">
-												${balance.balanceCash}</td>
-											<td class="formatNummber"
-												style="text-align: right; color: blue">
-												${balance.balanceTotalAssets}</td>
-											<td class="formatNummber"
-												style="text-align: right; color: blue">${balance.balanceNAV}</td>
-											<td>${balance.balanceMarginRate}</td>
-											<td
-												style="padding-left: 0px; padding-right: 0px; text-align: center;">
-												<a onclick="return confirm('Xác nhận xóa tài khoản?')"
-												style="color: red !important; font-weight: bold"
-												href="<c:url value='/user/removeBalance/${balance.balanceId}' />"> <i class="fa fa-trash "></i></a>
-											</td>
-										</tr>
-								</table>
-							</div>
-						
+						 
 					 
 						
 							<div class="table-responsive">
@@ -199,46 +157,47 @@ table {
 									<thead>
 										<tr>
 											<th width="30">STT</th>
-											<th width="30">ID</th>
+											<th width="30">ID tài khoản</th>
+											<th width="30">ID danh mục</th>
 											<th width="80">Mã CK</th>
 											<th width="80">Số lượng</th>
 											<th width="80">Giá mua</th>
-											<th width="80">Giá bán</th>
 											<th width="100" style="min-width:80px !important">Giá trị mua</th>
-											<th width="100" style="min-width:80px !important">Giá trị bán</th>
-											<th width="100" style="min-width:70px !important">+/-</th>
-											<th width="40" style="max-width:40px !important">%</th>
+											<th width="80" style="min-width:10px !important">Tỉ lệ margin</th>
+											<th width="80" style="min-width:110px !important">Tiền vay</th>
+											<th width="80" style="min-width:110px !important">Lãi vay</th>
 											<th width="80" style="min-width:110px !important">Ngày mua</th>
-											<th width="80" style="min-width:110px !important">Ngày bán</th>
 										</tr>
 									</thead>
 									
 									<c:forEach items="${listPortfolios}" var="u" varStatus="loop">
 										<tr>
 											<td style="text-align: center; font-weight: bold">${loop.index +1}</td>
+											<td>${u.balanceId}</td>
 											<td>${u.portfolioId}</td>
 											<td style="color: blue; font-weight:bold">
 												<c:forEach items="${listStocks}" var="stock">  
 													<c:if test="${stock.stockId == u.stockId}"> 
 														${stock.stockName} 
+														<c:set var="thisMarginRate" scope="session" value="${stock.stockMarginRate}"/>
 													</c:if>
 												</c:forEach> 
 											
 											</td>
 											<td class="formatQuantity" style="text-align: right">${u.quantity}</td>
 											<td style="text-align: right">${u.buyPrice}</td>
-											<td style="text-align: right; color:green; <c:if test="${((u.sellPrice * u.quantity*1000 - u.buyPrice * u.quantity*1000)) < 0}"> color:red</c:if>">${u.sellPrice}</td>
 											<td class="formatNummber" style="text-align: right">${u.buyPrice * u.quantity*1000}</td>
-											<td class="formatNummber" style="text-align: right; color: green; <c:if test="${((u.sellPrice * u.quantity*1000 - u.buyPrice * u.quantity*1000)) < 0}"> color:red</c:if>">${u.sellPrice * u.quantity*1000}</td>
-											<td class="formatNummber" style="text-align: right">${u.sellPrice * u.quantity*1000 - u.buyPrice * u.quantity*1000}</td>
+											<td style="text-align: right">${thisMarginRate}</td>
+											<td class="formatNummber" style="text-align: right; color:red">${u.marginDebt}</td>
+											<td class="formatNummber" style="text-align: right; color:red">
+												<c:forEach items="${marginDebtList}" var="debt">
+													<c:if test="${debt.stockId == u.stockId}"> 
+														${debt.stockPP}
+													</c:if>
+												</c:forEach>
+											</td>
 											 
-											<td class="formatPercent"  style="max-width:60px;font-weight: bold;text-align: center ; color: green; <c:if test="${((u.sellPrice * u.quantity*1000 - u.buyPrice * u.quantity*1000)) < 0}"> color:red</c:if>">
-											
-												${(u.sellPrice * u.quantity*1000 - u.buyPrice * u.quantity*1000)/(u.buyPrice * u.quantity*1000)*100}
-											
-											</td> 
 											<td class="formatTime">${u.buyDate}</td>
-											<td class="formatTime">${u.sellDate}</td>
 										</tr>
 									</c:forEach>
 								</table>
@@ -323,7 +282,7 @@ table {
 		return this.each(function() {
 			 
 			
-			var a = parseInt($(this).text());
+			var a = parseFloat($(this).text());
 			var str = accounting.formatMoney(a);
 			$(this).text(str.substring(0, str.length - 2));
 		})

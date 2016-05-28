@@ -42,6 +42,10 @@ public class Portfolio {
 	
     @Column(name = "availableQuantity")
 	private double availableQuantity; 
+
+	
+    @Column(name = "marginDebt")
+	private double marginDebt; 
 	 
   
 
@@ -167,6 +171,20 @@ public class Portfolio {
 
 	public void setAvailableQuantity(double availableQuantity) {
 		this.availableQuantity = availableQuantity;
+	}
+
+	
+
+
+	public double getMarginDebt() {
+		return marginDebt;
+	}
+
+
+
+
+	public void setMarginDebt(double marginDebt) {
+		this.marginDebt = marginDebt;
 	}
 
 

@@ -10,7 +10,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Liberty Invest</title>
+<title>Danh mục đầu tư | Liberty Invest</title>
 <!-- Meta data -->
 
 <!-- CDN -->
@@ -75,7 +75,7 @@ table {
 
 			<div class="row " style="margin: 0px 10px">
 				<div class="col-md-9 listArticle"
-					style="padding-left: 10px; padding-right: 10px;">
+					style="padding-left: 10px; padding-right: 10px; min-height:846px !important;">
 					<div
 						style="border-bottom: 1px solid #00aeef; padding-top: 0px; padding-bottom: 10px; margin-top: 0px; margin-bottom: 5px;">
 						<span
@@ -323,9 +323,11 @@ table {
 		return this.each(function() {
 			 
 			
-			var a = parseInt($(this).text());
-			var str = accounting.formatMoney(a);
-			$(this).text(str.substring(0, str.length - 2));
+			var a = parseFloat($(this).text());
+			if(a < 10e7){
+				var str = accounting.formatMoney(a);
+				$(this).text(str.substring(0, str.length - 2));
+			}
 		})
 	};
 

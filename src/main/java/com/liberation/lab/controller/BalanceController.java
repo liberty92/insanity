@@ -89,8 +89,14 @@ public class BalanceController {
 			 userId = Integer.parseInt(session.getAttribute("userId").toString());
 		}
 		
+	
+		
 		List<Balance> listBalance = this.balanceService.getBalanceByUserId(userId);
 		for (int i = 0; i < listBalance.size(); i++) {
+			updateBalanceValue(listBalance.get(i));
+		}
+		
+		/*for (int i = 0; i < listBalance.size(); i++) {
 			int balanceId = listBalance.get(i).getBalanceId();
 			List<Portfolio> listPortfolio = this.portfolioService.getPortfolioByBalanceId(balanceId);
 			double portfolioValue = 0;
@@ -113,7 +119,7 @@ public class BalanceController {
 			listBalance.get(i).setBalanceTotalAssets(listBalance.get(i).getBalanceCash()+ portfolioValue);
 			listBalance.get(i).setBalanceNAV(listBalance.get(i).getBalanceTotalAssets());
 			this.balanceService.updateBalance(listBalance.get(i));
-		}
+		}*/
 		
 		
 		model.addAttribute("user", this.userService.getUserById(userId));
@@ -316,5 +322,71 @@ public class BalanceController {
 	        response.getWriter().write(result);
 		}
 	}
+	
+	public double getBalancePortfolioValue(int balanceId) throws Exception{
+		
+		List<Portfolio> listPortfolio = this.portfolioService.getPortfolioByBalanceId(balanceId);
+		double portfolioValue = 0;
+		for (int j = 0; j < listPortfolio.size(); j++) {
+			if( listPortfolio.get(j).getSellPrice() <= 0){
+				int StockId = listPortfolio.get(j).getStockId();
+				Stock s = this.stockService.getStockById(StockId);
+				String StockName = s.getStockName();
+				String StockExchange = s.getStockExchangeId();
+				
+				OrdersController oc = new OrdersController();
+				PriceBoard pb = oc.getStockPriceByStockname(StockId, StockName, StockExchange);
+				double stockCurrentPrice = 0;
+				if(pb.getMatchPrice() != 0)
+					stockCurrentPrice = pb.getMatchPrice();
+				else
+					stockCurrentPrice = pb.getPrice();
+				
+				portfolioValue += listPortfolio.get(j).getQuantity()*stockCurrentPrice*1000;
+			} 
+		}
+		return portfolioValue;
+		
+	}
+	public double getBalanceTotalMarginDebt(int balanceId) throws Exception{
+		List<Portfolio> listPortfolio = this.portfolioService.getPortfolioByBalanceId(balanceId);
+		double marginDebt = 0;
+		for (int j = 0; j < listPortfolio.size(); j++) {
+			if( listPortfolio.get(j).getSellPrice() <= 0){
+				marginDebt += listPortfolio.get(j).getMarginDebt();
+			}
+		} 
+		return marginDebt;
+	}
+	
+	public void updateBalanceValue(Balance b) throws Exception{
+		Balance balance = b;
+		double cash = balance.getBalanceCash();
+		
+		double portfolioValue = this.getBalancePortfolioValue(balance.getBalanceId()) ;
+		double debt = this.getBalanceTotalMarginDebt(balance.getBalanceId());
+		
+		balance.setBalanceTotalAssets(cash + portfolioValue);
+		balance.setBalanceNAV(cash + portfolioValue - debt);
+		this.balanceService.updateBalance(balance);
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

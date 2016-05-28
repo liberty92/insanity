@@ -10,7 +10,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Liberty Invest</title>
+<title>Thống kê thuế và phí giao dịch | Liberty Invest</title>
 <!-- Meta data -->
 
 <!-- CDN -->
@@ -123,15 +123,15 @@ table {
 											<th width="10" style="text-align: left; max-width: 30px !important; font-weight: bold">STT</th>
 											<th width="30">TK</th>
 											<th width="10">ID</th>
-											<th width="40">Mã CK</th>
-											<th width="80" style="max-width: 80px !important; padding-right:2px;">Hành động</th>
-											<th width="50">Loại lệnh</th>
-											<th width="20">Giá</th>
-											<th width="70">Khối lượng</th>
-											<th width="80" style="max-width: 100px !important; padding-right:8px;">Tổng GT</th>
-											<th width="70">Phí giao dịch</th>
-											<th width="50">Thuế bán</th>
-											<th width="90" >Thời gian</th>
+											<th width="10">Mã CK</th>
+											<th width="10" style="max-width: 80px !important; padding-right:2px;">Hành động</th>
+											<th width="10">Loại lệnh</th>
+											<th width="10">Giá</th>
+											<th width="10" style="max-width: 60px !important; ">Khối lượng</th>
+											<th width="10" style="min-width: 150px !important; padding-right:8px;">Tổng GT</th>
+											<th width="10">Phí giao dịch</th>
+											<th width="10">Thuế bán</th>
+											<th width="10" >Thời gian</th>
 										</tr>
 									</thead>
 
@@ -149,11 +149,11 @@ table {
 											<td style="text-align: right; max-width: 80px !important;">${u.action}</td>
 											<td style="text-align: right">${u.orderType}</td>
 											<td style="text-align: right">${u.price}</td>
-											<td class="formatQuantity" style="text-align: right">${u.quantity}</td>
+											<td class="formatQuantity" style="text-align: right; max-width: 60px !important; ">${u.quantity}</td>
 											<td class="formatNummber"  style="text-align: right;max-width: 100px !important;">${u.price * u.quantity*1000}</td>
 											
-											<td class="formatNummber" style="text-align:right; color: red">${u.orderTradingFee}</td>
-											<td class="formatNummber" style="text-align:right; color: red">${u.orderSellTax}</td>
+											<td class="formatNummber" style="text-align:right; color: red ; max-width: 80px !important;">${u.orderTradingFee}</td>
+											<td class="formatNummber" style="text-align:right; color: red ; max-width: 80px !important;">${u.orderSellTax}</td>
 											<td class="formatTime" >${u.createdTime}</td>
 											 
 										</tr>

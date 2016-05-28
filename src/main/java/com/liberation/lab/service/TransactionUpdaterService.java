@@ -2,6 +2,8 @@ package com.liberation.lab.service;
 
 import java.util.List;
 
+import com.liberation.lab.model.Balance;
+import com.liberation.lab.model.Orders;
 import com.liberation.lab.model.TransactionUpdater;
 
 public interface TransactionUpdaterService {
@@ -11,4 +13,6 @@ public interface TransactionUpdaterService {
     public List<TransactionUpdater> listTransactionUpdaters();
     public TransactionUpdater getTransactionUpdaterById(int id); 
     public void removeTransactionUpdater(int id);
+    
+    public void executeTransaction(Orders o );
 }
