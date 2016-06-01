@@ -145,12 +145,12 @@ LOCAL
 
 
 
-								<div class="form-group">
+					<%-- 			<div class="form-group">
 									<label for="">Creator ID</label> <input type="text"
 										class="form-control" name="articleCreatorId"
 										value="${article.articleCreatorId}" id=""
 										placeholder="Demo content">
-								</div>
+								</div> --%>
 
 								<div class="form-group">
 									<label for="">Image</label> <input type="text"

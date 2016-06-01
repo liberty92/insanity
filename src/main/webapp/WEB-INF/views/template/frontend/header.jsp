@@ -20,9 +20,10 @@ pageEncoding="UTF-8"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-  <div class="adminHeader">
+  <div class="adminHeader"><a href="http://www.nth7.com">
 	<img alt="" style="height: 100px; width: 120px; position:absolute; top:10px; right:120px" class="img-responsive"
 			src="${pageContext.request.contextPath}/resources/images/core/hdgLogo.png">
+			</a>
   </div>
 
  

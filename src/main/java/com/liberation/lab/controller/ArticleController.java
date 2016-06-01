@@ -200,6 +200,16 @@ public class ArticleController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+
+		int userId = 0;
+		if (session.getAttribute("userId") != null) {
+			userId = Integer.parseInt(session.getAttribute("userId").toString());
+		}
+    	
     	int articleId = 0;
     	if(request.getParameter("articleId") != null){
     		if(request.getParameter("articleId").toString().length()>0){
@@ -211,11 +221,10 @@ public class ArticleController {
     	String articleTitle = request.getParameter("articleTitle");
     	String articleSummary = request.getParameter("articleSummary");
     	String articleContent = request.getParameter("articleContent");
-    	int articleCreatorId = 0;
     	
-    	if(request.getParameter("articleCreatorId") != null){
-    		articleCreatorId = Integer.parseInt(request.getParameter("articleCreatorId"));
-    	}
+    	int articleCreatorId = userId;
+    	
+   
     	String articleImage = request.getParameter("articleImage");
     	
     	Timestamp articlePublicationTime;

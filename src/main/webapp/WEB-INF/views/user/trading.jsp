@@ -151,11 +151,11 @@ input, select{
 											lệnh</span><span id="balanceAvailableCash"
 											class="col-sm-4 formatNummber">Sức mua:</span><span
 											class="col-sm-1" id="stockInfo">Giá:</span> <span id="p1"
-											class="col-sm-1" style="color: orange">&nbsp;</span> <span
-											id="p2" class="col-sm-1" style="color: #FF00FF">&nbsp;</span>
-										<span id="p3" class="col-sm-1" style="color: #01D5F4">&nbsp;</span>
+											class="col-sm-1" style="color: orange; white-space: nowrap;">&nbsp;</span> <span
+											id="p2" class="col-sm-1" style="color: #AA00FF; white-space: nowrap;">&nbsp;</span>
+										<span id="p3" class="col-sm-1" style="color: #01D5F4; white-space: nowrap;">&nbsp;</span>
 										
-										<span id="p4" class="col-sm-1" style="color: #00aeef;">&nbsp;</span>
+										<span id="p4" class="col-sm-1" style="color: #337AB7; white-space: nowrap;">&nbsp;</span>
 									</div>
 
 									<div>
@@ -302,8 +302,8 @@ input, select{
 						</div>
 
 						<div class="row listArticle" style="min-height:520px !important;">
-							<div class="table-responsive">
-								<table id="dataTable" style="color: blue"
+							<div class="table-responsive" style="position: relative; min-height:460px; padding-bottom:40px !important;">
+								<table id="dataTable" style="color: blue; " 
 									class="table table-hover table-striped table-bordered">
 									<thead>
 										<tr>
@@ -377,7 +377,24 @@ input, select{
 										</tr>
 									</c:forEach>
 								</table>
+								
+							 
+									
 							</div>
+									<div style="position:absolute; bottom: 0px; padding-left:0px; padding-right:20px; margin-right:10px; margin-bottom: 10px;" class="col-xs-12">  
+									
+								<table id="dataTable" style="color: blue; margin-bottom: 0px !important; position:absotule; bottom: 0px;"
+									class="table table-hover table-striped table-bordered "  >
+									<thead>
+										<tr>
+											<th width="100%"
+												style="text-align:left">INSANITY trading v1.0</th>
+										</tr>
+									</thead>
+									</table>
+									
+									
+									</div>
 						</div>
 					</div>
 				</div>
@@ -521,10 +538,10 @@ input, select{
             	priceBoard[1] = parseFloat(tempArray[1]);
             	priceBoard[2] = parseFloat(tempArray[2]);
             	
-            	$('#p1').text("TC: "+tempArray[0]);
-            	$('#p2').text("Trần: "+tempArray[1]);
+            	$('#p1').text("TC: "+tempArray[0]+" ");
+            	$('#p2').text("Trần: "+tempArray[1]+" ");
             	ceil = tempArray[1];
-            	$('#p3').text("Sàn: "+tempArray[2]);
+            	$('#p3').text("Sàn: "+tempArray[2]+" ");
             	floor = tempArray[2];
             	max = (availableCash/priceBoard[2]/1000).toFixed(0);
             	margin =  parseFloat(tempArray[5]);
@@ -568,11 +585,16 @@ input, select{
 		if($(this).val().localeCompare("LO") != 0){
 			if($('#orderAction').val().localeCompare("BUY") == 0){
 				$('#orderPrice').val(ceil);
+				$('#orderPrice').prop('disabled', 'disabled');
 			}
 			else{
 				$('#orderPrice').val(floor);
+				$('#orderPrice').prop('disabled', 'disabled');
 			}
 		} 
+		else{
+			$('#orderPrice').prop('disabled', '');
+		}
 	});
 	
 	

@@ -65,6 +65,9 @@ LOCAL -->
 table {
 	color: black;
 }
+.listArticle{
+	min-height: 370px !important;
+}
 </style>
 
 <body>
@@ -251,7 +254,13 @@ table {
 								data-minlength="3" required value="" class="form-control"
 								name="balanceName" id="" placeholder="demo 1">
 						</div>
-
+							 <div class="form-group"> 
+							    <div class="">
+							      <div class="checkbox">
+							        <label><input type="checkbox" name="marginState" value="YES">Sử dụng Margin</label>
+							      </div>
+							    </div>
+							  </div>
 						<div class="form-group">
 							<div>
 								<label for=""><span style="float: left">NAV ban

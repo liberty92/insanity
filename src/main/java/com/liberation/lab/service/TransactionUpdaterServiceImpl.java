@@ -183,8 +183,7 @@ public class TransactionUpdaterServiceImpl implements TransactionUpdaterService 
 				if (o.getAction().equals("BUY")) {
 					// balance.setBalanceCash(balance.getBalanceCash() +
 					// o.getPrice() * o.getQuantity()*1000);
-					balance.setBalanceAvailableCash(
-							balance.getBalanceAvailableCash() + o.getPrice() * o.getQuantity() * 1000 * o.getMargin());
+					balance.setBalanceAvailableCash( balance.getBalanceAvailableCash() + o.getPrice() * o.getQuantity() * 1000 * o.getMargin());
 					// MARGIN INCLUDED
 					this.balanceService.updateBalance(balance);
 				} else {

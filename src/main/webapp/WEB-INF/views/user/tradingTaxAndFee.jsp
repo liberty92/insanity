@@ -65,6 +65,9 @@ LOCAL -->
 table {
 	color: black;
 }
+.listArticle{
+	min-height: 370px !important;
+}
 </style>
 
 <body>
@@ -116,7 +119,7 @@ table {
 
 						<div class="row">
 							<div class="table-responsive">
-								<table id="dataTable" style="color: blue"
+								<table id="dataTable" style="color: blue; "
 									class="table table-hover table-striped table-bordered">
 									<thead>
 										<tr>
@@ -158,6 +161,18 @@ table {
 											 
 										</tr>
 									</c:forEach>
+								</table>
+								
+								
+								<table class="table table-hover table-striped table-bordered" style="margin-bottom:0px;">
+									<thead>
+										<tr>
+											<th width="30%" style="min-width: 30% !important; ">Tổng:</th>
+											<th width="80" style="min-width: 180px !important; ">Tổng phí giao dịch: <span style="float:right; color: #fff;" class="formatNummber">${totalFee}</span></th>
+											<th width="80" style="min-width: 180px !important; ">Tổng thuế bán: <span style="float:right; color: #fff;" class="formatNummber">${totalTax}</span></th>
+											<th width="80" style="min-width: 180px !important; ">Tổng phí giao dịch và thuế bán: <span style="float:right; color: #fff;" class="formatNummber">${totalFee + totalTax}</span></th>
+										</tr>
+									</thead>
 								</table>
 							</div>
 						</div>

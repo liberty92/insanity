@@ -197,17 +197,25 @@ public class OrdersController {
 		}
 		User u = this.userService.getUserById(userId);
 
+		double totalFee = 0;
+		double totalTax = 0;
 		List<Balance> listBalance = this.balanceService.getBalanceByUserId(userId);
 		List<Orders> listOrders = new ArrayList();
 		for (int i = 0; i < listBalance.size(); i++) {
 			int balanceId = listBalance.get(i).getBalanceId();
 			List<Orders> thisBalanceOrders = this.ordersService.getOrdersByBalanceId(balanceId);
 			for (int j = 0; j < thisBalanceOrders.size(); j++) {
-				if(thisBalanceOrders.get(j).getOrderState().equals("SUCCEEDED"))
+				if(thisBalanceOrders.get(j).getOrderState().equals("SUCCEEDED")){
 					listOrders.add(thisBalanceOrders.get(j));
+					totalFee += thisBalanceOrders.get(j).getOrderTradingFee();
+					totalTax += thisBalanceOrders.get(j).getOrderSellTax();
+				}
+				
 			}
 		}
 
+		model.addAttribute("totalTax", totalTax);
+		model.addAttribute("totalFee", totalFee);
 		model.addAttribute("user", u);
 		model.addAttribute("order", new Orders());
 		model.addAttribute("listOrders", listOrders);
@@ -227,14 +235,15 @@ public class OrdersController {
 		TradingFee secondSettingItem = this.tradingFeeService.getTradingFeeById(2);
 		double marginRate = secondSettingItem.getValue();
 		
-		
+		double totalMarginDebt = 0;
+		double totalMarginDebtInterest = 0;
 		
 		int userId = 0;
 		if (session.getAttribute("userId") != null) {
 			userId = Integer.parseInt(session.getAttribute("userId").toString());
 		}
 		User u = this.userService.getUserById(userId);
-		List<Stock> marginDebtList = new ArrayList();
+		List<Portfolio> marginDebtList = new ArrayList();
 
 		Timestamp createdTime;
 		java.util.Date date = new java.util.Date();
@@ -248,10 +257,12 @@ public class OrdersController {
 			for (int j = 0; j < thisBalancePortfolio.size(); j++) {
 				if(thisBalancePortfolio.get(j).getMarginDebt() != 0 && thisBalancePortfolio.get(j).getSellPrice() <= 0){
 					listPortfolio.add(thisBalancePortfolio.get(j));
-					double marginDebt = thisBalancePortfolio.get(j).getMarginDebt();
-					Stock s = new Stock();
-					s.setStockId(thisBalancePortfolio.get(j).getStockId());
 					
+					double marginDebt = thisBalancePortfolio.get(j).getMarginDebt();
+					Portfolio s = new Portfolio();
+					s.setPortfolioId(thisBalancePortfolio.get(j).getPortfolioId());
+					
+					totalMarginDebt += marginDebt;
 					
 					
 					Timestamp startDate = thisBalancePortfolio.get(j).getBuyDate();
@@ -261,8 +272,10 @@ public class OrdersController {
 					if(marginTime <= 0) marginTime =1;
 					
 					double marginFee = marginRate*marginDebt*marginTime/365/100;
+					
+					totalMarginDebtInterest += marginFee;
 					// YEAH, TEMPORARY STORE MARGIN DATA IN STOCK OBJECT. I HAVE NO CHOICE :/
-					s.setStockPP(marginFee);
+					s.setMarginDebt(marginFee);
 					marginDebtList.add(s);
 				}
 			}
@@ -271,6 +284,8 @@ public class OrdersController {
 		
 
 		model.addAttribute("marginRate", marginRate);
+		model.addAttribute("totalMarginDebt", totalMarginDebt);
+		model.addAttribute("totalMarginDebtInterest", totalMarginDebtInterest);
 		model.addAttribute("user", u);
 		model.addAttribute("listPortfolios", listPortfolio);
 		model.addAttribute("listStocks", this.stockService.listStock());
@@ -289,14 +304,15 @@ public class OrdersController {
 		TradingFee secondSettingItem = this.tradingFeeService.getTradingFeeById(2);
 		double marginRate = secondSettingItem.getValue();
 		
-		
+		double totalMarginDebt = 0;
+		double totalMarginDebtInterest = 0;
 		
 		int userId = 0;
 		if (session.getAttribute("userId") != null) {
 			userId = Integer.parseInt(session.getAttribute("userId").toString());
 		}
 		User u = this.userService.getUserById(userId);
-		List<Stock> marginDebtList = new ArrayList();
+		List<Portfolio> marginDebtList = new ArrayList();
  
 		
 		List<Balance> listBalance = this.balanceService.getBalanceByUserId(userId);
@@ -308,10 +324,10 @@ public class OrdersController {
 				if(thisBalancePortfolio.get(j).getMarginDebt() != 0 && thisBalancePortfolio.get(j).getSellPrice() > 0){
 					listPortfolio.add(thisBalancePortfolio.get(j));
 					double marginDebt = thisBalancePortfolio.get(j).getMarginDebt();
-					Stock s = new Stock();
-					s.setStockId(thisBalancePortfolio.get(j).getStockId());
+					Portfolio s = new Portfolio();
+					s.setPortfolioId(thisBalancePortfolio.get(j).getPortfolioId());
 					
-					
+					totalMarginDebt += marginDebt;
 					
 					Timestamp startDate = thisBalancePortfolio.get(j).getBuyDate();
 					Timestamp endDate = thisBalancePortfolio.get(j).getSellDate();
@@ -321,15 +337,18 @@ public class OrdersController {
 					if(marginTime <= 0) marginTime =1;
 					
 					double marginFee = marginRate*marginDebt*marginTime/365/100;
-					// YEAH, TEMPORARY STORE MARGIN DATA IN STOCK OBJECT. I HAVE NO CHOICE :/
-					s.setStockPP(marginFee);
+					totalMarginDebtInterest += marginFee;
+					// YEAH, TEMPORARY STORE MARGIN DATA IN PORTFOLIO OBJECT. I HAVE NO CHOICE :/
+					s.setMarginDebt(marginFee);
 					marginDebtList.add(s);
 				}
 			}
 		}
 		
 		
-
+		model.addAttribute("marginRate", marginRate);
+		model.addAttribute("totalMarginDebt", totalMarginDebt);
+		model.addAttribute("totalMarginDebtInterest", totalMarginDebtInterest);
 		model.addAttribute("marginRate", marginRate);
 		model.addAttribute("user", u);
 		model.addAttribute("listPortfolios", listPortfolio);
@@ -619,11 +638,29 @@ public class OrdersController {
 		}
 	}
 
-	public boolean orderValidation(Orders o) {
+	public boolean orderValidation(Orders o) throws Exception {
 		Orders order = o;
 		Balance balance = this.balanceService.getBalanceById(order.getBalanceId());
+		double ceilPrice = 0;
+		double floorPrice = 0;
+		
+		if(!(order.getOrderType().equals("LO"))){
+			Stock s = this.stockService.getStockById(order.getStockId());
+			int stockId = order.getStockId();
+			String stockName = s.getStockName();
+			String stockExhange = s.getStockExchangeId();
+			PriceBoard currentStockPrice = this.getStockPriceByStockname(stockId, stockName, stockExhange);
+			
+			ceilPrice = currentStockPrice.getCeil();
+			floorPrice = currentStockPrice.getFloor();
+		}
+		
 		if (order.getAction().equals("BUY")) {
 			double marginRate = o.getMargin();
+
+			if(!(order.getOrderType().equals("LO"))){
+				order.setPrice(ceilPrice);
+			}
 
 			// IF MARGIN = DEFAULT (1) THEN NO CHANGE -- IF USING -> MARGIN RATE < 0 --> REDUCE REQUIRED CASD
 			double requiredCash = (order.getPrice() * order.getQuantity() * 1000)*marginRate;
@@ -642,6 +679,10 @@ public class OrdersController {
 		}
 
 		if (order.getAction().equals("SELL")) {
+
+			if(!(order.getOrderType().equals("LO"))){
+				order.setPrice(floorPrice);
+			}
 			double requiredStock = order.getQuantity();
 			int stockId = order.getStockId();
 			int balanceId = balance.getBalanceId();

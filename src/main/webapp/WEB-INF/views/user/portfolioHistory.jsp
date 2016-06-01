@@ -180,7 +180,7 @@ table {
 												${balance.balanceTotalAssets}</td>
 											<td class="formatNummber"
 												style="text-align: right; color: blue">${balance.balanceNAV}</td>
-											<td>${balance.balanceMarginRate}</td>
+											<td class="formatPercent2">${balance.balanceMarginRate}</td>
 											<td
 												style="padding-left: 0px; padding-right: 0px; text-align: center;">
 												<a onclick="return confirm('Xác nhận xóa tài khoản?')"
@@ -312,6 +312,16 @@ table {
 		})
 	};
 	
+
+
+	$.fn.formatPercent2 = function() {
+		return this.each(function() {
+			var a = parseFloat($(this).text());
+			var b = Math.round(a * 100);
+			$(this).text(b +"%");
+		})
+	};
+	
 	$.fn.formatTime = function() {
 		return this.each(function() {
 			var a = ($(this).text());
@@ -376,6 +386,7 @@ table {
 				//$(".formatNummber").html(accounting.formatMoney($(this).val()));
 				// $(".formatNummber").digits();
 				$(".formatNummber").digits2();
+				$(".formatPercent2").formatPercent2();
 				$(".formatPercent").formatPercent();
 				$(".formatTime").formatTime();
 				$(".formatQuantity").formatQuantity();

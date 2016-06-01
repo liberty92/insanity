@@ -23,11 +23,12 @@
 	<script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 
-	
-	<link rel="stylesheet"
+
+<link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
-	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 
 <c:if test="${empty sessionScope.theme}">
 	<link rel="stylesheet" type="text/css"
@@ -45,21 +46,21 @@ LOCAL -->
 <link
 	href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css"
 	rel="stylesheet">
-	
+
 <%-- <link
 	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
 	rel="stylesheet"> --%>
-	
+
 <!-- JS -->
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
-	
+
 <script
 	src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 <script
-		src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
+	src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
@@ -73,6 +74,10 @@ LOCAL -->
 <style>
 table {
 	color: blue;
+}
+
+.listArticle {
+	min-height: 370px !important;
 }
 </style>
 
@@ -91,32 +96,19 @@ table {
 						style="border-bottom: 1px solid #00aeef; padding-top: 0px; padding-bottom: 10px; margin-top: 0px; margin-bottom: 5px;">
 						<span
 							style="text-transform: uppercase; font-size: 23px; font-weight: bold; color: #00aeef; float: left">
-							Lịch sử sử dụng margin</span> &nbsp; 
-							
-							
-							
-							
-							<a id="btn1" style="float:right; margin-left: 6px; padding:3px 12px;"
-									href="${pageContext.request.contextPath}/user/balance"
-									 class="btn btn-primary">
-									 <i class="fa fa-list-alt" >
-									 Quản lý tài khoản
-									 </i>
-									 </a>
-							
-							<a id="btn1"  style="float:right; margin-left: 6px; padding:3px 12px;"
-									href="${pageContext.request.contextPath}/user/trading"
-									 class="btn btn-primary">
-									 <i class="fa fa-sign-in" > &nbsp;
-									 Đặt lệnh
-									 </i>
-									 </a>
-							
-							
-							<span
-							style="float: right; margin-top: 10px; color: red">Lãi vay margin hiện tại:
-							${marginRate}% / năm</span>
-							
+							Lịch sử sử dụng margin</span> &nbsp; <a id="btn1"
+							style="float: right; margin-left: 6px; padding: 3px 12px;"
+							href="${pageContext.request.contextPath}/user/balance"
+							class="btn btn-primary"> <i class="fa fa-list-alt"> Quản
+								lý tài khoản </i>
+						</a> <a id="btn1"
+							style="float: right; margin-left: 6px; padding: 3px 12px;"
+							href="${pageContext.request.contextPath}/user/trading"
+							class="btn btn-primary"> <i class="fa fa-sign-in">
+								&nbsp; Đặt lệnh </i>
+						</a> <span style="float: right; margin-top: 10px; color: red">Lãi
+							vay margin hiện tại: ${marginRate}% / năm</span>
+
 					</div>
 
 
@@ -145,12 +137,12 @@ table {
 							</div>
 						</c:if>
 
-						<div class="row">
-						
-						
-						 
-					 
-						
+						<div class="row" style="position: relative; min-height: 320px;">
+
+
+
+
+
 							<div class="table-responsive">
 								<table id="dataTable"
 									class="table table-hover table-striped table-bordered">
@@ -162,54 +154,86 @@ table {
 											<th width="80">Mã CK</th>
 											<th width="80">Số lượng</th>
 											<th width="80">Giá mua</th>
-											<th width="100" style="min-width:80px !important">Giá trị mua</th>
-											<th width="80" style="min-width:10px !important">Tỉ lệ margin</th>
-											<th width="80" style="min-width:10px !important">Tiền vay</th>
-											<th width="80" style="min-width:10px !important">Lãi vay</th>
-											<th width="80" style="min-width:10px !important">Ngày mua</th>
-											<th width="80" style="min-width:10px !important">Ngày bán</th>
+											<th width="100" style="min-width: 80px !important">Giá
+												trị mua</th>
+											<th width="80" style="min-width: 10px !important">Tỉ lệ
+												margin</th>
+											<th width="80" style="min-width: 10px !important">Tiền
+												vay</th>
+											<th width="80" style="min-width: 10px !important">Lãi
+												vay</th>
+											<th width="80" style="min-width: 10px !important">Ngày
+												mua</th>
+											<th width="80" style="min-width: 10px !important">Ngày
+												bán</th>
 										</tr>
 									</thead>
-									
+
 									<c:forEach items="${listPortfolios}" var="u" varStatus="loop">
 										<tr>
 											<td style="text-align: center; font-weight: bold">${loop.index +1}</td>
 											<td>${u.balanceId}</td>
 											<%-- <td>${u.portfolioId}</td> --%>
-											<td style="color: blue; font-weight:bold">
-												<c:forEach items="${listStocks}" var="stock">  
+											<td style="color: blue; font-weight: bold"><c:forEach
+													items="${listStocks}" var="stock">
 													<c:if test="${stock.stockId == u.stockId}"> 
 														${stock.stockName} 
-														<c:set var="thisMarginRate" scope="session" value="${stock.stockMarginRate}"/>
+														<c:set var="thisMarginRate" scope="session"
+															value="${stock.stockMarginRate}" />
 													</c:if>
-												</c:forEach> 
-											
-											</td>
+												</c:forEach></td>
 											<td class="formatQuantity" style="text-align: right">${u.quantity}</td>
 											<td style="text-align: right">${u.buyPrice}</td>
 											<td class="formatNummber" style="text-align: right">${u.buyPrice * u.quantity*1000}</td>
 											<td style="text-align: right">${thisMarginRate}</td>
-											<td class="formatNummber" style="text-align: right; color:red">${u.marginDebt}</td>
-											<td class="formatNummber" style="text-align: right; color:red">
-												<c:forEach items="${marginDebtList}" var="debt">
-													<c:if test="${debt.stockId == u.stockId}"> 
-														${debt.stockPP}
+											<td class="formatNummber"
+												style="text-align: right; color: red">${u.marginDebt}</td>
+											<td class="formatNummber"
+												style="text-align: right; color: red"><c:forEach
+													items="${marginDebtList}" var="debt">
+													<c:if test="${debt.portfolioId == u.portfolioId}"> 
+														${debt.marginDebt}
 													</c:if>
-												</c:forEach>
-											</td>
-											 
+												</c:forEach></td>
+
 											<td class="formatTime">${u.buyDate}</td>
 											<td class="formatTime">${u.sellDate}</td>
 										</tr>
 									</c:forEach>
+									</div>
 								</table>
+
+							</div>
+							<div class="col-xs-12"
+								style=" position: absolute; bottom: 0; padding-left: 0px; padding-right:0px">
+								<table id="dataTable" style="margin-bottom: 0px"
+									class="table table-hover table-striped table-bordered">
+									<thead>
+										<tr>
+											<th width="40%" style="min-width: 70% !important;">Tỉ lệ
+												force sell : 30%</th>
+											<th width="80" style="min-width: 110px !important;">Tổng
+												vốn vay margin: <span style="float: right; color: #000;"
+												class="formatNummber">${totalMarginDebt}</span>
+											</th>
+											<th width="80" style="min-width: 110px !important;">Tổng
+												lãi vay: <span style="float: right; color: #000;"
+												class="formatNummber">${totalMarginDebtInterest}</span>
+											</th>
+											<th width="80" style="min-width: 110px !important;">Tổng
+												vốn và lãi: <span style="float: right; color: #000;"
+												class="formatNummber">${totalMarginDebt + totalMarginDebtInterest}</span>
+											</th>
+										</tr>
+									</thead>
+								</table> 
 							</div>
 						</div>
 
 
 
 
-	
+
 
 
 
@@ -222,7 +246,7 @@ table {
 
 
 				</div>
-<%-- 
+				<%-- 
 				<div class="col-md-3" style="padding-right: 0px">
 					<div class="col-xs-12 sideBarWrapper">
 						<div class="Side-bar">
@@ -241,16 +265,13 @@ table {
 	</div>
 
 
- 
+
 </body>
 </html>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
-	
+
 <script type="text/javascript">
-
-
-
 	$.fn.digits = function() {
 		return this.each(function() {
 			$(this).text(
@@ -269,21 +290,22 @@ table {
 		return this.each(function() {
 			var a = parseFloat($(this).text());
 			var b = Math.round(a * 100) / 100;
-			$(this).text(b +"%");
+			$(this).text(b + "%");
 		})
 	};
-	
+
 	$.fn.formatTime = function() {
 		return this.each(function() {
 			var a = ($(this).text());
-			$(this).text(a.substring(10, 19) + " "+ a.substring(8, 10) + "/"+a.substring(5, 7)+"/"+a.substring(0, 4) );
+			$(this).text(
+					a.substring(10, 19) + " " + a.substring(8, 10) + "/"
+							+ a.substring(5, 7) + "/" + a.substring(0, 4));
 		})
 	};
-	
+
 	$.fn.formatQuantity = function() {
 		return this.each(function() {
-			 
-			
+
 			var a = parseFloat($(this).text());
 			var str = accounting.formatMoney(a);
 			$(this).text(str.substring(0, str.length - 2));
@@ -292,14 +314,15 @@ table {
 
 	function confirmDelete() {
 		var x = 2;
-		bootbox.prompt("Hãy nhập OK để xác nhận xóa tài khoản", function(result) {                
-			  if (result == "OK") {
-				  x = 4;
-				  alert(x>3);
-			  }
-		});
-		
-		return x>3;
+		bootbox.prompt("Hãy nhập OK để xác nhận xóa tài khoản",
+				function(result) {
+					if (result == "OK") {
+						x = 4;
+						alert(x > 3);
+					}
+				});
+
+		return x > 3;
 	};
 
 	accounting.settings = {
@@ -323,7 +346,7 @@ table {
 
 	$(document).ready(
 			function() {
-				
+
 				$('#dataTable').DataTable();
 
 				$('#cashInput').keyup(function() {

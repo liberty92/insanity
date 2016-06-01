@@ -54,7 +54,7 @@
 									<a href="${pageContext.request.contextPath}/user/trading">
 									Giao dịch chứng khoán
 									<span class="desc">
-									Securities trading
+									Securities online trading
 									</span>
 									</a>
 								</p>
@@ -367,7 +367,7 @@
 							
 							<li>
 								<p>
-									<a href="${pageContext.request.contextPath}/listArticle/announcement_insanity">
+									<a href="http://www.nth7.com/viewArticle/80">
 									Giới thiệu về INSANITY
 									<span class="desc">
 									About INSANITY
@@ -376,7 +376,7 @@
 								</p>
 							</li>
 							<li class="divider"></li>
-							
+						<%-- 	
 							<li>
 								<p>
 									<a href="${pageContext.request.contextPath}/listArticle/announcement_contest">
@@ -387,7 +387,7 @@
 									</a>
 								</p>
 							</li>
-							<li class="divider"></li>
+							<li class="divider"></li> --%>
 							
 							<li>
 								<p>
@@ -470,8 +470,8 @@
                                                         <li data-target="#carousel-example-account" data-slide-to="1" class="">
                                                         	<a href="${pageContext.request.contextPath}/register" class="" onclick="location.href ='${pageContext.request.contextPath}/register';">Đăng ký<span class="desc">Create new account</span></a>
                                                        	</li>
-                                                        <li data-target="#carousel-example-account" data-slide-to="2" class=""><a href="#" class="">Quên ID?<span class="desc">No problem, we can remind you by email</span></a></li>
-                                                        <li data-target="#carousel-example-account" data-slide-to="3" class=""><a href="#" class="">Quên password?<span class="desc">Don't worry, it happens!</span></a></li>
+                                                        <li data-target="#carousel-example-account" data-slide-to="2" class=""><a href="${pageContext.request.contextPath}/register" class="" onclick="location.href ='${pageContext.request.contextPath}/register';">Quên ID?<span class="desc">No problem, we can remind you by email</span></a></li>
+                                                        <li data-target="#carousel-example-account" data-slide-to="3" class=""><a href="${pageContext.request.contextPath}/register" class="" onclick="location.href ='${pageContext.request.contextPath}/register';">Quên password?<span class="desc">Don't worry, it happens!</span></a></li>
                                                         <li data-target="" data-slide-to="3" class="">
                                                         	<a href="${pageContext.request.contextPath}/changeTheme" class="" onclick="location.href ='${pageContext.request.contextPath}/changeTheme';">Đổi giao diện<span class="desc">Change UI theme</span></a>
                                                        	</li>
@@ -512,8 +512,8 @@
                                                     	</li>
 	                                                    
 	                                                    
-	                                                    <li data-target="#carousel-example-account" data-slide-to="2" class=""><a href="#" class="">Đổi mật khẩu<span class="desc">Thay đổi mật khẩu</span></a></li>
-	                                                    <li data-target="#carousel-example-account" data-slide-to="3" class=""><a href="#" class="">Feedback<span class="desc">Gửi feedback cho chúng tôi</span></a></li>
+	                                                    <li data-target="#carousel-example-account" data-slide-to="2" class=""><a href="${pageContext.request.contextPath}/user/Info" class="">Đổi mật khẩu<span class="desc">Thay đổi mật khẩu</span></a></li>
+	                                                    <li data-target="#carousel-example-account" data-slide-to="3" class=""><a href="${pageContext.request.contextPath}/user/Info" class="">Feedback<span class="desc">Gửi feedback cho chúng tôi</span></a></li>
 	                                                    <li data-target="" data-slide-to="3" class="">
                                                         	<a href="${pageContext.request.contextPath}/changeTheme" class="" onclick="location.href ='${pageContext.request.contextPath}/changeTheme';">Đổi giao diện<span class="desc">Change UI theme</span></a>
                                                        	</li>

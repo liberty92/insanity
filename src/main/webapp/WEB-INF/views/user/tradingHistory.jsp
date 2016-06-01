@@ -65,6 +65,9 @@ LOCAL -->
 table {
 	color: black;
 }
+.listArticle{
+	min-height: 370px !important;
+}
 </style>
 
 <body>

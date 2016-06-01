@@ -63,6 +63,9 @@ LOCAL -->
 table {
 	color: blue;
 }
+.listArticle{
+	min-height: 370px !important;
+}
 </style>
 
 <body>
@@ -164,7 +167,7 @@ table {
 												${balance.balanceTotalAssets}</td>
 											<td class="formatNummber"
 												style="text-align: right; color: blue">${balance.balanceNAV}</td>
-											<td>${balance.balanceMarginRate}</td>
+											<td class="formatPercent2" style="text-align: right">${balance.balanceMarginRate}</td>
 											<td
 												style="padding-left: 0px; padding-right: 0px; text-align: center;">
 												<a onclick="return confirm('Xác nhận xóa tài khoản?')"
@@ -317,6 +320,14 @@ table {
 			$(this).text(b);
 		})
 	};
+
+	$.fn.formatPercent2 = function() {
+		return this.each(function() {
+			var a = parseFloat($(this).text());
+			var b = Math.round(a * 100);
+			$(this).text(b +"%");
+		})
+	};
 	
 
 	$.fn.formatQuantity = function() {
@@ -380,6 +391,7 @@ table {
 				$(".formatQuantity").formatQuantity();
 				$(".formatNummber").digits2();
 				$(".formatPercent").formatPercent();
+				$(".formatPercent2").formatPercent2();
 				$(".formatTime").formatTime();
 				var glow = $('.insanity');
 				setInterval(function() {

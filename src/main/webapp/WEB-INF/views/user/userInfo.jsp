@@ -66,14 +66,14 @@ LOCAL -->
 
 			<div class="row " style="margin: 0px 10px">
 				<div class="col-md-9 listArticle"
-					style="padding-left: 10px; padding-right: 10px;">
+					style="padding-left: 10px; padding-right: 10px; min-height: 720px">
 					<h2
 						style="border-bottom: 1px solid grey; font-size: 23px; font-weight: bold; color: #00aeef; padding-top: 0; margin-top: 0px; text-transform: uppercase;">
 						Thông tin cá nhân</h2>
 
 
 
-					<div class="col-xs-12">
+					<div class="col-xs-12" >
 						<c:if test="${!empty sessionScope.updateMessage}">
 							<div class="alert alert-success">
 								<a href="#" class="close" data-dismiss="alert"

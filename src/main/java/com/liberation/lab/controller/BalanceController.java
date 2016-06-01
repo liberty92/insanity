@@ -368,6 +368,10 @@ public class BalanceController {
 		
 		balance.setBalanceTotalAssets(cash + portfolioValue);
 		balance.setBalanceNAV(cash + portfolioValue - debt);
+		
+		double marginRate = ((cash + portfolioValue) - debt)/(cash + portfolioValue);
+		
+		balance.setBalanceMarginRate(marginRate);
 		this.balanceService.updateBalance(balance);
 	}
 
