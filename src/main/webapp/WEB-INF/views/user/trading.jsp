@@ -47,7 +47,6 @@ LOCAL -->
 <link
 	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
 	rel="stylesheet">
-
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <!-- JS -->
@@ -55,7 +54,6 @@ LOCAL -->
 	src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
 </head>
@@ -81,7 +79,6 @@ input, select{
 	border-radius: 0px !important;
 }
 </style>
-
 <body>
 	<div class="container-fluid">
 		<div class="row">
@@ -89,18 +86,14 @@ input, select{
 			<!-- ====================== BODY STARTS =================================== -->
 			<%@ include file="../template/frontend/menu/menu.jsp"%>
 			<!--2. Main body-->
-
 			<div class="row " style="margin: 0px 10px">
 				<div class="col-md-9 listArticle"
 					style="padding-left: 10px; padding-right: 10px;">
 					<div
 						style="border-bottom: 1px solid #00aeef; padding-top: 0px; padding-bottom: 10px; margin-top: 0px; margin-bottom: 5px;">
-						
 						<span
 							style="text-transform: uppercase; font-size: 23px; font-weight: bold; color: #00aeef; float: left">
 							Giao dịch trực tuyến</span> &nbsp; 
-							
-							
 							<a id="btn1" style="float:right; margin-left: 6px; padding:3px 12px;"
 									href="${pageContext.request.contextPath}/user/balance"
 									 class="btn btn-primary">
@@ -108,16 +101,11 @@ input, select{
 									 Quản lý tài khoản
 									 </i>
 									 </a>
-							
-							
 							<span
 							style="float: right; margin-top: 10px"> &nbsp; User ID:
 							${user.userId} - ${user.userFullName}</span> &nbsp; 
-							
 							<span
 							style="float: right; margin-top: 10px" id="balanceCash">&nbsp;</span>
-							
-							
 					</div>
 
 					<div class="col-xs-12">
@@ -157,7 +145,6 @@ input, select{
 										
 										<span id="p4" class="col-sm-1" style="color: #337AB7; white-space: nowrap;">&nbsp;</span>
 									</div>
-
 									<div>
 										<form id="orderForm"
 											action="${pageContext.servletContext.contextPath}/user/addOrder"
@@ -168,15 +155,11 @@ input, select{
 														out.println("Tài khoản của bạn không có đủ tiền mặt hoặc chứng khoán khả dụng để thực hiện thao tác này!");
 												%></b>
 											</legend>
-
 											<div class="col-sm-6">
-
-
 												<div class="form-group">
 													<div>
 														<label for="">Tài khoản</label>
 													</div>
-
 													<input type="hidden" class="form-control libertyForm"
 														name="orderId" value="${order.orderId}" id=""
 														placeholder="Demo content">
@@ -184,7 +167,6 @@ input, select{
 										<input type="number"
 										class="form-control libertyForm" name="balanceId" value="${order.balanceId}"
 										id="" placeholder="Demo content"> --%>
-
 													<select name="balanceId" id="inputBalanceId"
 														class="form-control libertyForm dropdownSelect"
 														required="required">
@@ -207,7 +189,6 @@ input, select{
 													<label for="" class="col-xs-6">Mã chứng khoán</label> 
 													<span id="p5" class="col-xs-6" style="float:right;color: #00aeef;white-space: nowrap !important;">&nbsp;</span>												
 												</div>
-													
 													<select name="stockId"
 														id="inputStockId"
 														class="form-control libertyForm dropdownSelect"
@@ -222,13 +203,11 @@ input, select{
 														</c:forEach>
 													</select>
 												</div>
-												
 												<div class="row">
 													<label id="q1" class="col-xs-6">&nbsp;</label>
 													<label id="q2" class="col-xs-6">&nbsp;</label>
 												</div>
 											</div>
-
 											<div class="col-sm-6">
 												<div class="row">
 													<div class="col-sm-4">
@@ -238,7 +217,6 @@ input, select{
 																<option value="BUY">Mua</option>
 																<option value="SELL">Bán</option>
 															</select>
-
 														</div>
 													</div>
 													<div class="col-sm-4">
@@ -253,14 +231,12 @@ input, select{
 														</div>
 													</div>
 													<div class="col-sm-4">
-
 														<div class="form-group">
 															<label for="">Margin</label> <select id="marginState"
 																class="form-control libertyForm" name="marginState">
 																<option value="NO">Không</option>
 																<option value="YES">Có</option>
 															</select>
-
 														</div>
 													</div>
 												</div>
@@ -289,18 +265,13 @@ input, select{
 														style="float: right; font-weight: bold">Giá trị: 0đ</span>
 												</div>
 											</div>
-
 											<br />
-
 										</form>
-
 										<br />
-
 									</div>
 								</div>
 							</div>
 						</div>
-
 						<div class="row listArticle" style="min-height:520px !important;">
 							<div class="table-responsive" style="position: relative; min-height:460px; padding-bottom:40px !important;">
 								<table id="dataTable" style="color: blue; " 
@@ -333,7 +304,6 @@ input, select{
 												style="max-width: 30px !important; padding-left: 2px; padding-right: 20px">Hủy</th>
 										</tr>
 									</thead>
-
 									<c:forEach items="${listOrders}" var="u" varStatus="loop">
 										<tr>
 											<td
@@ -357,16 +327,13 @@ input, select{
 												style="text-align: right; max-width: 100px !important;">${u.price * u.quantity*1000}</td>
 											<td class="formatTime" style="text-align: center; max-width:40px !important">${u.createdTime}</td>
 											<td style="max-width:20px !important; text-align: center; color:red;<c:if test="${u.orderState == 'WAITING'}">color: orange;</c:if> <c:if test="${u.orderState == 'SUCCEEDED'}">color: green;</c:if>">
-											
 											<c:if test="${u.orderState == 'SUCCEEDED'}">Đã khớp</c:if>
 											<c:if test="${u.orderState == 'UNSUCCESSED'}">Không khớp</c:if>
 											<c:if test="${u.orderState == 'WAITING'}">Chờ khớp</c:if>
 											<c:if test="${u.orderState == 'CANCELLED'}">Đã hủy</c:if>
-											
 											</td>
 											<td
 												style="padding-left: 0px; padding-right: 0px; text-align: center; max-width: 60px !important;">
-
 												<c:if test="${u.orderState == 'WAITING'}">
 													<a onclick="return confirm('Xác nhận hủy lệnh?')"
 														style="color: red !important; font-weight: bold"
@@ -428,8 +395,6 @@ input, select{
 	src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
-
-
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
 <script

@@ -54,7 +54,7 @@
 									<a href="${pageContext.request.contextPath}/user/trading">
 									Giao dịch chứng khoán
 									<span class="desc">
-									Securities online trading
+									Đặt lệnh giao dịch trực tuyến
 									</span>
 									</a>
 								</p>
@@ -67,7 +67,7 @@
 									<a href="${pageContext.request.contextPath}/user/balance">
 									Quản lý tài khoản
 									<span class="desc">
-									Balance management
+									Quản lý hiệu quả đầu tư danh mục
 									</span>
 									</a>
 								</p>
@@ -78,7 +78,7 @@
 									<a href="${pageContext.request.contextPath}/user/tradingHistory">
 									Lịch sử đặt lệnh
 									<span class="desc">
-									Trading history
+									Lịch sử chi tiết các lệnh giao dịch
 									</span>
 									</a>
 								</p>
@@ -90,7 +90,7 @@
 									<a href="${pageContext.request.contextPath}/user/marginStats">
 									Thống kê margin
 									<span class="desc">
-									Margin using stats
+									Thống kê sử dụng dịch vụ cho vay ký quỹ
 									</span>
 									</a>
 								</p>
@@ -103,7 +103,7 @@
 									<a href="${pageContext.request.contextPath}/user/tradingAndTaxFee">
 									Thống kê thuế & phí giao dịch
 									<span class="desc">
-									Trading and Tax fee stats
+									Thống kê phí giao dịch, thuế bán và các dịch vụ khác
 									</span>
 									</a>
 								</p>
@@ -142,7 +142,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/news_enterprise">
 									Tin doanh nghiệp
 									<span class="desc">
-									News from companies being listed on the stock exchange
+									Tin tức liên quan đến các doanh nghiệp đang niêm yết
 									</span>
 									</a>
 								</p>
@@ -154,7 +154,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/news_finance_banking">
 									Tài chính ngân hàng
 									<span class="desc">
-									Finance and banking latest news
+									Tin tức tài chính ngân hàng
 									</span>
 									</a>
 								</p>
@@ -166,7 +166,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/news_real_estate">
 									Bất động sản
 									<span class="desc">
-									Real estate latest news
+									Tin tức bất động sản
 									</span>
 									</a>
 								</p>
@@ -178,7 +178,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/news_goods_materials">
 									Hàng hóa - nguyên liệu
 									<span class="desc">
-									Goods and marterials latest new
+									Tin tức hàng hóa nguyên liệu
 									</span>
 									</a>
 								</p>
@@ -190,7 +190,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/news_macroeconomics">
 									Kinh tế vĩ mô
 									<span class="desc">
-									Macroeconomics latest new
+									Tin tức kinh tế vĩ mô
 									</span>
 									</a>
 								</p>
@@ -202,7 +202,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/news_international">
 									Tin quốc tế
 									<span class="desc">
-									International latest new
+									Tin tức kinh tế thế giới
 									</span>
 									</a>
 								</p>
@@ -238,7 +238,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/market_general">
 									Tổng quan thị trường
 									<span class="desc">
-									General market report
+									Báo cáo tổng quan thị trường
 									</span>
 									</a>
 								</p>
@@ -250,7 +250,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/market_trading_results">
 									Kết quả giao dịch
 									<span class="desc">
-									Trading results statistic
+									Báo cáo kết quả giao dịch
 									</span>
 									</a>
 								</p>
@@ -262,7 +262,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/market_foreign_results">
 									Giao dịch khối ngoại 
 									<span class="desc">
-									Foreign group trading results
+									Báo cáo kết quả giao dịch khối ngoại
 									</span>
 									</a>
 								</p>
@@ -298,7 +298,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/analyze_technical_chart">
 									Biểu đồ kỹ thuật
 									<span class="desc">
-									Technical chart
+									Biểu đồ kỹ thuật
 									</span>
 									</a>
 								</p>
@@ -310,7 +310,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/analyze_portfolio">
 									Danh mục đầu tư
 									<span class="desc">
-									Investment portfolios
+									Các danh mục đầu tư được khuyến nghị
 									</span>
 									</a>
 								</p>
@@ -322,7 +322,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/analyze_recommended_stock">
 									Cổ phiếu khuyến nghị
 									<span class="desc">
-									Recommended stocks
+									Các mã cổ phiếu được khuyến nghị
 									</span>
 									</a>
 								</p>
@@ -358,7 +358,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/announcement_common">
 									Thông báo chung
 									<span class="desc">
-									Common announcement
+									Thông báo chung
 									</span>
 									</a>
 								</p>
@@ -370,7 +370,7 @@
 									<a href="http://www.nth7.com/viewArticle/80">
 									Giới thiệu về INSANITY
 									<span class="desc">
-									About INSANITY
+									Giới thiệu về INSANITY
 									</span>
 									</a>
 								</p>
@@ -394,7 +394,7 @@
 									<a href="${pageContext.request.contextPath}/listArticle/announcement_recruitment">
 									Tuyển dụng
 									<span class="desc">
-									Recruitment
+									Thông báo tuyển dụng
 									</span>
 									</a>
 								</p>
@@ -445,12 +445,12 @@
                                                             <br>
                                                             <form class="form-horizontal" role="form" method="post" action="${pageContext.request.contextPath}/authentication">
                                                                 <div class="form-group">
-                                                                    <label for="inputEmail3" class="col-sm-3 control-label">Username</label>
-                                                                    <div class="col-sm-9"><input type="text" name="username" class="input-sm form-control" id="inputEmail3" placeholder="Email" autocomplete="off"></div>
+                                                                    <label for="inputEmail3" class="col-sm-4 control-label">Tên đăng nhập</label>
+                                                                    <div class="col-sm-8"><input type="text" name="username" class="input-sm form-control" id="inputEmail3" placeholder="Email" autocomplete="off"></div>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label for="inputPassword3" class="col-sm-3 control-label">Password</label>
-                                                                    <div class="col-sm-9"><input type="password" name="password" class="input-sm form-control" id="inputPassword3" placeholder="Password" autocomplete="off"></div>
+                                                                    <label for="inputPassword3" class="col-sm-4 control-label">Mật khẩu</label>
+                                                                    <div class="col-sm-8"><input type="password" name="password" class="input-sm form-control" id="inputPassword3" placeholder="Password" autocomplete="off"></div>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <div class="col-sm-offset-3 col-sm-9">
@@ -468,12 +468,12 @@
                                                        <li data-target="#carousel-example-account" data-slide-to="0" class="active"><a href="${pageContext.request.contextPath}/login" class="">Đăng nhập<span class="desc">Already have an account? Log in</span></a></li>
                                                         --%>
                                                         <li data-target="#carousel-example-account" data-slide-to="1" class="">
-                                                        	<a href="${pageContext.request.contextPath}/register" class="" onclick="location.href ='${pageContext.request.contextPath}/register';">Đăng ký<span class="desc">Create new account</span></a>
+                                                        	<a href="${pageContext.request.contextPath}/register" class="" onclick="location.href ='${pageContext.request.contextPath}/register';">Đăng ký<span class="desc">Tạo tài khoản mới</span></a>
                                                        	</li>
-                                                        <li data-target="#carousel-example-account" data-slide-to="2" class=""><a href="${pageContext.request.contextPath}/register" class="" onclick="location.href ='${pageContext.request.contextPath}/register';">Quên ID?<span class="desc">No problem, we can remind you by email</span></a></li>
-                                                        <li data-target="#carousel-example-account" data-slide-to="3" class=""><a href="${pageContext.request.contextPath}/register" class="" onclick="location.href ='${pageContext.request.contextPath}/register';">Quên password?<span class="desc">Don't worry, it happens!</span></a></li>
+                                                        <li data-target="#carousel-example-account" data-slide-to="2" class=""><a href="${pageContext.request.contextPath}/register" class="" onclick="location.href ='${pageContext.request.contextPath}/register';">Quên mật khẩu<span class="desc">Khôi phục mật khẩu</span></a></li>
+                                                        <li data-target="#carousel-example-account" data-slide-to="3" class=""><a href="${pageContext.request.contextPath}/register" class="" onclick="location.href ='${pageContext.request.contextPath}/register';">Feedback<span class="desc">Gửi feedback cho chúng tôi</span></a></li>
                                                         <li data-target="" data-slide-to="3" class="">
-                                                        	<a href="${pageContext.request.contextPath}/changeTheme" class="" onclick="location.href ='${pageContext.request.contextPath}/changeTheme';">Đổi giao diện<span class="desc">Change UI theme</span></a>
+                                                        	<a href="${pageContext.request.contextPath}/changeTheme" class="" onclick="location.href ='${pageContext.request.contextPath}/changeTheme';">Đổi giao diện<span class="desc">Thay đổi chủ đề website</span></a>
                                                        	</li>
                                                     </ol>
                                                 </div>
