@@ -129,7 +129,6 @@ input, select{
 								</strong>
 							</div>
 						</c:if>
-
 						<div class="row">
 							<div class="panel panel-default" style="color: #167AC6; padding-bottom:10px; margin-bottom:0px">
 								<div class="panel-body">
@@ -142,7 +141,6 @@ input, select{
 											class="col-sm-1" style="color: orange; white-space: nowrap;">&nbsp;</span> <span
 											id="p2" class="col-sm-1" style="color: #AA00FF; white-space: nowrap;">&nbsp;</span>
 										<span id="p3" class="col-sm-1" style="color: #01D5F4; white-space: nowrap;">&nbsp;</span>
-										
 										<span id="p4" class="col-sm-1" style="color: #337AB7; white-space: nowrap;">&nbsp;</span>
 									</div>
 									<div>
@@ -344,12 +342,8 @@ input, select{
 										</tr>
 									</c:forEach>
 								</table>
-								
-							 
-									
 							</div>
 									<div style="position:absolute; bottom: 0px; padding-left:0px; padding-right:20px; margin-right:10px; margin-bottom: 10px;" class="col-xs-12">  
-									
 								<table id="dataTable" style="color: blue; margin-bottom: 0px !important; position:absotule; bottom: 0px;"
 									class="table table-hover table-striped table-bordered "  >
 									<thead>
@@ -359,13 +353,10 @@ input, select{
 										</tr>
 									</thead>
 									</table>
-									
-									
 									</div>
 						</div>
 					</div>
 				</div>
-
 				<div class="col-md-3" style="padding-right: 0px">
 					<div class="col-xs-12 sideBarWrapper">
 						<div class="Side-bar">
@@ -382,13 +373,6 @@ input, select{
 		<%@ include file="../template/backend/footer.jsp"%>
 	</div>
 	</div>
-
-
-
-
-
-
-
 </body>
 </html>
 <script
@@ -451,23 +435,18 @@ input, select{
 		var form_num = accounting.formatMoney(raw_num);
 		$('#cashDisplay').html(form_num);
 	});
-	
 	$('#orderQuantity').on('keyup', function (e) {
 		var p = $("#orderPrice").val();
 	    var q = $("#orderQuantity").val();
 	    var value1 = p*q*1000;
 	    console.log(p);
 	    console.log(q);
-	    
 	    var a = parseFloat(value1);
-		 
 	    $('#tradeValue').text(accounting.formatMoney(a));
-	   	 
 	}); 
 	
 	$('#inputBalanceId').on('change', function (e) {
 	    balanceId = this.value;
-	    
 	    $.ajax({
             url : '${pageContext.request.contextPath}/user/ajaxGetBalanceInfo',
             data : {
@@ -479,13 +458,9 @@ input, select{
             	availableCash = parseFloat(tempArray[1]);
             	$('#balanceCash').text("Tiền mặt: " + accounting.formatMoney(tempArray[0])+" -  ");
             	$('#balanceAvailableCash').text("Sức mua: " + accounting.formatMoney(tempArray[1]));
-                 
             }
         });
-	   	 
 	}); 
-
-	
 	$('#inputStockId').on('change', function (e) {
 	    stockId = this.value;
 	    console.log(balanceId);
@@ -660,13 +635,10 @@ input, select{
 	$('#n1').html(x2); */
 	$(document).ready(
 			function() { 
-				 
-
 				 $('#dataTable').DataTable({
 				        "aLengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
 				        "iDisplayLength": -1
 				    });
-				 
 /* 				 $('#myTable').on( 'draw.dt', function () {
 					 $(".formatNummber").digits2();
 						$(".formatPercent").formatPercent();

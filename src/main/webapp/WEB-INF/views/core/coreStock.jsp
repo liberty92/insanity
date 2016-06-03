@@ -22,7 +22,7 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" type="text/css"
+<link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
 <link
 	href="${pageContext.request.contextPath}/resources/css/select2.min.css"
@@ -52,7 +52,6 @@ td {
 </style>
 </head>
 <body>
-
 	<div class="container-fluid" style="width: 95%">
 		<div class="row">
 			<div class="row">
@@ -64,6 +63,127 @@ td {
 			<div class="row">
 				<%@ include file="../template/frontend/menu/menuAdmin.jsp"%>
 			</div>
+			<br/>
+				<div class="panel panel-default row">
+					<div class="panel-body">
+						<h2>Add stock</h2>
+						<div>
+							<form
+								action="${pageContext.servletContext.contextPath}/core/addStock"
+								method="POST" role="form">
+								<div class="row">
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label for="">Stock name</label> <input type="hidden"
+												class="form-control" name="stockId" value="${stock.stockId}"
+												id="" placeholder="Demo content"> <input type="text"
+												class="form-control" name="stockName"
+												value="${stock.stockName}" id="" placeholder="Demo content">
+										</div>
+										<div class="form-group">
+											<label for="">Stock exchange Id</label> <select
+												name="stockExchangeId" id="input" class="form-control"
+												required="required">
+												<option value="HSX"
+													<c:if test="${stock.stockExchangeId == HSX}"> selected="selected" </c:if>>
+													HSX</option>
+												<option value="HNX"
+													<c:if test="${stock.stockExchangeId == HNX}"> selected="selected" </c:if>>
+													HNX</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="">Company id</label>
+											<%-- <input type="number"
+										step="any" class="form-control" name="companyId"
+										value="${stock.companyId}" id="" placeholder="Demo content"> --%>
+											<select class="form-control dropdownSelect" name="companyId"
+												required>
+												<c:forEach items="${listCompany}" var="company">
+													<option value="${company.companyId}"
+														<c:if test="${stock.companyId == company.companyId}"> selected="selected" </c:if>>
+														${company.companyId} - ${company.companyName}</option>
+												</c:forEach>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="">Stock price</label> <input type="number"
+												step="100" class="form-control" name="stockPrice"
+												value="${stock.stockPrice}" id="" placeholder="Demo content">
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label for="">Quantity</label><span
+												style="float: right; color: red">Unit: Million</span> <input
+												type="number" step="any" class="form-control"
+												name="stockQuantity" value="${stock.stockQuantity}" id=""
+												placeholder="Unit: Million">
+										</div>
+										<div class="form-group">
+											<label for="">Capitalization</label><span
+												style="float: right; color: red">Unit: Billion</span> <input
+												type="number" step="any" class="form-control"
+												name="stockCapitalization"
+												value="${stock.stockCapitalization}" id=""
+												placeholder="Unit: Billion">
+										</div>
+										<div class="form-group">
+											<label for="">PE</label> <input type="number" step="any"
+												class="form-control" name="stockPE" value="${stock.stockPE}"
+												id="" placeholder="Demo content">
+										</div>
+										<div class="form-group">
+											<label for="">State</label> <input type="number" step="any"
+												class="form-control" name="stockState"
+												value="${stock.stockState}" id="" placeholder="Demo content">
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label for="">PP</label> <input type="number" step="any"
+												class="form-control" name="stockPP" value="${stock.stockPP}"
+												id="" placeholder="Demo content">
+										</div>
+										<div class="form-group">
+											<label for="">EPS</label> <input type="number" step="any"
+												class="form-control" name="stockEPS"
+												value="${stock.stockEPS}" id="" placeholder="Demo content">
+										</div>
+										<div class="form-group">
+											<label for="">ROE</label> <input type="number" step="any"
+												class="form-control" name="stockROE"
+												value="${stock.stockROE}" id="" placeholder="Demo content">
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label for="">ROA</label> <input type="number" step="any"
+												class="form-control" name="stockROA"
+												value="${stock.stockROA}" id="" placeholder="Demo content">
+										</div>
+										<div class="form-group">
+											<label for="">Beta</label> <input type="number" step="any"
+												class="form-control" name="stockBeta"
+												value="${stock.stockBeta}" id="" placeholder="Demo content">
+										</div>
+										<div class="form-group">
+											<label for="">Margin rate</label> <input type="number"
+												step="any" class="form-control" name="stockMarginRate"
+												value="${stock.stockMarginRate}" id=""
+												placeholder="Demo content">
+										</div>
+										<br />
+										<button type="submit" class="btn btn-primary">Submit</button>
+									</div>
+								</div>
+							</form>
+							<br />
+						</div>
+					</div>
+				</div>
+			
+			
 			<div class="row">
 				<c:if test="${!empty listStock}">
 					<div class="panel panel-default">
@@ -98,17 +218,14 @@ td {
 										<tr>
 											<td style="text-align: center">${loop.index +1}</td>
 											<td>${u.stockId}</td>
-											<td style="color: blue;text-align:center">${u.stockName}</td>
+											<td style="color: blue; text-align: center">${u.stockName}</td>
 											<td>${u.stockExchangeId}</td>
-									<%-- 		<td>
+											<%-- 		<td>
 											${u.companyId} <br/>
 												<c:forEach items="${listCompany}" var="company">
 													<c:if test="${u.companyId == company.companyId}"> ${company.companyName} </c:if>
 												</c:forEach>
 											</td> --%>
-											
-											
-											
 											<td>${u.stockQuantity}<span
 												style="float: right; color: red">M</span></td>
 											<td>${u.stockCapitalization}<span
@@ -133,161 +250,20 @@ td {
 						</div>
 					</div>
 				</c:if>
-
-				<br />
-
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<h2>Add stock</h2>
-
-
-						<div>
-							<form
-								action="${pageContext.servletContext.contextPath}/core/addStock"
-								method="POST" role="form">
-								<legend>Add new stock</legend>
-
-								<div class="form-group">
-									<label for="">Stock name</label> <input type="hidden"
-										class="form-control" name="stockId" value="${stock.stockId}"
-										id="" placeholder="Demo content"> <input type="text"
-										class="form-control" name="stockName"
-										value="${stock.stockName}" id="" placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">Stock exchange Id</label> <select
-										name="stockExchangeId" id="input" class="form-control"
-										required="required">
-										<option value="HSX"
-											<c:if test="${stock.stockExchangeId == HSX}"> selected="selected" </c:if>>
-											HSX</option>
-										<option value="HNX"
-											<c:if test="${stock.stockExchangeId == HNX}"> selected="selected" </c:if>>
-											HNX</option>
-									</select>
-								</div>
-
-								<div class="form-group">
-									<label for="">Company id</label> 
-									<%-- <input type="number"
-										step="any" class="form-control" name="companyId"
-										value="${stock.companyId}" id="" placeholder="Demo content"> --%>
-										
-										
-										<select class="form-control dropdownSelect" name="companyId" required>
-											<c:forEach items="${listCompany}" var="company">
-												<option value="${company.companyId}" <c:if test="${stock.companyId == company.companyId}"> selected="selected" </c:if> >
-													${company.companyId} - ${company.companyName}
-												</option>
-											</c:forEach>
-										</select>
-										
-								</div>
-
-								<div class="form-group">
-									<label for="">Quantity</label><span
-										style="float: right; color: red">Unit: Million</span> <input
-										type="number" step="any" class="form-control"
-										name="stockQuantity" value="${stock.stockQuantity}" id=""
-										placeholder="Unit: Million">
-								</div>
-
-								<div class="form-group">
-									<label for="">Capitalization</label><span
-										style="float: right; color: red">Unit: Billion</span> <input
-										type="number" step="any" class="form-control"
-										name="stockCapitalization"
-										value="${stock.stockCapitalization}" id=""
-										placeholder="Unit: Billion">
-								</div>
-
-								<div class="form-group">
-									<label for="">PE</label> <input type="number" step="any"
-										class="form-control" name="stockPE" value="${stock.stockPE}"
-										id="" placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">PP</label> <input type="number" step="any"
-										class="form-control" name="stockPP" value="${stock.stockPP}"
-										id="" placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">EPS</label> <input type="number" step="any"
-										class="form-control" name="stockEPS" value="${stock.stockEPS}"
-										id="" placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">ROE</label> <input type="number" step="any"
-										class="form-control" name="stockROE" value="${stock.stockROE}"
-										id="" placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">ROA</label> <input type="number" step="any"
-										class="form-control" name="stockROA" value="${stock.stockROA}"
-										id="" placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">Beta</label> <input type="number" step="any"
-										class="form-control" name="stockBeta"
-										value="${stock.stockBeta}" id="" placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">Margin rate</label> <input type="number"
-										step="any" class="form-control" name="stockMarginRate"
-										value="${stock.stockMarginRate}" id=""
-										placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">Stock price</label> <input type="number"
-										step="100" class="form-control" name="stockPrice"
-										value="${stock.stockPrice}" id="" placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">State</label> <input type="number" step="any"
-										class="form-control" name="stockState"
-										value="${stock.stockState}" id="" placeholder="Demo content">
-								</div>
-
-
-
-								<br />
-
-								<button type="submit" class="btn btn-primary">Submit</button>
-							</form>
-
-							<br />
-
-						</div>
-					</div>
-				</div>
 			</div>
-
 		</div>
 	</div>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
-
 	<script>
 		$(document).ready(function() {
 			$('#dataTable').DataTable();
 			$(".dropdownSelect").select2();
 		});
 	</script>
-
 </body>
 </html>

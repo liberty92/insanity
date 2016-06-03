@@ -148,14 +148,10 @@ h2{
 						</div>
 					</div>
 				</c:if>
-
 				<br />
-
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<h2>Add stock price</h2>
-
-
 						<div>
 							<form
 								action="${pageContext.servletContext.contextPath}/core/addPriceBoard"
@@ -175,9 +171,6 @@ h2{
 											</c:forEach>
 									</select>
 								</div> 
-								
-								
-
 								<div class="form-group">
 									<label for="">Price</label> <input type="number" step="0.1"
 										class="form-control" name="price" value="${priceBoard.price}"
@@ -288,38 +281,27 @@ h2{
 										class="form-control" name="oversold" value="${priceBoard.oversold}"
 										id="" placeholder="Demo content">
 								</div>
- 
-								
-
 								<br />
-
 								<button type="submit" class="btn btn-primary">Submit</button>
 							</form>
-
 							<br />
-
 						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
-
 	<script>
 		$(document).ready(function() {
 			$('#dataTable').DataTable();
 			$(".dropdownSelect").select2();
 		});
 	</script>
-
 </body>
 </html>

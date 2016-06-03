@@ -48,7 +48,6 @@
 </style>
 </head>
 <body>
-
 	<div class="container-fluid" style="width: 95%">
 		<div class="row">
 			<div class="row">
@@ -71,7 +70,7 @@
 										<tr>
 											<th width="50">Index</th>
 											<th width="100">Company ID</th>
-											<th width="100">Full name</th>
+											<th width="200">Full name</th>
 											<th width="100">Category</th>
 											<th width="200">BOD</th>
 											<th width="200">Contact</th>
@@ -85,7 +84,7 @@
 										<tr>
 											<td style="text-align: center">${loop.index +1}</td>
 											<td>${u.companyId}</td>
-											<td>${u.companyName}</td>
+											<td style="min-width:200px;">${u.companyName}</td>
 											<td><c:forEach items="${listCompanyCategory}" var="cc">
 													<c:if
 														test="${cc.companyCategoryName == u.companyCategoryName}">
@@ -107,20 +106,16 @@
 						</div>
 					</div>
 				</c:if>
-
 				<br />
-
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<h2>Add company</h2>
-
-
 						<div>
 							<form
 								action="${pageContext.servletContext.contextPath}/core/addCompany"
 								method="POST" role="form">
-								<legend>Add new company</legend>
-
+								<div class="row" >
+								<div class="col-sm-4">
 								<div class="form-group">
 									<label for="">Company name</label> <input type="hidden"
 										class="form-control" name="companyId"
@@ -129,7 +124,6 @@
 										value="${company.companyName}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Category name</label> 
 									<select name="companyCategoryName" id="input" class="form-control dropdownSelect">
@@ -138,44 +132,40 @@
 												${cc.description}</option>
 										</c:forEach>
 									</select>
-
+									</div>
+								</div>
+								<div class="col-sm-4">
 									<div class="form-group">
 										<label for="">Board of directors</label> <input type="text"
 											class="form-control" name="companyBOD"
 											value="${company.companyBOD}" id=""
 											placeholder="Demo content">
 									</div>
-
 									<div class="form-group">
 										<label for="">Contact</label> <input type="text"
 											class="form-control" name="companyContact"
 											value="${company.companyContact}" id=""
 											placeholder="Demo content">
 									</div>
-
+								</div>
+								<div class="col-sm-4">
 									<div class="form-group">
 										<label for="">Info</label> <input type="text"
 											class="form-control" name="companyInfo"
 											value="${company.companyInfo}" id=""
 											placeholder="Demo content">
 									</div>
-
 									<div class="form-group">
 										<label for="">State</label> <input type="text"
 											class="form-control" name="companyState"
 											value="${company.companyState}" id=""
 											placeholder="Demo content">
 									</div>
-
-
-
-									<br />
-
+								</div>
+								</div>
 									<button type="submit" class="btn btn-primary">Submit</button>
 							</form>
-
 							<br />
-
 						</div>
 					</div>
 				</div>
@@ -183,7 +173,6 @@
 
 		</div>
 	</div>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
 
@@ -194,7 +183,10 @@
 
 	<script>
 	$(document).ready(function() {
-		$('#dataTable').DataTable();
+		$('#dataTable').DataTable({
+	        "aLengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
+	        "iDisplayLength": 5
+	    }); 
 		$(".dropdownSelect").select2();
 	} );
 </script>

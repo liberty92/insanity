@@ -39,11 +39,10 @@
 }
 .glow {
 	text-shadow: 0px 0px 12px white;
-}
+} 
 </style>
 </head>
 <body>
-
 	<div class="container-fluid">
 		<div class="modal fade" id="loginModal">
 			<div class="modal-dialog">

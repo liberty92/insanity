@@ -41,7 +41,6 @@
 </style>
 </head>
 <body>
-
 	<div class="container-fluid" style="width: 95%">
 		<div class="row">
 			<div class="row">
@@ -84,7 +83,6 @@
 											<td><a
 												href="<c:url value='/core/editTradingFee/${u.id}' />">Edit</a></td>
 											<td>
-											
 											<c:if test="${u.id > 2 }">
 											<a
 												href="<c:url value='/core/removeTradingFee/${u.id}' />">Delete</a>
@@ -97,23 +95,15 @@
 						</div>
 					</div>
 				</c:if>
-
 				<br />
-
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<h2>Add trading fee setting</h2>
-
-
 						<div>
 							<form
 								action="${pageContext.servletContext.contextPath}/core/addTradingFee"
 								method="POST" role="form">
 								<legend>Add new setting</legend>
-
-
-
-
 								<div class="form-group">
 									<label for="">Setting name</label> <input type="hidden"
 										class="form-control" name="id" value="${tradingFee.id}" id=""
@@ -121,52 +111,40 @@
 										class="form-control" name="name" value="${tradingFee.name}"
 										id="" placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">From value</label> <input type="number"
 										step="10e6" class="form-control" name="fromValue"
 										value="${tradingFee.fromValue}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Through value</label> <input type="number"
 										step="10e6" class="form-control" name="throughValue"
 										value="${tradingFee.throughValue}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Fee value</label> <input type="number"
 										step="0.01" class="form-control" name="value"
 										value="${tradingFee.value}" id="" placeholder="Demo content">
 								</div>
-
-
 								<br />
-
 								<button type="submit" class="btn btn-primary">Submit</button>
 							</form>
-
 							<br />
-
 						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 	<script>
-	
 	$.fn.digits2 = function() {
 		return this.each(function() {
 			var a = parseFloat($(this).text());
@@ -176,10 +154,8 @@
 			else{
 				$(this).text("Infinity");
 			}
-				
 		})
 	};
-	
 	accounting.settings = {
 			currency : {
 				symbol : " đ", // default currency symbol is '$'
@@ -195,7 +171,6 @@
 				decimal : "."
 			}
 		};
-	
 		$(document).ready(function() {
 			$(".formatNummber").digits2();
 		});

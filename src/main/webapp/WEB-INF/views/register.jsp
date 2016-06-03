@@ -12,15 +12,9 @@
 <title>Đăng ký | Liberty Invest</title>
 <!-- Meta data -->
 
-<link
-	href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css"
-	rel="stylesheet">
-<link
-	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
-	rel="stylesheet">
-<link
-	href="${pageContext.request.contextPath}/resources/images/core/favicon.ico"
-	rel="shortcut icon">
+<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
+<link href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
 body { 
 	background: url('${pageContext.request.contextPath}/resources/images/core/banner7.jpg') no-repeat bottom center fixed; 
@@ -29,18 +23,16 @@ body {
 </head>
 <body class="homepage">
 	<div class="container-fluid">
-		<div
-			class="col-md-offset-5 col-md-2 col-lg-offset-5 col-lg-2 col-xs-offset-4 col-xs-4">
-			<a href="${pageContext.request.contextPath}"><img style="max-width: 70%;"
+	<div class="row">
+		<div class="col-sm-offset-5 col-sm-2 col-xs-offset-3 col-xs-6" style="padding-top:10px">
+			<a href="${pageContext.request.contextPath}"><img style="max-width: 70%;margin:auto"
 				src="${pageContext.request.contextPath}/resources/images/core/hdgLogo.png"
 				class="img-responsive"></a>
 		</div>
-
+	</div>
 		<div
-			style="background-color: rgba(255, 255, 255, 0.7); border: 1px rgba(0, 0, 0, 0.3) solid; border-radius: 7px; padding-top: 15px;"
+			style="background-color: rgba(255, 255, 255, 0.7); border: 1px rgba(0, 0, 0, 0.3) solid; border-radius: 7px; margin-top: 15px;"
 			class="col-sm-offset-2 col-sm-8">
-
-
 			<form class="form-horizontal"  role="form" data-toggle="validator" action="${pageContext.request.contextPath}/registerAuthentication" method="post">
 				<legend><span  class="col-sm-offset-2">Đăng ký</span></legend>
 				<span  class="col-sm-offset-2" style="color:#a94442;">${sessionScope.registerErrorMessager}</span>
@@ -87,32 +79,19 @@ body {
 							placeholder="Have to be a valid email address" required>
 					</div>
 				</div>
-
-
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<button type="submit" class="btn btn-primary col-sm-10">Submit</button>
 					</div>
 				</div>
 			</form>
-
-
-
-
-
 		</div>
-
-
 	</div>
 </body>
-<script
-	src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
 <script type="text/javascript">
 	
 </script>

@@ -38,6 +38,7 @@ public class ArticleController {
     @RequestMapping(value= "/listArticle/{articleType}", method = RequestMethod.GET)
     public String listArticlesByArticleType(@PathVariable("articleType") String articleType,Model model){
     	model.addAttribute("listArticles", this.articleService.listArticlesByArticleType(articleType));
+    	model.addAttribute("articleTypeHeader",articleType);
     	return "article/listArticle";
     }
     
@@ -45,6 +46,7 @@ public class ArticleController {
     @RequestMapping(value= "/admin/listArticle/{articleType}", method = RequestMethod.GET)
     public String adminListArticlesByArticleType(@PathVariable("articleType") String articleType,Model model){
     	model.addAttribute("listArticles", this.articleService.listArticlesByArticleType(articleType));
+    	model.addAttribute("articleTypeHeader",articleType);
     	return "admin/listArticle";
     }
     
@@ -97,6 +99,8 @@ public class ArticleController {
     
     @RequestMapping("/viewArticle/{articleId}")
     public String viewArticle(@PathVariable("articleId") int id, Model model){
+        String articleTypeHeader = this.articleService.getArticleById(id).getArticleTypeId();
+        model.addAttribute("articleTypeHeader",articleTypeHeader);
         model.addAttribute("article", this.articleService.getArticleById(id));
         return "/article/viewArticle";
     }

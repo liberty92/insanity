@@ -2067,7 +2067,11 @@ height: 100%;
 @media (min-width: 0) and (max-width: 400px) {
   .hp07imgslide img {
     left: 0;
-    margin-left: -209px; } }
+    margin-left: 0px; 
+    
+    
+    } 
+ }
 @media \0screen\,screen\9 {
   .hp07nav ul {
     margin-left: 0 !important; }

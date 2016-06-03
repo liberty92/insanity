@@ -4,7 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib uri="http://ckeditor.com" prefix="ckeditor" %>
+<%@ taglib uri="http://ckeditor.com" prefix="ckeditor"%>
 <%@ page session="true"%>
 <!DOCTYPE html>
 <head>
@@ -17,17 +17,18 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-	
-	<link rel="stylesheet" type="text/css"
+
+<link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
 
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-	
+
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 
 <link
@@ -46,7 +47,6 @@
 </style>
 </head>
 <body>
-
 	<div class="container-fluid" style="width: 95%">
 		<div class="row">
 			<div class="row">
@@ -68,33 +68,33 @@
 									class="table table-responsive table-hover table-striped table-bordered">
 									<thead>
 										<tr>
-											<th width="50">Index</th>
-											<th width="50">ID</th>
+											<th width="10">Index</th>
+											<th width="30">ID</th>
 											<th width="120">Type</th>
 											<th width="120">Title</th>
-											<th width="120">Summary</th>
-											<th>Content</th>
+											<th width="">Summary</th>
+											<!-- <th>Content</th> -->
 											<th width="120">Image</th>
-											<th width="120">Creator ID</th>
-											<th width="120">Public at</th>
-											<th width="50">Edit</th>
-											<th width="50">Delete</th>
+											<th width="30">Creator ID</th>
+											<th width="60">Public at</th>
+											<th width="30">Edit</th>
+											<th width="30">Delete</th>
 										</tr>
 									</thead>
 									<c:forEach items="${listArticles}" var="a" varStatus="loop">
 										<tr style="height: 80px;">
-											<td style="text-align: center; font-weight: bold">${loop.index}</td>
-											<td style="text-align: center;">${a.articleId}</td>
+											<td style="max-width:30px;text-align: center; font-weight: bold">${loop.index +1}</td>
+											<td style="max-width:30px;ttext-align: center;">${a.articleId}</td>
 											<td style="word-break: break-all;">${a.articleTypeId}</td>
 											<td>${a.articleTitle}</td>
 											<td>${fn:substring(a.articleSummary,0,100)}</td>
-											<td>${fn:substring(a.articleContent,0,200).replace("<", "[HTML TAG]")}</td>
-											<td style="word-break: break-all;">${a.articleImage}</td>
-											<td>${a.articleCreatorId}</td>
-											<td>${a.articlePublicationTime}</td>
-											<td><a
+										<%-- 	<td>${fn:substring(a.articleContent,0,200).replace("<", "[HTML TAG]")}</td> --%>
+											<td style="word-break: break-all;"> <img alt="" class="img-responsive" src="${a.articleImage}"> </td>
+											<td style="max-width:30px">${a.articleCreatorId}</td>
+											<td style="max-width:60px">${a.articlePublicationTime}</td>
+											<td style="max-width:30px"><a
 												href="<c:url value='/core/editArticle/${a.articleId}' />">Edit</a></td>
-											<td><a
+											<td style="max-width:30px"><a
 												href="<c:url value='/core/removeArticle/${a.articleId}' />">Delete</a></td>
 										</tr>
 									</c:forEach>
@@ -103,96 +103,82 @@
 						</div>
 					</div>
 				</c:if>
-
 				<br />
-
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<h2>Add article</h2>
-
-
 						<div>
 							<form
 								action="${pageContext.servletContext.contextPath}/core/addArticle"
 								method="POST" role="form">
-								<legend>Add new article</legend>
-
-								<div class="form-group">
-									<label for="">Type</label> <input type="hidden"
-										class="form-control" name="articleId"
-										value="${article.articleId}" id="" placeholder="Demo content">
-
-									<input type="text" class="form-control" name="articleTypeId"
-										value="${article.articleTypeId}" id=""
-										placeholder="Demo content">
-								</div>
-
 								<div class="form-group">
 									<label for="">Title</label> <input type="text"
 										class="form-control" name="articleTitle"
 										value="${article.articleTitle}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Summary</label> <input type="text"
 										class="form-control" name="articleSummary"
 										value="${article.articleSummary}" id=""
 										placeholder="Demo content">
 								</div>
-
+								<div class="col-xs-12">
+									<div class="col-xs-9">
+										<div class="row">
+											<div class="form-group row">
+												<label for="">Content</label>
+												<textarea name="articleContent" id="input"
+													class="form-control" rows="10" placeholder="Demo content"
+													required="required">${article.articleContent}</textarea>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-3">
+									<div class="row" style="padding-left:40px;">
 								<div class="form-group">
-									<label for="">Content</label>
-
-									<textarea name="articleContent"
-										value="${article.articleContent}" id="input"
-										class="form-control" rows="10" placeholder="Demo content"
-										required="required">${article.articleContent}</textarea>
-
-								</div>
-
-
-
-								<div class="form-group">
-									<label for="">Creator ID</label> <input type="text"
-										class="form-control" name="articleCreatorId"
-										value="${article.articleCreatorId}" id=""
+									<label for="">Type</label> <input type="hidden"
+										class="form-control" name="articleId"
+										value="${article.articleId}" id="" placeholder="Demo content">
+									<input type="text" class="form-control" name="articleTypeId"
+										value="${article.articleTypeId}" id=""
 										placeholder="Demo content">
 								</div>
-
-								<div class="form-group">
-									<label for="">Image</label> <input type="text"
-										class="form-control" name="articleImage"
-										value="${article.articleImage}" id=""
-										placeholder="Demo content">
+										<div class="form-group">
+											<label for="">Creator ID</label> <input type="text"
+												class="form-control" name="articleCreatorId"
+												value="${article.articleCreatorId}" id=""
+												placeholder="Demo content">
+										</div>
+										<div class="form-group">
+											<label for="">Image</label> <input type="text"
+												class="form-control" name="articleImage"
+												value="${article.articleImage}" id=""
+												placeholder="Demo content">
+										</div>
+										<label for="">Article Publication Time</label>
+										<div class='input-group date'>
+											<input type='text' id='datetimepicker'
+												name="articlePublicationTime"
+												value="${article.articlePublicationTime}"
+												class="form-control" /> <span class="input-group-addon">
+												<span id="datetimepickericon"
+												class="glyphicon glyphicon-calendar"></span>
+											</span>
+										</div>
+										<br />
+										<button type="submit" class="btn btn-primary">Submit</button>
+									</div>
+									</div>
 								</div>
-
-
-								<label for="">Article Publication Time</label>
-								<div class='input-group date'>
-									<input type='text' id='datetimepicker'
-										name="articlePublicationTime"
-										value="${article.articlePublicationTime}" class="form-control" />
-									<span class="input-group-addon"> <span
-										id="datetimepickericon" class="glyphicon glyphicon-calendar"></span>
-									</span>
-								</div>
-
-								<br />
-
-								<button type="submit" class="btn btn-primary">Submit</button>
 							</form>
-
 							<br />
-
 						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
@@ -231,7 +217,10 @@
 		$(document)
 				.ready(
 						function() {
-							$('#dataTable').DataTable();
+							 $('#dataTable').DataTable({
+							        "aLengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
+							        "iDisplayLength": 5
+							    });
 							var $datetimepicker = $('#datetimepicker');
 
 							var d = new Date();
@@ -258,6 +247,7 @@
 
 						});
 	</script>
-	<ckeditor:replace replace="input" basePath="${pageContext.request.contextPath}/resources/js/ckeditor2/" />
+	<ckeditor:replace replace="input"
+		basePath="${pageContext.request.contextPath}/resources/js/ckeditor2/" />
 </body>
 </html>

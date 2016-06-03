@@ -12,44 +12,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Balance manager - BK Securities core engine</title>
 <!-- Meta data -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css"
-	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<link
-	href="${pageContext.request.contextPath}/resources/css/select2.min.css"
-	rel="stylesheet">
-	
-	<script
-	src="${pageContext.request.contextPath}/resources/js/accounting.min.js"></script>
-	<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
-<script
-	src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
-
-<link
-	href="${pageContext.request.contextPath}/resources/images/core/favicon.ico"
-	rel="shortcut icon">
-
-<%-- 
-	<link href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet">
-	<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-	<link href="${pageContext.request.contextPath}/resources/css/login.css" rel="stylesheet">
-	<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
-
- --%>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link href="${pageContext.request.contextPath}/resources/css/select2.min.css" rel="stylesheet">
+<script src="${pageContext.request.contextPath}/resources/js/accounting.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
+<script src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
+<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
 <style type="text/css">
 </style>
 </head>
 <body>
-
 	<div class="container-fluid" style="width: 95%">
 		<div class="row">
 			<div class="row">
@@ -80,7 +56,7 @@
 											<th width="100">Cash</th>
 											<th width="100">Total assets</th>
 											<th width="50">NAV</th>
-											<th width="50">Margin</th>
+											<th width="10">Margin</th>
 											<th width="50">State</th>
 											<th width="50">Edit</th>
 											<th width="50">Delete</th>
@@ -90,7 +66,7 @@
 										<tr>
 											<td style="text-align: center; font-weight: bold">${loop.index +1}</td>
 											<td>${u.balanceId}</td>
-											<td>${u.userId}<c:forEach items="${listUsers}"
+											<td style="min-width:120px;">${u.userId}<c:forEach items="${listUsers}"
 													var="user">
 													<c:if test="${user.userId == u.userId}">
 														<br />${user.userFullName}
@@ -111,7 +87,7 @@
 											<td class="formatNummber" style="text-align: right; color: blue">
 												${u.balanceNAV}
 											</td>
-											<td>${u.balanceMarginRate}</td>
+											<td style="max-width:30px;" class="formatPercent">${u.balanceMarginRate}</td>
 											<td>${u.balanceState}</td>
 											<td><a
 												href="<c:url value='/core/editBalance/${u.balanceId}' />">Edit</a></td>
@@ -124,38 +100,32 @@
 						</div>
 					</div>
 				</c:if>
-
 				<br />
-
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<h2>Add balance</h2>
-
 						<div>
 							<form
 								action="${pageContext.servletContext.contextPath}/core/addBalance"
 								method="POST" role="form">
-								<legend>Add new balance</legend>
-
-								<div class="form-group">
+								<div class="row">
+								<div class="col-sm-4">
+									<div class="form-group">
 									<label for="">User Id</label> <input type="hidden"
 										class="form-control" name="balanceId"
 										value="${balance.balanceId}" id="" placeholder="Demo content">
-
 									<select name="userId" id="input" class="form-control dropdownSelect" id="dropdownSelect">
 										<c:forEach items="${listUsers}" var="user">
 											<option value="${user.userId}">${user.userId} - ${user.userFullName}</option>
 										</c:forEach>
 									</select>
 								</div>
-
 								<div class="form-group">
 									<label for="">Balance name</label> <input type="text"
 										class="form-control" name="balanceName"
 										value="${balance.balanceName}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<label for="">Created date</label>
 								<div class='input-group date'>
 									<input type='text' id='datetimepicker'
@@ -165,77 +135,63 @@
 										id="datetimepickericon" class="glyphicon glyphicon-calendar"></span>
 									</span>
 								</div>
-
-								<div class="form-group">
+								</div>
+								<div class="col-sm-4">
+										<div class="form-group">
 									<label for="">Initial NAV</label> <input type="text"
 										class="form-control" name="balanceInitialNAV"
 										value="${balance.balanceInitialNAV}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Cash</label> <input type="text"
 										class="form-control" name="balanceCash"
 										value="${balance.balanceCash}" id=""
 										placeholder="Demo content">
 								</div>
-
-								<div class="form-group">
+									<div class="form-group">
 									<label for="">Total assets</label> <input type="text"
 										class="form-control" name="balanceTotalAssets"
 										value="${balance.balanceTotalAssets}" id=""
 										placeholder="Demo content">
 								</div>
-
+								</div>
+								<div class="col-sm-4">
 								<div class="form-group">
 									<label for="">NAV</label> <input type="text"
 										class="form-control" name="balanceNAV"
 										value="${balance.balanceNAV}" id="" placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Margin rate</label> <input type="text"
 										class="form-control" name="balanceMarginRate"
 										value="${balance.balanceMarginRate}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">State</label> <input type="text"
 										class="form-control" name="balanceState"
 										value="${balance.balanceState}" id=""
 										placeholder="Demo content">
 								</div>
-
-
-								<br />
-
+								</div>
+								</div>
 								<button type="submit" class="btn btn-primary">Submit</button>
 							</form>
-
 							<br />
-
 						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
-
-	<script
-		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/js/bootstrap-datetimepicker.min.js"></script>
-
+	<script src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/insanity.js"></script>
 	<script type="text/javascript">
-		// $('#datetimepicker').datetimepicker();
-
 		function formatDate(value) {
 			if (value) {
 				Number.prototype.padLeft = function(base, chr) {
@@ -252,7 +208,6 @@
 				return dformat;
 			}
 		}
-
 		$('#datetimepicker').datetimepicker({
 			format : 'DD-MM-YYYY HH:mm:ss'
 		});
@@ -264,7 +219,6 @@
 								"$1,"));
 			})
 		}
-		
 		$.fn.digits2 = function() {
 			return this.each(function() {
 				var a = parseFloat($(this).text());
@@ -286,16 +240,15 @@
 				decimal : "."
 			}
 		};
-
-		$(document)
-				.ready(
-						function() {
-							$('#dataTable').DataTable();
+		$(document).ready(function() {
+							$('#dataTable').DataTable({
+						        "aLengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
+						        "iDisplayLength": -1
+						    }); 
 							$(".formatNummber").digits2();
 							$(".dropdownSelect").select2();
-
+							$(".formatPercent").formatPercent2();
 							var $datetimepicker = $('#datetimepicker');
-
 							var d = new Date();
 							var showDate = (("00" + (d.getMonth() + 1))
 									.slice(-2)
@@ -308,18 +261,14 @@
 									+ ":"
 									+ ("00" + d.getMinutes()).slice(-2) + ":" + ("00" + d
 									.getSeconds()).slice(-2));
-
 							$('#datetimepicker').val(showDate);
-
 							if ("${balance.balanceCreatedDate}" != null
 									&& ("${balance.balanceCreatedDate}").length > 0) {
 								$('#datetimepicker')
 										.val(
 												formatDate("${balance.balanceCreatedDate}"));
 							}
-
 						});
 	</script>
-
 </body>
 </html>

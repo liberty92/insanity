@@ -47,97 +47,22 @@
 			<div class="row">
 				<%@ include file="../template/frontend/menu/menuAdmin.jsp"%>  
 			</div>
+			
+			
+			
+			<br/>
 			<div class="row">
-				<c:if test="${!empty listOrders}">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<h2>List Orders</h2>
-							<div class="table-responsive">
-							<table class="table table-hover table-striped table-bordered" id="dataTable">
-								<thead>
-									<tr>
-										<th width="50">Index</th>
-										<th width="50">ID</th>
-										<th width="150">Balance ID & Owner info</th>
-										<th width="100">Stock ID</th>
-										<th width="100">Action</th>
-										<th width="100">Order type</th>
-										<th width="100">Price</th>
-										<th width="100">Quantity</th>
-										<th width="100">Value</th>
-										<th width="100">Created time</th>
-										<th width="100">State</th>
-										<th width="50">Edit</th>
-										<th width="50">Delete</th>
-									</tr>
-								</thead>
-								<c:forEach items="${listOrders}" var="u"  varStatus="loop">
-									<tr>
-										<td style="text-align:center; font-weight:bold">${loop.index +1}</td>
-										<td>${u.orderId}</td>
-										<td>${u.balanceId}
-
-											<c:forEach items="${listBalances}" var="balance">
-												<c:if test="${balance.balanceId == u.balanceId}">
-													<c:forEach items="${listUsers}" var="user">
-														<c:if test="${balance.userId == user.userId}"><br/> ${user.userFullName} </c:if> 
-													</c:forEach>
-													<br/>${balance.balanceName} - ${balance.balanceCash}
-	                                           	</c:if> 
-											</c:forEach>
-
-										</td>
-										<td>${u.stockId}<br/>
-
-											<c:forEach items="${listStocks}" var="stock">
-												<c:if test="${stock.stockId == u.stockId}"> 
-													${stock.stockName} 
-												</c:if>
-											</c:forEach> 
-											
-										</td>
-										<td>${u.action}
-										<c:if test="${u.action.length()>3} ">
-											<c:if test="${u.margin > 0}">
-											<br/><span style="color:RED">Margin: ${u.margin}%</span>
-											</c:if>
-										</c:if>
-										</td>
-										<td>${u.orderType}</td>
-										<td  style="text-align:right;color: blue">
-											<%-- <span style="clear:both">${u.price}</span><br/> --%> 
-												<fmt:parseNumber var="i" type="number" value="${u.price}" pattern="#,###.##"/>
-												<c:out value="${i}"/>
-										</td>
-										<td style="text-align:right;color: blue" class="formatQuantity">
-												${(u.quantity)}
-										</td>
-										<td class="formatNummber" style="text-align:right;color: blue">
-												<fmt:parseNumber var="i3" type="number" value="${(u.quantity * u.price *1000)}" pattern="#,###.##"/>
-												<c:out value="${i3}"/> đ
-										
-										</td> 
-										<td>${u.createdTime}</td>
-										<td>${u.orderState}</td> 
-										<td><a
-											href="<c:url value='/core/editOrder/${u.orderId}' />">Edit</a></td>
-										<td><a
-											href="<c:url value='/core/removeOrder/${u.orderId}' />">Delete</a></td>
-									</tr>
-								</c:forEach>
-							</table>
-						</div>
-						</div>
-					</div>
-				</c:if>
-
-				<br />
-				 
+			
+			
+			
+			
+			
+			
 				
 						<div class="panel panel-default" style="color: #167AC6">
 							<div class="panel-body">
-							<div style="color:#00aeef; font-weight:bold; font-size:1.2em">
-								<span class="col-sm-2" style="float:left; color:red">Đặt lệnh</span><span id="balanceInfo" class="col-sm-4 formatNummber" >Sức mua:</span><span class="col-sm-1" id="stockInfo">Giá:</span> 
+							<div style="color:#00aeef; font-weight:bold; font-size:1.2em; white-space: nowrap;">
+								<span class="col-sm-1" style="float:left; color:red">Đặt lệnh</span><span id="balanceCash" class="col-sm-2 formatNummber" ></span><span class="col-sm-2" id="balanceAvailableCash"></span></span> <span class="col-sm-1" id="stockInfo">Giá:</span> 
 								<span id="p1" class="col-sm-1" style="color:orange">&nbsp;</span>
 								<span id="p2" class="col-sm-1" style="color:violet;padding:0px">&nbsp;</span>
 								<span id="p3" class="col-sm-1" style="color:aqua">&nbsp;</span>
@@ -291,6 +216,12 @@
 										</div> 
 										
 										
+										<div class="col-xs-12" style="border: 1px solid rgba(0,0,0,0.3);  box-shadow: 0px 0px 6px rgba(0,0,0,0.3);margin-bottom:12px; ">
+											<a href="${pageContext.request.contextPath}/core/timeoutCancelAllTransaction">
+												<i class="fa fa-empire   fa-4x col-xs-12" style="color: rgba(0,0,0,0.3)"></i><div>Stop trading session</div>
+											</a>
+										</div> 
+											
 										<div class="col-xs-12" style="border: 1px solid rgba(0,0,0,0.3);  box-shadow: 0px 0px 6px rgba(0,0,0,0.3)">
 											<a href="${pageContext.request.contextPath}/core/timeoutCancelAllTransaction">
 												<i class="fa fa-empire   fa-4x col-xs-12" style="color: rgba(0,0,0,0.3)"></i><div>Stop trading session</div>
@@ -315,6 +246,100 @@
 							</div>
 						</div>
 				
+			
+			
+			
+			
+			
+			
+			
+			
+			
+				<c:if test="${!empty listOrders}">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<h2>List Orders</h2>
+							<div class="table-responsive">
+							<table class="table table-hover table-striped table-bordered" id="dataTable">
+								<thead>
+									<tr>
+										<th width="50">Index</th>
+										<th width="50">ID</th>
+										<th width="150">Balance ID & Owner info</th>
+										<th width="100">Stock ID</th>
+										<th width="100">Action</th>
+										<th width="100">Order type</th>
+										<th width="100">Price</th>
+										<th width="100">Quantity</th>
+										<th width="100">Value</th>
+										<th width="100">Created time</th>
+										<th width="100">State</th>
+										<th width="50">Edit</th>
+										<th width="50">Delete</th>
+									</tr>
+								</thead>
+								<c:forEach items="${listOrders}" var="u"  varStatus="loop">
+									<tr>
+										<td style="text-align:center; font-weight:bold">${loop.index +1}</td>
+										<td>${u.orderId}</td>
+										<td>${u.balanceId}
+
+											<c:forEach items="${listBalances}" var="balance">
+												<c:if test="${balance.balanceId == u.balanceId}">
+													<c:forEach items="${listUsers}" var="user">
+														<c:if test="${balance.userId == user.userId}"><br/> ${user.userFullName} </c:if> 
+													</c:forEach>
+													<br/>${balance.balanceName} - ${balance.balanceCash}
+	                                           	</c:if> 
+											</c:forEach>
+
+										</td>
+										<td>${u.stockId}<br/>
+
+											<c:forEach items="${listStocks}" var="stock">
+												<c:if test="${stock.stockId == u.stockId}"> 
+													${stock.stockName} 
+												</c:if>
+											</c:forEach> 
+											
+										</td>
+										<td>${u.action}
+										<c:if test="${u.action.length()>3} ">
+											<c:if test="${u.margin > 0}">
+											<br/><span style="color:RED">Margin: ${u.margin}%</span>
+											</c:if>
+										</c:if>
+										</td>
+										<td>${u.orderType}</td>
+										<td  style="text-align:right;color: blue">
+											<%-- <span style="clear:both">${u.price}</span><br/> --%> 
+												<fmt:parseNumber var="i" type="number" value="${u.price}" pattern="#,###.##"/>
+												<c:out value="${i}"/>
+										</td>
+										<td style="text-align:right;color: blue" class="formatQuantity">
+												${(u.quantity)}
+										</td>
+										<td class="formatNummber" style="text-align:right;color: blue">
+												<fmt:parseNumber var="i3" type="number" value="${(u.quantity * u.price *1000)}" pattern="#,###.##"/>
+												<c:out value="${i3}"/> đ
+										
+										</td> 
+										<td>${u.createdTime}</td>
+										<td>${u.orderState}</td> 
+										<td><a
+											href="<c:url value='/core/editOrder/${u.orderId}' />">Edit</a></td>
+										<td><a
+											href="<c:url value='/core/removeOrder/${u.orderId}' />">Delete</a></td>
+									</tr>
+								</c:forEach>
+							</table>
+						</div>
+						</div>
+					</div>
+				</c:if>
+
+				<br />
+				 
 						
 
 				<%-- <div class="panel panel-default">
@@ -507,7 +532,7 @@
 	}); 
 	
 	$('#inputBalanceId').on('change', function (e) {
-	    var balanceId = this.value;
+	    balanceId = this.value;
 	    
 	    $.ajax({
             url : '${pageContext.request.contextPath}/user/ajaxGetBalanceInfo',
@@ -515,8 +540,12 @@
             	balanceId : balanceId
             },
             success : function(responseText) {
-            	cash = parseFloat(responseText);
-            	$('#balanceInfo').text("Sức mua: " + accounting.formatMoney(responseText));
+            	var tempArray = responseText.split("|");
+            	cash = parseFloat(tempArray[0]);
+            	availableCash = parseFloat(tempArray[1]);
+            	$('#balanceCash').text("Tiền mặt: " + accounting.formatMoney(tempArray[0]));
+            	$('#balanceAvailableCash').text("Sức mua: " + accounting.formatMoney(tempArray[1]));
+                 
             }
         });
 	   	 

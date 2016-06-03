@@ -10,46 +10,36 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Đăng nhập | Liberty Invest</title>
 	<!-- Meta data -->
-
+	<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
 	<link href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet">
 	<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 	<link href="${pageContext.request.contextPath}/resources/css/login.css" rel="stylesheet">
-	<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
-	<style type="text/css"> 
-		body{
-		background-image: url('${pageContext.request.contextPath}/resources/slide/slideSource/slideImage/b6.jpg') !important;
-	} 
-</style>
 </head>
 <body class="homepage">
 	<div class="header">
 	<div class="container-fluid">
-		<div class="col-md-offset-5 col-md-2 col-lg-offset-5 col-lg-2 col-xs-offset-4 col-xs-4">
+		<div class="col-sm-offset-5 col-sm-2 col-xs-offset-3 col-xs-6">
 			<a><img src="${pageContext.request.contextPath}/resources/images/core/hdgLogo.png" class="img-responsive"></a>
 		</div>
-	</div>
-		<!-- <h1><span style="color: #FF0000;">LIBERATION LAB</span></h1> -->
+	</div> 
 	</div>
 	<div class="boxlogin">
 		<form id="fm1" action="${pageContext.request.contextPath}/authentication" method="post">
-
 			<div class="boxlogin-in">
 				<div class="padding">
 					<input id="username" name="username" class="form-control" required="required" placeholder="Username" type="text"/>
 				</div>
-				
 				<div class="padding" style="padding-top: 10px ">
 					<input id="password" name="password" class="required form-control"  required="required" placeholder="Password" type="password" value="" size="25" autocomplete="off">
 				</div>
 				<br/>
 				<br/>
 				<div class="row" style="text-align: center;">
-					<p style="color:red; padding:0px 10px;">
+					<p style="color:red; padding:0px 20px;">
 						<c:out value="${sessionScope.loginErrorMessage}"/>
 						<c:out value="${sessionScope.loginRequiredMessage}"/>
-						
 					</p>
-					<p style="color:blue; padding:0px 10px;">
+					<p style="color:blue; padding:0px 20px;">
 						<c:out value="${sessionScope.welcomeMessage}"/>
 					</p>
 					<% 
@@ -73,17 +63,15 @@
 			<div class="row">
 				<div class="no-print" style="color: white !important">
 					<b>Liberation Lab © 2016</b> | 
-					<a  href="http://www.nth7.com/viewArticle/82">Terms and conditions</a> | 
+					<a  href="http://www.nth7.com/viewArticle/83">Terms and conditions</a> | 
 					<a  href="https://fb.com/liberty4692">Contact us</a> 
 				</div>
 			</div>
 		</footer>
-
 	</body>
 	<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
 	<script type="text/javascript">
-
 	</script>
 	</html>

@@ -63,9 +63,7 @@ LOCAL -->
 
 			<div class="row " style="margin: 0px 10px">
 				<div class="col-md-9 listArticle" style="padding-left: 10px; padding-right: 10px;  ">
-					<h2 
-						style="border-bottom: 1px solid grey; font-size: 23px; font-weight: bold; color: #00aeef; padding-top: 0; margin-top: 0px; text-transform: uppercase;">
-						${article.articleTypeId}</h2>
+					<h2 id="articleTypeHeader">${articleTypeHeader}</h2>
 			
 			
 								
@@ -82,8 +80,8 @@ LOCAL -->
                             ${article.articleContent}  
                             </div>
                             	
-                            <br/>
-                            <p style="color:#00aeef">Đăng ngày ${article.articlePublicationTime}</p>	
+                            <br/> 
+                            <p style="color:#00aeef" class="formatTime">${article.articlePublicationTime}</p>	
                             </div>
 
  
@@ -108,13 +106,19 @@ LOCAL -->
 </body>
 </html>
 
-<script type="text/javascript">
-	$(document).ready(
-		function() {
-			var glow = $('.insanity');
-			setInterval(function() {
-				glow.hasClass('glow') ? glow.removeClass('glow') : glow
-				.addClass('glow');
-			}, 4000);
-		});
-	</script>
+<script src="${pageContext.request.contextPath}/resources/js/insanity.js"></script>
+
+<script type="text/javascript"> 
+$.fn.formatTimePublicationTime = function () {
+	return this.each(function() {
+		var a = ($(this).text());
+		$(this).text("Đăng ngày "+a.substring(10, 19) + " "+ a.substring(8, 10) + "/"+a.substring(5, 7)+"/"+a.substring(0, 4) );
+	})
+};
+
+
+$(document).ready(function(){ 
+		$("#articleTypeHeader").articleTypeHeader();
+		$(".formatTime").formatTimePublicationTime();
+	});
+</script>

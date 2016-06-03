@@ -6,7 +6,8 @@
 CKEDITOR.editorConfig = function( config ) {
 	// config.skin = 'kama';
 //       config.height = '800px';
-       config.height = '800px';
+	config.height = '800px';
+       config.width = '975px';
 
     var duong_dan='/bkdelivery/js/ckeditor/';
     config.filebrowserBrowseUrl         =duong_dan+ 'ckfinder/ckfinder.html';

@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page session="true"%>
 <!DOCTYPE html>
 <head>
@@ -12,20 +12,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Portfolio manager - BK Securities core engine</title>
 <!-- Meta data -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-	<script
+<script
 	src="${pageContext.request.contextPath}/resources/js/accounting.min.js"></script>
 
-<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
-<link href="${pageContext.request.contextPath}/resources/css/select2.min.css" rel="stylesheet">
+<link
+	href="${pageContext.request.contextPath}/resources/images/core/favicon.ico"
+	rel="shortcut icon">
+<link
+	href="${pageContext.request.contextPath}/resources/css/select2.min.css"
+	rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <%-- 
 	<link href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet">
 	<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
@@ -33,12 +42,11 @@
 	<link href="${pageContext.request.contextPath}/resources/images/core/favicon.ico" rel="shortcut icon">
 
  --%>
-<style type="text/css"> 
+<style type="text/css">
 </style>
 </head>
 <body>
-
-	<div class="container-fluid" style="width:95%" >
+	<div class="container-fluid" style="width: 95%">
 		<div class="row">
 			<div class="row">
 				<h1>
@@ -47,291 +55,226 @@
 				</h1>
 			</div>
 			<div class="row">
-				<%@ include file="../template/frontend/menu/menuAdmin.jsp"%>  
+				<%@ include file="../template/frontend/menu/menuAdmin.jsp"%>
 			</div>
+					<br />
+					
+					
+				<div class="panel panel-default row">
+					<div class="panel-body">
+						<h2>Add portfolio</h2>
+						<div>
+							<form
+								action="${pageContext.servletContext.contextPath}/core/addPortfolio"
+								method="POST" role="form">
+
+								<div class="row">
+
+									<div class="col-sm-3">
+
+										<div class="form-group">
+											<label for="">Balance Id</label> <input type="hidden"
+												class="form-control" name="portfolioId"
+												value="${portfolio.portfolioId}" id=""
+												placeholder="Demo content">
+											<%-- 
+										<input type="number"
+										class="form-control" name="balanceId" value="${portfolio.balanceId}"
+										id="" placeholder="Demo content"> --%>
+
+											<select name="balanceId" id="input"
+												class="form-control dropdownSelect" required="required">
+												<c:forEach items="${listBalances}" var="balance">
+													<option value="${balance.balanceId}"
+														<c:if test="${balance.balanceId == portfolio.balanceId}"> selected="selected" </c:if>>
+														<c:forEach items="${listUsers}" var="u">
+															<c:if test="${balance.userId == u.userId}"> ${u.userFullName} </c:if>
+														</c:forEach> - ${balance.balanceId}
+													</option>
+												</c:forEach>
+											</select>
+										</div>
+
+										<div class="form-group">
+											<label for="">Stock ID</label> <select name="stockId"
+												id="input" class="form-control dropdownSelect"
+												required="required">
+												<c:forEach items="${listStocks}" var="stock">
+													<option value="${stock.stockId}"
+														<c:if test="${stock.stockId == portfolio.stockId}"> selected="selected" </c:if>>
+														${stock.stockName}</option>
+												</c:forEach>
+											</select>
+											<%-- <input type="number"
+										class="form-control" name="stockId" value="${portfolio.stockId}"
+										id="" placeholder="Demo content"> --%>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label for="">Buy price</label> <input type="number"
+												step="0.1" class="form-control" name="buyPrice"
+												value="${portfolio.buyPrice}" id=""
+												placeholder="Demo content">
+										</div>
+
+										<div class="form-group">
+											<label for="">Sell price</label> <input type="number"
+												step="0.1" class="form-control" name="sellPrice"
+												value="${portfolio.sellPrice}" id=""
+												placeholder="Demo content">
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label for="">Quantity</label> <input type="number" step="10"
+												class="form-control" name="quantity"
+												value="${portfolio.quantity}" id=""
+												placeholder="Demo content">
+										</div>
+										<label for="">Buy date</label>
+										<div class='input-group date'>
+											<input type='text' id='datetimepicker2' name="buyDate"
+												value="${portfolio.buyDate}" class="form-control" /> <span
+												class="input-group-addon"> <span
+												id="datetimepickericon" class="glyphicon glyphicon-calendar"></span>
+											</span>
+										</div>
+									</div>
+									<div class="col-sm-3"></div>
+									<div class="col-sm-3">
+										<label for="">Sell date</label>
+										<div class='input-group date'>
+											<input type='text' id='datetimepicker' name="sellDate"
+												value="${portfolio.sellDate}" class="form-control" /> <span
+												class="input-group-addon"> <span
+												id="datetimepickericon" class="glyphicon glyphicon-calendar"></span>
+											</span>
+										</div>
+										<br />
+										<button type="submit" class="btn btn-primary">Submit</button>
+									</div>
+								</div>
+							</form>
+							<br />
+						</div>
+					</div>
+				</div>
 			<div class="row">
 				<c:if test="${!empty listPortfolios}">
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<h2>List Portfolios</h2>
 							<div class="table-responsive">
-							<table class="table table-hover table-striped table-bordered" id="dataTable">
-								<thead>
-									<tr>
-										<th width="50">Index</th>
-										<th width="50">ID</th>
-										<th width="150">Balance ID & Owner info</th>
-										<th width="50">Stock ID</th>
-										<th width="50">Buy price</th>
-										<th width="50">Buy value</th>
-										<th width="50">Sell price</th>
-										<th width="50">Quantity</th>
-										<th width="50">Buy date</th>
-										<th width="50">Sell date</th>
-										<th width="50">Edit</th>
-										<th width="50">Delete</th>
-									</tr>
-								</thead>
-								<c:forEach items="${listPortfolios}" var="u"  varStatus="loop">
-									<tr>
-										<td style="text-align:center; font-weight:bold">${loop.index +1}</td>
-										<td>${u.portfolioId}</td>
-										<td>${u.balanceId}
-
-											<c:forEach items="${listBalances}" var="balance">
-												<c:if test="${balance.balanceId == u.balanceId}">
-													<c:forEach items="${listUsers}" var="user">
-														<c:if test="${balance.userId == user.userId}"><br/> ${user.userFullName} </c:if> 
-													</c:forEach>
-													<br/>${balance.balanceName}
-	                                           	</c:if> 
-											</c:forEach>
-
-										</td>
-										<td>${u.stockId}<br/>
-
-											<c:forEach items="${listStocks}" var="stock">
-												<c:if test="${stock.stockId == u.stockId}"> 
+								<table class="table table-hover table-striped table-bordered"
+									id="dataTable">
+									<thead>
+										<tr>
+											<th width="50">Index</th>
+											<th width="50">ID</th>
+											<th width="150">Balance ID & Owner info</th>
+											<th width="50">Stock ID</th>
+											<th width="50">Buy price</th>
+											<th width="50">Buy value</th>
+											<th width="50">Sell price</th>
+											<th width="50">Quantity</th>
+											<th width="50">Buy date</th>
+											<th width="50">Sell date</th>
+											<th width="50">Edit</th>
+											<th width="50">Delete</th>
+										</tr>
+									</thead>
+									<c:forEach items="${listPortfolios}" var="u" varStatus="loop">
+										<tr>
+											<td style="text-align: center; font-weight: bold">${loop.index +1}</td>
+											<td>${u.portfolioId}</td>
+											<td>${u.balanceId}<c:forEach items="${listBalances}"
+													var="balance">
+													<c:if test="${balance.balanceId == u.balanceId}">
+														<c:forEach items="${listUsers}" var="user">
+															<c:if test="${balance.userId == user.userId}">
+																<br /> ${user.userFullName} </c:if>
+														</c:forEach>
+														<br />${balance.balanceName}
+	                                           	</c:if>
+												</c:forEach>
+											</td>
+											<td>${u.stockId}<br /> <c:forEach items="${listStocks}"
+													var="stock">
+													<c:if test="${stock.stockId == u.stockId}"> 
 													${stock.stockName} 
 												</c:if>
-											</c:forEach> 
-											
-										</td>
-										<td class="" style="text-align:right;color: blue">
-											<span style="clear:both">${u.buyPrice}</span> 
-										
-										</td>
-										<td  class="formatNummber" >
-										${(u.buyPrice)*(u.quantity)*1000}
-										</td>
-										<td class="" style="text-align:right;color: blue">
-											<span style="clear:both">${u.sellPrice}</span><br/>&nbsp;
-												<fmt:parseNumber var="i" type="number" value="${(u.sellPrice)*(u.quantity)*1000}" pattern="#,###"/>
-												<c:out value="${i}"/> đ
-										
-										</td>
-										<td class="" style="text-align:right; color:green; <c:if test="${ (u.sellPrice*u.quantity - u.buyPrice*u.quantity)<0 && (u.sellPrice != 0)  }">  color: red </c:if>    ">
-											<span  class="formatQuantity" style="clear:both">${u.quantity}</span>
-											<br/>
-											<c:if test="${u.sellPrice != 0}"> 
-												<fmt:parseNumber var="i" type="number" value="${(u.sellPrice*u.quantity - u.buyPrice*u.quantity)*1000 }" pattern="#,###"/>
-												<c:out value="${i}"/> đ<br/>&nbsp;
-												<fmt:parseNumber var="i2" type="number" value="${(u.sellPrice*u.quantity - u.buyPrice*u.quantity)/(u.buyPrice*u.quantity)*100 }" />
-												<fmt:formatNumber type="number" maxFractionDigits="2" value="${i2}" var="i3"/>
-												<c:out value="${i3}"/>%
+												</c:forEach>
+											</td>
+											<td class="" style="text-align: right; color: blue"><span
+												style="clear: both">${u.buyPrice}</span></td>
+											<td class="formatNummber">
+												${(u.buyPrice)*(u.quantity)*1000}</td>
+											<td class="" style="text-align: right; color: blue"><span
+												style="clear: both">${u.sellPrice}</span><br />&nbsp; <fmt:parseNumber
+													var="i" type="number"
+													value="${(u.sellPrice)*(u.quantity)*1000}" pattern="#,###" />
+												<c:out value="${i}" /> đ</td>
+											<td class=""
+												style="text-align:right; color:green; <c:if test="${ (u.sellPrice*u.quantity - u.buyPrice*u.quantity)<0 && (u.sellPrice != 0)  }">  color: red </c:if>    ">
+												<span class="formatQuantity" style="clear: both">${u.quantity}</span>
+												<br /> <c:if test="${u.sellPrice != 0}">
+													<fmt:parseNumber var="i" type="number"
+														value="${(u.sellPrice*u.quantity - u.buyPrice*u.quantity)*1000 }"
+														pattern="#,###" />
+													<c:out value="${i}" /> đ<br />&nbsp;
+												<fmt:parseNumber var="i2" type="number"
+														value="${(u.sellPrice*u.quantity - u.buyPrice*u.quantity)/(u.buyPrice*u.quantity)*100 }" />
+													<fmt:formatNumber type="number" maxFractionDigits="2"
+														value="${i2}" var="i3" />
+													<c:out value="${i3}" />%
 											</c:if>
-										</td>
-										<td>${u.buyDate}</td>
-										<td>${u.sellDate}</td> 
-										<td><a
-											href="<c:url value='/core/editPortfolio/${u.portfolioId}' />">Edit</a></td>
-										<td><a
-											href="<c:url value='/core/removePortfolio/${u.portfolioId}' />">Delete</a></td>
-									</tr>
-								</c:forEach>
-							</table>
-						</div>
+											</td>
+											<td class="formatTime">${u.buyDate}</td>
+											<td class="formatTime">${u.sellDate}</td>
+											<td><a
+												href="<c:url value='/core/editPortfolio/${u.portfolioId}' />">Edit</a></td>
+											<td><a
+												href="<c:url value='/core/removePortfolio/${u.portfolioId}' />">Delete</a></td>
+										</tr>
+									</c:forEach>
+								</table>
+							</div>
 						</div>
 					</div>
 				</c:if>
 
-				<br />
-
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<h2>Add portfolio</h2>
-
-						<div>
-							<form
-								action="${pageContext.servletContext.contextPath}/core/addPortfolio"
-								method="POST" role="form">
-								<legend>Add new portfolio item</legend>
-
-								<div class="form-group">
-									<label for="">Balance Id</label> <input type="hidden"
-										class="form-control" name="portfolioId" value="${portfolio.portfolioId}"
-										id="" placeholder="Demo content"> 
-										<%-- 
-										<input type="number"
-										class="form-control" name="balanceId" value="${portfolio.balanceId}"
-										id="" placeholder="Demo content"> --%>
-										
-										<select name="balanceId" id="input" class="form-control dropdownSelect" required="required">
-										<c:forEach items="${listBalances}" var="balance">
-											<option value="${balance.balanceId}" <c:if test="${balance.balanceId == portfolio.balanceId}"> selected="selected" </c:if>  >
-												<c:forEach items="${listUsers}" var="u">
-													<c:if test="${balance.userId == u.userId}"> ${u.userFullName} </c:if> 
-												</c:forEach>
-												- ${balance.balanceId}
-											</option>
-										</c:forEach> 
-										</select>
-								</div>
-
-								<div class="form-group">
-									<label for="">Stock ID</label> 
-									<select name="stockId" id="input" class="form-control dropdownSelect" required="required">
-										<c:forEach items="${listStocks}" var="stock">
-											<option value="${stock.stockId}" <c:if test="${stock.stockId == portfolio.stockId}"> selected="selected" </c:if>  >
-												${stock.stockName} 
-											</option>
-										</c:forEach> 
-										</select>
-									
-									
-									<%-- <input type="number"
-										class="form-control" name="stockId" value="${portfolio.stockId}"
-										id="" placeholder="Demo content"> --%>
-										
-								</div>
-
-								<div class="form-group">
-									<label for="">Buy price</label> <input type="number" step="0.1"
-										class="form-control" name="buyPrice"
-										value="${portfolio.buyPrice}" id=""
-										placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">Sell price</label> <input type="number" step="0.1"
-										class="form-control" name="sellPrice"
-										value="${portfolio.sellPrice}" id=""
-										placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">Quantity</label> <input type="number" step="10"
-										class="form-control" name="quantity"
-										value="${portfolio.quantity}" id=""
-										placeholder="Demo content">
-								</div>
-
-								<label for="">Buy date</label>
-								<div class='input-group date'>
-									<input type='text' id='datetimepicker2'
-										name="buyDate"
-										value="${portfolio.buyDate}" class="form-control" />
-									<span class="input-group-addon"> <span
-										id="datetimepickericon" class="glyphicon glyphicon-calendar"></span>
-									</span>
-								</div>
-
-								<label for="">Sell date</label>
-								<div class='input-group date'>
-									<input type='text' id='datetimepicker'
-										name="sellDate"
-										value="${portfolio.sellDate}" class="form-control" />
-									<span class="input-group-addon"> <span
-										id="datetimepickericon" class="glyphicon glyphicon-calendar"></span>
-									</span>
-								</div>
- 
-								<br />
-
-								<button type="submit" class="btn btn-primary">Submit</button>
-							</form>
-
-							<br />
-
-						</div>
-					</div>
-				</div>
+		
 			</div>
 
 		</div>
 	</div>
- 
+
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
-		<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
-		<script src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
-		<script src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootstrap-datetimepicker.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/insanity.js"></script>
 
 	<script type="text/javascript">
-		// $('#datetimepicker').datetimepicker();
-
-		function formatDate(value) {
-			if (value) {
-				Number.prototype.padLeft = function(base, chr) {
-					var len = (String(base || 10).length - String(this).length) + 1;
-					return len > 0 ? new Array(len).join(chr || '0') + this
-							: this;
-				}
-				var d = new Date(value), dformat = [
-						(d.getMonth() + 1).padLeft(), d.getDate().padLeft(),
-						d.getFullYear() ].join('/')
-						+ ' '
-						+ [ d.getHours().padLeft(), d.getMinutes().padLeft(),
-								d.getSeconds().padLeft() ].join(':');
-				return dformat;
-			}
-		}
-
-		$('#datetimepicker').datetimepicker({
-			format : 'DD-MM-YYYY HH:mm:ss'
-		});
-
-		$('#datetimepicker2').datetimepicker({
-			format : 'DD-MM-YYYY HH:mm:ss'
-		});
-		
-		$.fn.digits = function(){ 
-		    return this.each(function(){ 
-		        $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") ); 
-		    })
-		}
-		
-		$.fn.breakLine = function(){  
-		    return this.each(function(){ 
-		        $(this).html( $(this).html().replace(/&nbsp;/g,"<br/>")); 
-		        $(this).html( $(this).html().replace(".0","")); 
-		    })
-		}
-		
-		$.fn.formatQuantity = function() {
-			return this.each(function() {
-				 
-				
-				var a = parseInt($(this).text());
-				var str = accounting.formatMoney(a);
-				$(this).text(str.substring(0, str.length - 2));
-			})
-		};
-		 
-		$.fn.digits2 = function() {
-			return this.each(function() {
-				var a = parseFloat($(this).text());
-				$(this).text(accounting.formatMoney(a));
-			})
-		};
-		accounting.settings = {
-			currency : {
-				symbol : " đ", // default currency symbol is '$'
-				format : "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
-				decimal : ".", // decimal point separator
-				thousand : ",", // thousands separator
-				precision : 0
-			// decimal places
-			},
-			number : {
-				precision : 0, // default precision on numbers is 0
-				thousand : ",",
-				decimal : "."
-			}
-		};
-
 		$(document)
 				.ready(
-						function() { 
+						function() {
 							$('#dataTable').DataTable();
-							$(".dropdownSelect").select2();
 							$(".formatNummber").digits2();
+							$(".formatPercent").formatPercent();
+							$(".formatTime").formatTime();
 							$(".formatQuantity").formatQuantity();
-							
+
 							/* $("a").click(function(){
 								$(".formatNummber").digits();
 							}); */
@@ -356,9 +299,8 @@
 
 							if ("${portfolio.sellDate}" != null
 									&& ("${portfolio.sellDate}").length > 0) {
-								$('#datetimepicker')
-										.val(
-												formatDate("${portfolio.sellDate}"));
+								$('#datetimepicker').val(
+										formatDate("${portfolio.sellDate}"));
 							}
 
 						});

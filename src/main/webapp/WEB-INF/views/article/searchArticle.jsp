@@ -64,8 +64,7 @@ LOCAL -->
 			<!--2. Main body-->
 
 			<div class="row " style="margin: 0px 10px">
-				<div class="col-md-9 listArticle"
-					style="padding-left: 10px; padding-right: 10px;">
+				<div class="col-md-9 listArticle" style="padding-left: 10px; padding-right: 10px; position: relative;">
 					<h2
 						style="border-bottom: 1px solid grey; font-size: 20px; font-weight: normal; color: #00aeef; padding-top: 0; margin-top: 0px; text-transform: uppercase;">
 						Có ${fn:length(listArticles)} kết quả tìm kiếm cho từ khóa: ${keyword}</h2>
@@ -88,16 +87,25 @@ LOCAL -->
 											href="${pageContext.request.contextPath}/viewArticle/${a.articleId}"
 											method="get"><span
 											style="color: #00AEEF; font-size: 16px; font-weight: bold">${a.articleTitle}</span>
-										</a> <br /> <span style="color: grey">Đăng ngày: </span> <span
-											style="color: grey">${a.articlePublicationTime}</span>
+										</a> 
+										<br/>
+										<span style="color: grey" class="formatTime">${a.articlePublicationTime}</span>
 										<p style="text-align: justify; color: white">
 											${a.articleSummary}</p>
 									</div>
 								</div>
-								<br />
 							</c:forEach>
 						</c:if>
 					</ul>
+					
+					
+					<div style=" position:absolute; bottom: -15px; right:10px">
+						<ul class="pagination" >
+						  <li><a id="prev">Trang trước</a></li>
+						  <li><a id="pageIndex">0</a></li>
+						  <li><a id="next">Trang sau</a></li>
+						</ul>
+					</div>
 
 
 
@@ -125,12 +133,43 @@ LOCAL -->
 </html>
 
 <script type="text/javascript">
-	$(document).ready(
-		function() {
-			var glow = $('.insanity');
-			setInterval(function() {
-				glow.hasClass('glow') ? glow.removeClass('glow') : glow
-				.addClass('glow');
-			}, 4000);
-		});
-	</script>
+var articleQuantity =0;
+var articleIndexNow =0;
+var totalPage = 1;
+var currentPage=1;
+$("#next").click(function(){
+	if(currentPage < totalPage){
+		$(".Article-item").slice(articleIndexNow -5,articleIndexNow).hide();
+		$(".Article-item").slice(articleIndexNow,articleIndexNow +5).show();
+		articleIndexNow = articleIndexNow+5;
+		currentPage ++;
+		$("#pageIndex").text(currentPage+"/"+totalPage);
+	}
+});
+$("#prev").click(function(){
+	if(currentPage > 1){
+		$(".Article-item").slice(articleIndexNow-5,articleIndexNow).show();
+		$(".Article-item").slice(articleIndexNow,articleIndexNow+5).hide();
+		articleIndexNow = articleIndexNow -5;
+		currentPage --;
+		$("#pageIndex").text(currentPage+"/"+totalPage);
+	}
+});
+$.fn.formatTimePublicationTime = function () {
+	return this.each(function() {
+		var a = ($(this).text());
+		$(this).text("Đăng ngày "+a.substring(10, 19) + " "+ a.substring(8, 10) + "/"+a.substring(5, 7)+"/"+a.substring(0, 4) );
+	})
+};
+
+$(document).ready(function() {
+	$(".formatTime").formatTimePublicationTime();
+	$(".Article-item").hide();
+	$(".Article-item").slice(0,5).show();
+	articleQuantity = $(".Article-item").size();
+	articleIndexNow = 5;
+	currentPage=1;
+	totalPage = Math.ceil(articleQuantity/5);
+	$("#pageIndex").text(currentPage+"/"+totalPage);
+	});
+</script>

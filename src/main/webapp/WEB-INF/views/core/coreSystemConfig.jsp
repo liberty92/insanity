@@ -41,7 +41,6 @@
 </style>
 </head>
 <body>
-
 	<div class="container-fluid" style="width: 95%">
 		<div class="row">
 			<div class="row">
@@ -85,7 +84,6 @@
 									<c:forEach items="${listSystemConfigs}" var="u" varStatus="loop">
 										<tr>
 											<td style="text-align: center">${loop.index +1}</td>
-										 
 										 	<td>${slide1}</td>
 										 	<td>${slide2}</td>
 										 	<td>${slide3}</td>
@@ -100,17 +98,9 @@
 										 	<td>${video}</td>
 										 	<td>${fanpage}</td>
 										 	<td>${contact}</td>
-										 
-										 
-										 
-										 
-										 
-										 
-										 
 											<td><a
 												href="<c:url value='/core/editSystemConfig/${u.configId}' />">Edit</a></td>
 											<td>
-											
 											<c:if test="${u.configId != 1 }">
 											<a
 												href="<c:url value='/core/removeSystemConfig/${u.configId}' />">Delete</a>
@@ -123,22 +113,14 @@
 						</div>
 					</div>
 				</c:if>
-
 				<br />
-
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<h2>Edit system config</h2>
-
-
 						<div>
 							<form
 								action="${pageContext.servletContext.contextPath}/core/addSystemConfig"
 								method="POST" role="form">
-
-
-
-
 								<div class="form-group">
 									<label for="">Slide 1</label> <input type="hidden"
 										class="form-control" name="id" value="${systemConfig.configId}" id=""
@@ -146,133 +128,107 @@
 										class="form-control" name="slide1" value="${systemConfig.slide1}"
 										id="" placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Slide 2</label> <input type="text"
 										step="10e6" class="form-control" name="slide2"
 										value="${systemConfig.slide2}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Slide 3</label> <input type="text"
 										step="10e6" class="form-control" name="slide3"
 										value="${systemConfig.slide3}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Slide 4</label> <input type="text"
 										step="10e6" class="form-control" name="slide4"
 										value="${systemConfig.slide4}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Slide Text 1</label> <input type="text"
 										step="10e6" class="form-control" name="slideText1"
 										value="${systemConfig.slideText1}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Slide Text 2</label> <input type="text"
 										step="10e6" class="form-control" name="slideText2"
 										value="${systemConfig.slideText2}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Slide Text 3</label> <input type="text"
 										step="10e6" class="form-control" name="slideText3"
 										value="${systemConfig.slideText3}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Slide Text 4</label> <input type="text"
 										step="10e6" class="form-control" name="slideText4"
 										value="${systemConfig.slideText4}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Banner</label> <input type="text"
 										step="10e6" class="form-control" name="banner"
 										value="${systemConfig.banner}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Logo</label> <input type="text"
 										step="10e6" class="form-control" name="logo"
 										value="${systemConfig.logo}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Footer banner</label> <input type="text"
 										step="10e6" class="form-control" name="footerBanner"
 										value="${systemConfig.footerBanner}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Video</label> <input type="text"
 										step="10e6" class="form-control" name="video"
 										value="${systemConfig.video}" id="video"
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
 									<label for="">Fanpage</label> <input type="text"
 										step="10e6" class="form-control" name="fanpage"
 										value="${systemConfig.fanpage}" id=""
 										placeholder="Demo content">
 								</div>
-
 								<div class="form-group">
-								
 									<label for="">Contact</label> <input type="text"
 										step="10e6" class="form-control" name="contact"
 										value="${systemConfig.contact}" id=""
 										placeholder="Demo content">
 								</div>
-
-						 
-
-
 								<br />
-
 								<button type="submit" class="btn btn-primary">Submit</button>
 							</form>
-
 							<br />
-
 						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 	<script>
-	
 	$.fn.digits2 = function() {
 		return this.each(function() {
 			var a = parseFloat($(this).text());
 			$(this).text(accounting.formatMoney(a));
 		})
 	};
-	
 	accounting.settings = {
 			currency : {
 				symbol : " đ", // default currency symbol is '$'
@@ -288,7 +244,6 @@
 				decimal : "."
 			}
 		};
-	
 		$(document).ready(function() {
 			$(".formatNummber").digits2();
 		});

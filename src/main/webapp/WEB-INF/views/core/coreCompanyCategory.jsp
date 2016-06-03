@@ -19,7 +19,7 @@
 
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
-	<link rel="stylesheet" type="text/css"
+<link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/adminstyle.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -40,7 +40,6 @@
 </style>
 </head>
 <body>
-
 	<div class="container-fluid" style="width: 95%">
 		<div class="row">
 			<div class="row">
@@ -52,13 +51,59 @@
 			<div class="row">
 				<%@ include file="../template/frontend/menu/menuAdmin.jsp"%>
 			</div>
+			<br/>
 			<div class="row">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h2>Add company category</h2>
+						<div>
+							<form
+								action="${pageContext.servletContext.contextPath}/core/addCompanyCategory"
+								method="POST" role="form">
+								<div class="row">
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label for="">Category Name</label> <input type="hidden"
+												class="form-control" name="companyCategoryId"
+												value="${companyCategory.companyCategoryId}" id=""
+												placeholder="Demo content"> <input type="text"
+												class="form-control" name="companyCategoryName"
+												value="${companyCategory.companyCategoryName}" id=""
+												placeholder="Demo content">
+										</div>
+									</div>
+									<div class="col-sm-4">
+									<div class="form-group">
+											<label for="">Description</label> <input type="text"
+												class="form-control" name="description"
+												value="${companyCategory.description}" id=""
+												placeholder="Demo content">
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label for="">Info</label> <input type="text"
+												class="form-control" name="companyCategoryInfo"
+												value="${companyCategory.companyCategoryInfo}" id=""
+												placeholder="Demo content">
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12">
+										<button type="submit" class="btn btn-primary">Submit</button>
+								</div>
+							</form>
+							<br />
+						</div>
+					</div>
+				</div>
 				<c:if test="${!empty listCompanyCategory}">
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<h2>List Company category</h2>
 							<div class="table-responsive">
-								<table id="dataTable" class="table table-hover table-striped table-bordered">
+								<table id="dataTable"
+									class="table table-hover table-striped table-bordered">
 									<thead>
 										<tr>
 											<th width="100">Index</th>
@@ -89,66 +134,12 @@
 						</div>
 					</div>
 				</c:if>
-
 				<br />
-
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<h2>Add company category</h2>
-
-
-						<div>
-							<form
-								action="${pageContext.servletContext.contextPath}/core/addCompanyCategory"
-								method="POST" role="form">
-								<legend>Add new company category</legend>
-
-
-
-
-								<div class="form-group">
-									<label for="">Category Name</label> <input type="hidden"
-										class="form-control" name="companyCategoryId"
-										value="${companyCategory.companyCategoryId}" id=""
-										placeholder="Demo content"> <input type="text"
-										class="form-control" name="companyCategoryName"
-										value="${companyCategory.companyCategoryName}" id=""
-										placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">Description</label> <input type="text"
-										class="form-control" name="description"
-										value="${companyCategory.description}" id=""
-										placeholder="Demo content">
-								</div>
-
-								<div class="form-group">
-									<label for="">Info</label> <input type="text"
-										class="form-control" name="companyCategoryInfo"
-										value="${companyCategory.companyCategoryInfo}" id=""
-										placeholder="Demo content">
-								</div>
-
-
-								<br />
-
-								<button type="submit" class="btn btn-primary">Submit</button>
-							</form>
-
-							<br />
-
-						</div>
-					</div>
-				</div>
 			</div>
-
 		</div>
 	</div>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootbox.min.js"></script>
-
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
 	<script
