@@ -148,10 +148,10 @@
 							
 							<li>
 								<p>
-									<a href="${pageContext.request.contextPath}/core/priceBoard">
-									Price board
+									<a href="${pageContext.request.contextPath}/core/tradingFee">
+									Trading fee
 									<span class="desc">
-									<span style="color:red">Core engine</span> - Price board
+									<span style="color:red">Core engine</span> - Trading fee config
 									</span>
 									</a>
 								</p>

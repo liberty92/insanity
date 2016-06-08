@@ -142,7 +142,7 @@ table {
 											<th width="80">Tổng GT HT</th>
 											<th width="30">+/-</th>
 											<th width="40" style="mix-width:40px !important;">%</th>
-											<th width="100" style="min-width:100px !important; padding-right:2px; padding-left:2px">Ngày mua</th>
+											<th width="10" style="min-width:100px !important;max-width:120px !important; padding-right:2px; padding-left:2px">Ngày mua</th>
 										</tr>
 									</thead>
 									<c:forEach items="${listPortfolios}" var="u" varStatus="loop">
@@ -180,8 +180,8 @@ table {
 											</td>
 											<td class="formatNummber"   style="text-align: right; color: blue; ">${temp1}</td>
 											<td class="formatNummber"  style="text-align: right ; color: green;<c:if test="${temp2 < 0}"> color:red</c:if>">${temp2}</td> 
-											<td class="formatPercent"  style="max-width:30px !important;  padding-left:2px; padding-right:2px;font-weight: bold;text-align: center ; color: green; <c:if test="${temp2 < 0}"> color:red</c:if>">${temp3}</td> 
-											<td class="formatTime">${u.buyDate}</td>
+											<td class="formatPercent"  style="max-width:50px !important;  padding-left:2px; padding-right:2px;font-weight: bold;text-align: right ; color: green; <c:if test="${temp2 < 0}"> color:red</c:if>">${temp3}</td> 
+											<td class="formatTime" style="text-align: right; max-width:120px !important; ">${u.buyDate}</td>
 										</tr>
 									</c:forEach>
 								</table>

@@ -103,8 +103,8 @@ LOCAL
 						</div> 
 						
 						<div class="col-lg-1 col-md-2 col-sm-3 col-xs-4">
-							<a target="_blank" href="${pageContext.request.contextPath}/core/priceBoard">
-								<i class="fa fa-bank fa-3x" style="color:white"></i><div>Price board</div> 
+							<a target="_blank" href="${pageContext.request.contextPath}/core/tradingFee">
+								<i class="fa fa-bank fa-3x" style="color:white"></i><div>Trading fee</div> 
 							</a>
 						</div>
 						

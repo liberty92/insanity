@@ -274,7 +274,7 @@ public class OrdersController {
 					double marginFee = marginRate*marginDebt*marginTime/365/100;
 					
 					totalMarginDebtInterest += marginFee;
-					// YEAH, TEMPORARY STORE MARGIN DATA IN STOCK OBJECT. I HAVE NO CHOICE :/
+					// YEAH, TEMPORARY STORE MARGIN DATA IN ANOTHER PORTFOLIO OBJECT. I HAVE NO CHOICE :/
 					s.setMarginDebt(marginFee);
 					marginDebtList.add(s);
 				}
@@ -1449,5 +1449,363 @@ public class OrdersController {
 	
 	public void hehe(){
 		System.out.println("hehe");
+	}
+	
+	
+	
+	/*AJAX SERVICES*/
+	@RequestMapping("ajax/ajaxStockInfo/{callback}")
+	public void ajaxTrading(HttpServletRequest request, HttpServletResponse response,@PathVariable("callback") String callback) throws Exception {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+		String result = "";
+		JSONObject obj = new JSONObject();
+		 
+		List<Stock> listStock = this.stockService.listStock(); 
+		OrdersController t = new OrdersController();
+		
+		for (int i = 0; i < listStock.size(); i++) {
+			JSONObject balanceObject = new JSONObject();
+			int StockId = listStock.get(i).getStockId();
+			String stockName = listStock.get(i).getStockName() ;
+			String stockExchange = listStock.get(i).getStockExchangeId();
+			double stockMarginRate = listStock.get(i).getStockMarginRate();
+			
+			balanceObject.put("stockId", StockId);
+			balanceObject.put("stockName", stockName);
+//			balanceObject.put("stockExchange", stockExchange);
+			balanceObject.put("marginRate", listStock.get(i).getStockMarginRate());
+			
+			
+//			PriceBoard pb = t.getStockPriceByStockname(StockId, stockName, stockExchange);
+//			if(pb != null && pb.getPrice()!= null && pb.getPrice() != 0){
+//				
+//				balanceObject.put("stockId", StockId);
+//				balanceObject.put("stockName", stockName);
+//				balanceObject.put("stockExchange", stockExchange);
+//				balanceObject.put("marginRate", listStock.get(i).getStockMarginRate());
+//				double price = pb.getPrice();
+//				double ceil = pb.getCeil();
+//				double floor = pb.getFloor();
+//				
+//				balanceObject.put("price", price);
+//				balanceObject.put("ceil", ceil);
+//				balanceObject.put("floor", floor);
+//				obj.put("balance"+i,balanceObject);
+//			}
+			
+			obj.put("balance"+i,balanceObject);
+		}
+ 
+			
+			result =  callback +"("+ obj + ");";
+			System.out.println(result);
+			response.setContentType("text/javascript");
+			response.getWriter().write(result);
+	}
+	
+	
+	@RequestMapping("ajax/ajaxStockInfoDetail/{callback}")
+	public void ajaxGetStockDetail(HttpServletRequest request, HttpServletResponse response,@PathVariable("callback") String callback) throws Exception {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		res.setHeader("Content-Type", "application/json; charset=utf-8");
+		
+		String result = "";
+		JSONObject obj = new JSONObject();
+		
+		List<Stock> listStock = this.stockService.listStock(); 
+		OrdersController t = new OrdersController();
+		int count = 0;
+		int stockId = 0;
+		if (request.getParameter("stockId") != null) {
+			stockId = Integer.parseInt(request.getParameter("stockId"));
+		}
+		
+		for (int i = 0; i < listStock.size(); i++) {
+			if(stockId == listStock.get(i).getStockId()){
+				JSONObject stockPriceObject = new JSONObject();
+				String stockName = listStock.get(i).getStockName() ;
+				String stockExchange = listStock.get(i).getStockExchangeId();
+				
+				PriceBoard pb = t.getStockPriceByStockname(stockId, stockName, stockExchange);
+				if(pb != null && pb.getPrice()!= null && pb.getPrice() != 0){
+					
+					double price = pb.getPrice();
+					double ceil = pb.getCeil();
+					double floor = pb.getFloor();
+					
+					
+					
+					int balanceId = 0;
+					double quantity = 0;
+					double availableQuantity = 0;
+					
+					if (req.getParameter("balanceId") != null && Integer.parseInt(req.getParameter("balanceId")) > 0) {
+						balanceId = Integer.parseInt(req.getParameter("balanceId"));
+						List<Portfolio> havingPortfolio = this.portfolioService.getPortfolioByBalanceId(balanceId);
+						for (int j = 0; j < havingPortfolio.size(); j++) {
+							if (havingPortfolio.get(j).getStockId() == stockId) {
+								// THERE CAN BE ONLY 1 RESULT LIKE THAT
+								if (havingPortfolio.get(j).getSellPrice() <= 0) {
+									//havingStock = havingPortfolio.get(i).getQuantity();
+									quantity = havingPortfolio.get(j).getQuantity();
+									availableQuantity = havingPortfolio.get(j).getAvailableQuantity();
+								}
+							}
+						}
+					}
+					
+					
+					
+					
+					stockPriceObject.put("price", price);
+					stockPriceObject.put("ceil", ceil);
+					stockPriceObject.put("floor", floor);
+					stockPriceObject.put("quantity", quantity);
+					stockPriceObject.put("availableQuantity", availableQuantity);
+					count ++;
+					obj.put("stockPriceDetail"+count,stockPriceObject);
+				}
+				
+			}
+		}
+		
+		
+		
+		
+		result =  callback +"("+ obj + ");";
+		System.out.println(result);
+		response.setContentType("text/javascript");
+		response.getWriter().write(result);
+	}
+	
+	
+	@RequestMapping("ajax/ajaxMarginStats/{callback}")
+	public void ajaxMarginStats(HttpServletRequest request, HttpServletResponse response,@PathVariable("callback") String callback) throws Exception {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		res.setHeader("Content-Type", "application/json; charset=utf-8");
+		
+		int count = 0;
+		String result = "";
+		JSONObject obj = new JSONObject();
+		
+		int userId = 0;
+		if (req.getParameter("userId") != null && Integer.parseInt(req.getParameter("userId")) > 0) {
+			userId = Integer.parseInt(req.getParameter("userId"));
+		} 
+		
+		Timestamp createdTime;
+		java.util.Date date = new java.util.Date();
+		createdTime = new Timestamp(date.getTime());
+		
+		TradingFee secondSettingItem = this.tradingFeeService.getTradingFeeById(2);
+		double marginInterestRate = secondSettingItem.getValue();
+		
+		
+		List<Stock> listStock = this.stockService.listStock(); 
+		List<Balance> listBalance = this.balanceService.getBalanceByUserId(userId);
+		
+		List<Portfolio> listPortfolio = new ArrayList();
+		for (int i = 0; i < listBalance.size(); i++) {
+			int balanceId = listBalance.get(i).getBalanceId();
+			List<Portfolio> thisBalancePortfolio = this.portfolioService.getPortfolioByBalanceId(balanceId);
+			for (int j = 0; j < thisBalancePortfolio.size(); j++) {
+				if(thisBalancePortfolio.get(j).getMarginDebt() != 0 && thisBalancePortfolio.get(j).getSellPrice() <= 0){
+					
+					
+					JSONObject tempObject = new JSONObject();
+					tempObject.put("portfolioId", thisBalancePortfolio.get(j).getPortfolioId());
+					tempObject.put("balanceId", balanceId);
+					
+					double buyPrice = thisBalancePortfolio.get(j).getBuyPrice();
+					double quantity = thisBalancePortfolio.get(j).getQuantity();
+					double totalValue = Math.round(buyPrice*quantity);
+					
+					tempObject.put("buyPrice", buyPrice);
+					tempObject.put("quantity", quantity);
+					tempObject.put("totalValue", totalValue);
+					tempObject.put("createdDate", "'"+thisBalancePortfolio.get(j).getBuyDate()+"'");
+					int stockId = thisBalancePortfolio.get(j).getStockId();
+					String stockName = this.stockService.getStockById(stockId).getStockName();
+					double marginRate = this.stockService.getStockById(stockId).getStockMarginRate();
+					tempObject.put("stockName", stockName);
+					tempObject.put("marginRate", marginRate);
+					double marginDebt = thisBalancePortfolio.get(j).getMarginDebt();
+					tempObject.put("marginDebt", marginDebt);
+					
+					
+					Timestamp startDate = thisBalancePortfolio.get(j).getBuyDate();
+					long sd = startDate.getTime();
+					long nd = createdTime.getTime();
+					float marginTime = Precision.round(((nd-sd)/(86400*1000)),0);
+					if(marginTime <= 0) marginTime =1;
+					
+					double marginFee = marginInterestRate*marginDebt*marginTime/365/100;
+					
+					tempObject.put("marginFee", marginFee);
+					count++;
+					obj.put("tempObject"+count,tempObject);
+				}
+			}
+		}
+		
+		result =  callback +"("+ obj + ");";
+		System.out.println(result);
+		response.setContentType("text/javascript");
+		response.getWriter().write(result);
+	}
+	
+	
+	@RequestMapping("ajax/ajaxTradingHistory/{callback}")
+	public void ajaxTradingHistory(HttpServletRequest request, HttpServletResponse response,@PathVariable("callback") String callback) throws Exception {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		res.setHeader("Content-Type", "application/json; charset=utf-8");
+		
+		String result = "";
+		JSONObject obj = new JSONObject();
+		int count = 0;
+		int userId = 0;
+		if (req.getParameter("userId") != null && Integer.parseInt(req.getParameter("userId")) > 0) {
+			userId = Integer.parseInt(req.getParameter("userId"));
+		} 
+		List<Stock> listStock = this.stockService.listStock(); 
+		List<Balance> listBalance = this.balanceService.getBalanceByUserId(userId);
+		
+		for (int i = 0; i < listBalance.size(); i++) {
+			int balanceId = listBalance.get(i).getBalanceId();
+			List<Orders> thisBalanceOrders = this.ordersService.getOrdersByBalanceId(balanceId);
+			for (int j = 0; j < thisBalanceOrders.size(); j++) {
+				
+				JSONObject orderDetailObject = new JSONObject();
+				orderDetailObject.put("orderId", thisBalanceOrders.get(j).getOrderId());
+				orderDetailObject.put("balanceId", balanceId);
+				orderDetailObject.put("orderType", thisBalanceOrders.get(j).getOrderType());
+				orderDetailObject.put("action", thisBalanceOrders.get(j).getAction());
+				
+				int stockId = thisBalanceOrders.get(j).getStockId();
+				String stockName = this.stockService.getStockById(stockId).getStockName();
+				orderDetailObject.put("stockName", stockName);
+				
+				double price = thisBalanceOrders.get(j).getPrice();
+				double quantity = thisBalanceOrders.get(j).getQuantity();
+				double totalValue = Math.round(price*quantity);
+				orderDetailObject.put("price", price);
+				orderDetailObject.put("quantity", quantity);
+				orderDetailObject.put("totalValue", totalValue);
+				orderDetailObject.put("createdDate", "'"+thisBalanceOrders.get(j).getCreatedTime()+"'");
+				orderDetailObject.put("orderState", thisBalanceOrders.get(j).getOrderState());
+				orderDetailObject.put("marginState", thisBalanceOrders.get(j).getMargin());
+				orderDetailObject.put("tradingFee", Math.round(thisBalanceOrders.get(j).getOrderTradingFee()));
+				orderDetailObject.put("sellTax", Math.round(thisBalanceOrders.get(j).getOrderSellTax()));
+				count++;
+				obj.put("orderDetail"+count,orderDetailObject);
+			}
+		}
+ 
+	 
+		
+ 
+		result =  callback +"("+ obj + ");";
+		System.out.println(result);
+		response.setContentType("text/javascript");
+		response.getWriter().write(result);
+	}
+	
+	
+	@RequestMapping(value = "ajax/ajaxAddOrder/{callback}")
+	public void userAjaxAddOrders(HttpServletRequest request, HttpServletResponse response,@PathVariable("callback") String callback)
+			throws Exception {
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+		String result = "";
+		JSONObject obj = new JSONObject();
+		
+		// 1. GET ORDER INFO
+		int balanceId = 0;
+		if (request.getParameter("balanceId") != null) {
+			balanceId = Integer.parseInt(request.getParameter("balanceId"));
+		}
+		int stockId = 0;
+		if (request.getParameter("stockId") != null) {
+			stockId = Integer.parseInt(request.getParameter("stockId"));
+		}
+		String action = request.getParameter("action");
+		String orderType = request.getParameter("orderType");
+		String orderState = "WAITING";
+		Stock s = stockService.getStockById(stockId);
+		// FIXED CODE, MARGIN'S NOT ENABLED YET
+		double margin = 1;
+		if (request.getParameter("marginState").toString().equals("YES")) {
+			margin = s.getStockMarginRate();
+		}
+		double price = 0;
+		if (request.getParameter("price") != null) {
+			price = Double.parseDouble(request.getParameter("price"));
+		}
+		double quantity = 0;
+		if (request.getParameter("quantity") != null) {
+			quantity = Double.parseDouble(request.getParameter("quantity"));
+		}
+		Timestamp createdTime;
+		java.util.Date date = new java.util.Date();
+		createdTime = new Timestamp(date.getTime());
+
+		Orders o = new Orders();
+		o.setBalanceId(balanceId);
+		o.setStockId(stockId);
+		o.setCreatedTime(createdTime);
+		o.setPrice(price);
+		o.setQuantity(quantity);
+		o.setAction(action);
+		o.setOrderType(orderType);
+		o.setMargin(margin);
+		o.setOrderState("WAITING");
+
+		Balance b = this.balanceService.getBalanceById(balanceId);
+
+		// 2. ORDER VALIDATION:
+		boolean validation = this.orderValidation(o);
+		if (validation == false) {
+			obj.put("message","Error occured, check your order!");
+		} else {
+			this.ordersService.addOrders(o);
+			obj.put("message","Order created!");
+		}
+		
+		// 3. TRANSACTION
+		this.transactionUpdaterService.executeTransaction(o);
+		
+		
+
+		// 3. TRANSACTION AND UPDATE BALANCE
+/*		boolean checkingTransaction = this.transaction(o);
+		if (checkingTransaction == true) {
+			this.updateBalanceAndPortfolioAfterTransaction(o);
+		}*/
+		 
+		result =  callback +"("+ obj + ");";
+		System.out.println(result);
+		response.setContentType("text/javascript");
+		response.getWriter().write(result);
+		
 	}
 }

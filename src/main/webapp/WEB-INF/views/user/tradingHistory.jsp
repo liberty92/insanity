@@ -51,7 +51,7 @@ table {
 						<span
 							style="text-transform: uppercase; font-size: 23px; font-weight: bold; color: #00aeef; float: left">
 							Lịch sử đặt lệnh</span> &nbsp; <span
-							style="float: right; margin-top: 10px">Balance ID:
+							style="float: right; margin-top: 10px">User ID:
 							${user.userId} - ${user.userFullName}</span>
 					</div>
 					<div class="col-xs-12">

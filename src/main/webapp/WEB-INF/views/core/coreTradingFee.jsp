@@ -81,11 +81,11 @@
 											<td class="<c:if test="${u.id > 2}">formatNummber </c:if> "" style="text-align: right"><c:if test="${u.id > 2}">${u.throughValue} </c:if> </td>
 											<td style="text-align: right; color:red">${u.value}%</td>
 											<td><a
-												href="<c:url value='/core/editTradingFee/${u.id}' />">Edit</a></td>
+												href="<c:url value='/core/editTradingFee/${u.id}' />"><i class="fa fa-pencil-square-o  "></i></a></td>
 											<td>
 											<c:if test="${u.id > 2 }">
 											<a
-												href="<c:url value='/core/removeTradingFee/${u.id}' />">Delete</a>
+												href="<c:url value='/core/removeTradingFee/${u.id}' />"><i style="color:red" class="fa fa-trash  "></i></a>
 												</td>
 											</c:if>
 										</tr>

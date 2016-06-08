@@ -60,18 +60,18 @@
 									class="table table-hover table-striped table-bordered">
 									<thead>
 										<tr>
-											<th width="100">User ID</th>
-											<th width="100">Username</th>
+											<th width="10">User ID</th>
+											<th width="10">Username</th>
 											<!-- <th width="80">Password</th> -->
 											<th width="100">User full name</th>
 											<th width="80">User role</th>
-											<th width="100">User profile picture</th>
-											<th width="50">User age</th>
-											<th width="100">User email</th>
-											<th width="100">User phone number</th>
-											<th width="100">User address</th>
-											<th width="50">Edit</th>
-											<th width="50">Delete</th>
+											<th width="100">Profile picture</th>
+											<th width="10">User age</th>
+											<th width="10">User email</th>
+											<th width="10">Phone number</th>
+											<th width="10">User address</th>
+											<th width="10">Edit</th>
+											<th width="10">Del</th>
 										</tr>
 									</thead>
 									<c:forEach items="${listUsers}" var="u">
@@ -84,7 +84,11 @@
 											<td>${u.userFullName}</td>
 											<td><c:forEach items="${listUserRoles}" var="ur">
 													<c:if test="${ur.userId == u.userId}">
-													${ur.userRole}
+														<c:if  test="${ ur.userRole.length() == 8}"><span style='color:blue' > ${ur.userRole}</span></c:if>
+														<c:if  test="${ ur.userRole.length() == 12}"><span style='color:green' > ${ur.userRole}</span></c:if>
+														<c:if  test="${ ur.userRole.length() == 14}"><span style='color:red' > ${ur.userRole}</span></c:if>
+														
+													
                                             	</c:if>
 												</c:forEach></td>
 											<td style="padding: 0px"><c:if
@@ -98,9 +102,9 @@
 											<td>${u.userPhoneNumber}</td>
 											<td>${u.userAddress}</td>
 											<td><a
-												href="<c:url value='/core/editUser/${u.userId}' />">Edit</a></td>
+												href="<c:url value='/core/editUser/${u.userId}' />"><i class="fa fa-pencil-square-o  "></i></a></td>
 											<td><a
-												href="<c:url value='/core/removeUser/${u.userId}' />">Delete</a></td>
+												href="<c:url value='/core/removeUser/${u.userId}' />"><i style="color:red" class="fa fa-trash  "></i></a></td>
 										</tr>
 									</c:forEach>
 								</table>

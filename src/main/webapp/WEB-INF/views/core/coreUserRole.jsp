@@ -88,11 +88,15 @@
 													<c:if test="${u.userId == user.userId }">${user.userFullName}</c:if>
 												</c:forEach>
 											</td>
-											<td>${u.userRole}</td>
+											<td <c:if  test="${ u.userRole.length() == 8}">style='color:blue'</c:if>  <c:if  test="${ u.userRole.length() == 12}">style='color:green'</c:if>  <c:if  test="${ u.userRole.length() == 14}">style='color:red'</c:if> >
+											
+											${u.userRole}
+											
+											</td>
 											<td><a
-												href="<c:url value='/core/editUserRole/${u.userRoleId}' />">Edit</a></td>
+												href="<c:url value='/core/editUserRole/${u.userRoleId}' />"><i class="fa fa-pencil-square-o  "></i></a></td>
 											<td><a
-												href="<c:url value='/core/removeUserRole/${u.userRoleId}' />">Delete</a></td>
+												href="<c:url value='/core/removeUserRole/${u.userRoleId}' />"><i style="color:red" class="fa fa-trash  "></i></a></td>
 										</tr>
 									</c:forEach>
 								</table>

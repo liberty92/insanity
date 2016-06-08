@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,12 +20,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.liberation.lab.model.Article;
 import com.liberation.lab.model.Person;
+import com.liberation.lab.model.Portfolio;
+import com.liberation.lab.model.PriceBoard;
+import com.liberation.lab.model.Stock;
 import com.liberation.lab.model.User;
 import com.liberation.lab.model.UserRole;
 import com.liberation.lab.service.ArticleService;
@@ -160,5 +165,92 @@ public class UserAuthentication {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	// AJAX SERVICES
+		@RequestMapping("ajax/ajaxLogin/{callback}")
+		public void ajaxLogin(HttpServletRequest request, HttpServletResponse response,@PathVariable("callback") String callback) throws Exception {
+			HttpServletRequest req = (HttpServletRequest) request;
+			HttpServletResponse res = (HttpServletResponse) response;
+			HttpSession session = req.getSession(true);
+			
+			res.setHeader("Content-Type", "application/json; charset=utf-8");
 
+			String result = "";
+			JSONObject obj = new JSONObject();
+			
+			String username = "";
+			String password = "";
+			
+			if (req.getParameter("username") != null ) username = req.getParameter("username");
+			if (req.getParameter("password") != null ) password = req.getParameter("password");
+				
+			
+			if (this.userService.getUserByUsername(username) != null) {
+				User u = this.userService.getUserByUsername(username);
+				if (u.getPassword().equals(this.getMD5(password))) {
+					// SUCCESSFULLY LOGED IN
+					session.setAttribute("userId", u.getUserId());
+					session.setAttribute("username", u.getUsername());
+					session.setAttribute("userFullName", u.getUserFullName());
+					session.setAttribute("userAge", u.getUserAge());
+					session.setAttribute("userAddress", u.getUserAddress());
+					session.setAttribute("userEmail", u.getUserEmail());
+					session.setAttribute("userPhoneNumber", u.getUserPhoneNumber());
+					session.setAttribute("userProfilePicture", u.getUserProfilePicture());
+					
+					List<String> userRolesListById = this.userRoleService.listUserRolesById(u.getUserId());
+					session.setAttribute("userRoleList", userRolesListById);
+					
+					obj.put("loginState", "1");
+					obj.put("userFullName", u.getUserFullName());
+					obj.put("userProfilePicture", u.getUserProfilePicture());
+					obj.put("userId", u.getUserId());
+					 
+				} else {
+					// WRONG PASSWORD
+					session.setAttribute("loginErrorMessage", "You have entered a wrong password!");
+					obj.put("loginState", "0");
+					obj.put("errorMessage", "You have entered a wrong password!");
+				}
+			} else {
+				// NO SUCH USERNAME
+				session.setAttribute("loginErrorMessage", "Username doesn't exist!");
+				obj.put("loginState", "0");
+				obj.put("errorMessage", "Username doesn't exist!");
+			}
+				
+				result =  callback +"("+ obj + ");";
+				System.out.println(result);
+				response.setContentType("text/javascript");
+				response.getWriter().write(result);
+		}
+		
+		
+		@RequestMapping("ajax/ajaxHomepage/{callback}")
+		public void ajaxHomepage(HttpServletRequest request, HttpServletResponse response,@PathVariable("callback") String callback) throws Exception {
+			HttpServletRequest req = (HttpServletRequest) request;
+			HttpServletResponse res = (HttpServletResponse) response;
+			HttpSession session = req.getSession(true);
+			res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+			String result = "";
+			JSONObject obj = new JSONObject();
+			
+			String userFullName = session.getAttribute("userFullName").toString();
+			String userProfilePicture = session.getAttribute("userProfilePicture").toString();
+			
+			
+			obj.put("userFullName", userFullName);
+			obj.put("userProfilePicture", userProfilePicture);
+			
+	 
+				
+				result =  callback +"("+ obj + ");";
+				System.out.println(result);
+				response.setContentType("text/javascript");
+				response.getWriter().write(result);
+		}
+		
+		
+		
 }

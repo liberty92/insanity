@@ -211,7 +211,7 @@ td {
 											<th width="50">Price</th>
 											<th width="50">State</th>
 											<th width="50">Edit</th>
-											<th width="50">Delete</th>
+											<th width="50">Del</th>
 										</tr>
 									</thead>
 									<c:forEach items="${listStock}" var="u" varStatus="loop">
@@ -240,9 +240,9 @@ td {
 											<td style="color: blue">${u.stockPrice}</td>
 											<td>${u.stockState}</td>
 											<td><a
-												href="<c:url value='/core/editStock/${u.stockId}' />">Edit</a></td>
+												href="<c:url value='/core/editStock/${u.stockId}' />"><i class="fa fa-pencil-square-o  "></i></a></td>
 											<td><a
-												href="<c:url value='/core/removeStock/${u.stockId}' />">Delete</a></td>
+												href="<c:url value='/core/removeStock/${u.stockId}' />"><i style="color:red" class="fa fa-trash  "></i></a></td>
 										</tr>
 									</c:forEach>
 								</table>

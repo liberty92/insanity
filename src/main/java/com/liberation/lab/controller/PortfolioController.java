@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -311,4 +312,56 @@ public class PortfolioController {
 			- this.getBalanceTotalMarginDebt(balance.getBalanceId()));
 		this.balanceService.updateBalance(balance);
 	}
+	
+	// AJAX SERVICES
+	
+	@RequestMapping(value = { "ajax/ajaxPortfolioInfo/{callback}" }, method = RequestMethod.GET)
+	public void ajaxPortfolio(HttpServletRequest request, HttpServletResponse response,@PathVariable("callback") String callback) throws ServletException, Exception {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+		String result = "";
+		JSONObject obj = new JSONObject();
+		int balanceId =0;
+		
+		if (req.getParameter("balanceId") != null ) balanceId = Integer.parseInt(req.getParameter("balanceId").toString()); 
+		Balance b = this.balanceService.getBalanceById(balanceId);
+		this.updateBalanceValue(b);
+		
+		List<Portfolio> listPortfolio = this.portfolioService.getPortfolioByBalanceId(b.getBalanceId());
+		
+		OrdersController t = new OrdersController();
+		
+		for (int i = 0; i < listPortfolio.size(); i++) {
+			int StockId = listPortfolio.get(i).getStockId();
+			Stock thisStock = this.stockService.getStockById(StockId);
+			String stockName = thisStock.getStockName();
+			String stockExchange = thisStock.getStockExchangeId();
+			double marginRate = thisStock.getStockMarginRate();
+			PriceBoard pb = t.getStockPriceByStockname(StockId, stockName, stockExchange);
+			double priceNow = pb.getMatchPrice();
+			if(priceNow == 0) priceNow = pb.getPrice();
+			
+			JSONObject portfolioObject = new JSONObject();
+			portfolioObject.put("stockId", listPortfolio.get(i).getStockId());
+			portfolioObject.put("stockName", stockName);
+			portfolioObject.put("buyDate", "'"+listPortfolio.get(i).getBuyDate() + "'");
+			portfolioObject.put("buyPrice", listPortfolio.get(i).getBuyPrice());
+			portfolioObject.put("quantity", listPortfolio.get(i).getQuantity());
+			portfolioObject.put("marginRate", marginRate);
+			portfolioObject.put("currentPrice", priceNow);
+			portfolioObject.put("availableQuantity", listPortfolio.get(i).getAvailableQuantity());
+			portfolioObject.put("marginDebt", listPortfolio.get(i).getMarginDebt());
+			obj.put("portfolio"+i,portfolioObject);
+		}
+		
+		result =  callback +"("+ obj + ");";
+		System.out.println(result);
+		response.setContentType("text/javascript");
+		response.getWriter().write(result);
+	}
+	
+	
 }

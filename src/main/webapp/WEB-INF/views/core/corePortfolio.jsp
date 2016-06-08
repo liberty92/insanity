@@ -171,25 +171,26 @@
 									id="dataTable">
 									<thead>
 										<tr>
-											<th width="50">Index</th>
-											<th width="50">ID</th>
+											<th width="10">Index</th>
+											<th width="10">ID</th>
 											<th width="150">Balance ID & Owner info</th>
 											<th width="50">Stock ID</th>
 											<th width="50">Buy price</th>
 											<th width="50">Buy value</th>
 											<th width="50">Sell price</th>
+											<th width="50">Sell value</th>
 											<th width="50">Quantity</th>
 											<th width="50">Buy date</th>
 											<th width="50">Sell date</th>
-											<th width="50">Edit</th>
-											<th width="50">Delete</th>
+											<th width="10">Edit</th>
+											<th width="10">Del</th>
 										</tr>
 									</thead>
 									<c:forEach items="${listPortfolios}" var="u" varStatus="loop">
 										<tr>
 											<td style="text-align: center; font-weight: bold">${loop.index +1}</td>
 											<td>${u.portfolioId}</td>
-											<td>${u.balanceId}<c:forEach items="${listBalances}"
+											<td style="min-width:120px !important;">${u.balanceId}<c:forEach items="${listBalances}"
 													var="balance">
 													<c:if test="${balance.balanceId == u.balanceId}">
 														<c:forEach items="${listUsers}" var="user">
@@ -209,34 +210,35 @@
 											</td>
 											<td class="" style="text-align: right; color: blue"><span
 												style="clear: both">${u.buyPrice}</span></td>
-											<td class="formatNummber">
+											<td class="formatNumber" style="min-width:120px !important">
 												${(u.buyPrice)*(u.quantity)*1000}</td>
-											<td class="" style="text-align: right; color: blue"><span
-												style="clear: both">${u.sellPrice}</span><br />&nbsp; <fmt:parseNumber
-													var="i" type="number"
-													value="${(u.sellPrice)*(u.quantity)*1000}" pattern="#,###" />
-												<c:out value="${i}" /> đ</td>
-											<td class=""
-												style="text-align:right; color:green; <c:if test="${ (u.sellPrice*u.quantity - u.buyPrice*u.quantity)<0 && (u.sellPrice != 0)  }">  color: red </c:if>    ">
+											<td class="" style="text-align: right; color: blue"><span  
+												style="clear: both">${u.sellPrice}</span>
+											</td>
+											<td class="" style="text-align: right; color: blue; max-width:120px !important;">
+												<span class="formatNumber" > ${(u.sellPrice)*(u.quantity)*1000}</span> 
+											</td>
+											<td style="text-align:right; color:green;max-width:120px !important; <c:if test="${ (u.sellPrice*u.quantity - u.buyPrice*u.quantity)<0 && (u.sellPrice != 0)  }">  color: red </c:if>    ">
 												<span class="formatQuantity" style="clear: both">${u.quantity}</span>
 												<br /> <c:if test="${u.sellPrice != 0}">
-													<fmt:parseNumber var="i" type="number"
-														value="${(u.sellPrice*u.quantity - u.buyPrice*u.quantity)*1000 }"
-														pattern="#,###" />
-													<c:out value="${i}" /> đ<br />&nbsp;
-												<fmt:parseNumber var="i2" type="number"
-														value="${(u.sellPrice*u.quantity - u.buyPrice*u.quantity)/(u.buyPrice*u.quantity)*100 }" />
-													<fmt:formatNumber type="number" maxFractionDigits="2"
-														value="${i2}" var="i3" />
-													<c:out value="${i3}" />%
+												
+												<span class="formatNumber" >
+												${(u.sellPrice*u.quantity - u.buyPrice*u.quantity)*1000 }
+												</span>
+												<br/>
+												<span class="formatPercent" >
+												${(u.sellPrice*u.quantity - u.buyPrice*u.quantity)/(u.buyPrice*u.quantity)*100 }
+												</span>
+												 
+													
 											</c:if>
 											</td>
 											<td class="formatTime">${u.buyDate}</td>
 											<td class="formatTime">${u.sellDate}</td>
-											<td><a
-												href="<c:url value='/core/editPortfolio/${u.portfolioId}' />">Edit</a></td>
-											<td><a
-												href="<c:url value='/core/removePortfolio/${u.portfolioId}' />">Delete</a></td>
+											<td style="max-width:30px !important;"><a
+												href="<c:url value='/core/editPortfolio/${u.portfolioId}' />"><i class="fa fa-pencil-square-o  "></i></a></td>
+											<td style="max-width:30px !important;"><a
+												href="<c:url value='/core/removePortfolio/${u.portfolioId}' />"><i style="color:red" class="fa fa-trash  "></i></a></td>
 										</tr>
 									</c:forEach>
 								</table>
@@ -270,15 +272,15 @@
 				.ready(
 						function() {
 							$('#dataTable').DataTable();
-							$(".formatNummber").digits2();
+							$(".formatNumber").digits2();
 							$(".formatPercent").formatPercent();
 							$(".formatTime").formatTime();
 							$(".formatQuantity").formatQuantity();
 
 							/* $("a").click(function(){
-								$(".formatNummber").digits();
+								$(".formatNumber").digits();
 							}); */
-							/* $(".formatNummber").breakLine(); */
+							/* $(".formatNumber").breakLine(); */
 
 							var $datetimepicker = $('#datetimepicker');
 

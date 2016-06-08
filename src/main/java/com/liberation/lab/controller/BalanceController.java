@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -189,10 +190,31 @@ public class BalanceController {
 	}
 	
 	@RequestMapping("/user/removeBalance/{balanceId}")
-	public String userRemoveBalance(@PathVariable("balanceId") int id) {
+	public String userRemoveBalance(@PathVariable("balanceId") int id,HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Balance b = balanceService.getBalanceById(id);
-		b.setBalanceState(0);
-		this.balanceService.updateBalance(b);
+		
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		
+		int userId = 0;
+		
+		if(session.getAttribute("userId") == null || session.getAttribute("userId").toString().length() <=0){
+			req.getRequestDispatcher("/403").forward(req, res);
+		}
+		else {
+			 userId = Integer.parseInt(session.getAttribute("userId").toString());
+		}
+		
+		int balanceUserId = b.getUserId();
+		
+		if(balanceUserId != userId ){
+			req.getRequestDispatcher("/403").forward(req, res);
+		}
+		else{
+			b.setBalanceState(0);
+			this.balanceService.updateBalance(b);
+		}
 		return "redirect:/user/balance";
 	}
 
@@ -375,6 +397,142 @@ public class BalanceController {
 		this.balanceService.updateBalance(balance);
 	}
 
+	
+	/*AJAX SERVICES*/
+	@RequestMapping("ajax/ajaxBalanceInfo/{callback}")
+	public void ajaxHomepage(HttpServletRequest request, HttpServletResponse response,@PathVariable("callback") String callback) throws Exception {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		res.setHeader("Content-Type", "application/json; charset=utf-8");
+		
+		String result = "";
+		JSONObject obj = new JSONObject();
+		
+		int userId = 0;
+		if (req.getParameter("userId") != null ) userId = Integer.parseInt(req.getParameter("userId").toString());
+		
+		List<Balance> listBalance = this.balanceService.getBalanceByUserId(userId); 
+		
+		
+		for (int i = 0; i < listBalance.size(); i++) {
+			JSONObject balanceObject = new JSONObject();
+			balanceObject.put("balanceId", listBalance.get(i).getBalanceId());
+			balanceObject.put("balanceName", listBalance.get(i).getBalanceName());
+			balanceObject.put("balanceCreatedDate", "'"+listBalance.get(i).getBalanceCreatedDate()+"'");
+			balanceObject.put("balanceInitialNAV", listBalance.get(i).getBalanceInitialNAV());
+			balanceObject.put("balanceCash",listBalance.get(i).getBalanceCash());
+			balanceObject.put("balanceAvailableCash", listBalance.get(i).getBalanceAvailableCash());
+			balanceObject.put("balanceTotalAssets", listBalance.get(i).getBalanceTotalAssets());
+			balanceObject.put("balanceNAV", listBalance.get(i).getBalanceNAV());
+			balanceObject.put("balanceMarginRate", listBalance.get(i).getBalanceMarginRate());
+			balanceObject.put("balanceState", listBalance.get(i).getBalanceState());
+			obj.put("balance"+i,balanceObject);
+		}
+		
+		
+		result =  callback +"("+ obj + ");";
+		System.out.println(result);
+		response.setContentType("text/javascript");
+		response.getWriter().write(result);
+	}
+	
+	
+	@RequestMapping("ajax/ajaxAddBalance/{callback}")
+	public void ajaxAddBalance(HttpServletRequest request, HttpServletResponse response,@PathVariable("callback") String callback) throws Exception {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		res.setHeader("Content-Type", "application/json; charset=utf-8");
+		
+		String result = "";
+		JSONObject obj = new JSONObject();
+		
+		int userId = 0;
+		if (req.getParameter("userId") != null ) userId = Integer.parseInt(req.getParameter("userId").toString());
+		
+		// ELSE DIE IMMEDIATELY DUE TO FOREIGN KEY CONSTRAINT!!!
+		
+		String balanceName = req.getParameter("balanceName");
+		double balanceInitialNAV = 0;
+		if (req.getParameter("balanceInitialNAV") != null) {
+			balanceInitialNAV = Double.parseDouble(req.getParameter("balanceInitialNAV"));
+		}
+		double balanceCash = balanceInitialNAV;
+		
+		double balanceTotalAssets = balanceCash;
+		
+		double balanceNAV = balanceCash;
+		
+		double balanceMarginRate = 0;
+		
+		int balanceState = 1;
+		
+		Timestamp balanceCreatedDate;
+		java.util.Date date = new java.util.Date();
+		balanceCreatedDate = new Timestamp(date.getTime());
+		
+		
+		
+		Balance b = new Balance();
+		b.setUserId(userId);
+		b.setBalanceName(balanceName);
+		b.setBalanceCreatedDate(balanceCreatedDate);
+		b.setBalanceInitialNAV(balanceInitialNAV);
+		b.setBalanceCash(balanceCash);
+		b.setBalanceAvailableCash(balanceCash);
+		b.setBalanceTotalAssets(balanceTotalAssets);
+		b.setBalanceNAV(balanceNAV);
+		b.setBalanceMarginRate(balanceMarginRate);
+		b.setBalanceState(balanceState);
+		
+		this.balanceService.addBalance(b);
+		
+		obj.put("addingState","SUCCESS");
+		
+		result =  callback +"("+ obj + ");";
+		System.out.println(result);
+		response.setContentType("text/javascript");
+		response.getWriter().write(result);
+	}
+	
+	
+	@RequestMapping("ajax/ajaxRemoveBalance/{callback}")
+	public void ajaxRemoveBalance(HttpServletRequest request, HttpServletResponse response,@PathVariable("callback") String callback) throws Exception {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession(true);
+		res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+		String result = "";
+		JSONObject obj = new JSONObject();
+		
+		int userId = 0;
+		if (req.getParameter("userId") != null ) userId = Integer.parseInt(req.getParameter("userId").toString());
+		int balanceId = 0;
+		if (req.getParameter("balanceId") != null ) balanceId = Integer.parseInt(req.getParameter("balanceId").toString());
+		Balance b = balanceService.getBalanceById(balanceId);
+		
+		int balanceUserId = b.getUserId();
+		
+		if(balanceUserId != userId ){
+			obj.put("removeState","ERROR");
+		}
+		else{
+			b.setBalanceState(0);
+			this.balanceService.updateBalance(b);
+			obj.put("removeState","SUCCESS");
+		}
+
+		
+		result =  callback +"("+ obj + ");";
+		System.out.println(result);
+		response.setContentType("text/javascript");
+		response.getWriter().write(result);
+	}
+	
+	
+	
 }
 
 

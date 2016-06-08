@@ -59,7 +59,7 @@
 											<th width="10">Margin</th>
 											<th width="50">State</th>
 											<th width="50">Edit</th>
-											<th width="50">Delete</th>
+											<th width="50">Del</th>
 										</tr>
 									</thead>
 									<c:forEach items="${listBalances}" var="u" varStatus="loop">
@@ -74,7 +74,7 @@
 												</c:forEach>
 											</td>
 											<td>${u.balanceName}</td>
-											<td>${u.balanceCreatedDate}</td>
+											<td class="formatDate">${u.balanceCreatedDate}</td>
 											<td class="formatNummber" style="text-align: right; color: blue">
 											 	${u.balanceInitialNAV}
 											 </td>
@@ -90,9 +90,9 @@
 											<td style="max-width:30px;" class="formatPercent">${u.balanceMarginRate}</td>
 											<td>${u.balanceState}</td>
 											<td><a
-												href="<c:url value='/core/editBalance/${u.balanceId}' />">Edit</a></td>
+												href="<c:url value='/core/editBalance/${u.balanceId}' />"><i class="fa fa-pencil-square-o  "></i></a></td>
 											<td><a
-												href="<c:url value='/core/removeBalance/${u.balanceId}' />">Delete</a></td>
+												href="<c:url value='/core/removeBalance/${u.balanceId}' />"><i style="color:red" class="fa fa-trash  "></i></a></td>
 										</tr>
 									</c:forEach>
 								</table>

@@ -33,6 +33,12 @@
 
  --%>
 <style type="text/css"> 
+th{
+white-space: nowrap;
+}
+tr{
+white-space: nowrap;
+}
 </style>
 </head>
 <body>
@@ -62,7 +68,7 @@
 						<div class="panel panel-default" style="color: #167AC6">
 							<div class="panel-body">
 							<div style="color:#00aeef; font-weight:bold; font-size:1.2em; white-space: nowrap;">
-								<span class="col-sm-1" style="float:left; color:red">Đặt lệnh</span><span id="balanceCash" class="col-sm-2 formatNummber" ></span><span class="col-sm-2" id="balanceAvailableCash"></span></span> <span class="col-sm-1" id="stockInfo">Giá:</span> 
+								<span class="col-sm-1" style="float:left; color:red">Đặt lệnh</span><span id="balanceCash" class="col-sm-2 formatNumber" ></span><span class="col-sm-2" id="balanceAvailableCash"></span></span> <span class="col-sm-1" id="stockInfo">Giá:</span> 
 								<span id="p1" class="col-sm-1" style="color:orange">&nbsp;</span>
 								<span id="p2" class="col-sm-1" style="color:violet;padding:0px">&nbsp;</span>
 								<span id="p3" class="col-sm-1" style="color:aqua">&nbsp;</span>
@@ -265,8 +271,8 @@
 									<tr>
 										<th width="50">Index</th>
 										<th width="50">ID</th>
-										<th width="150">Balance ID & Owner info</th>
-										<th width="100">Stock ID</th>
+										<th width="150">Balance Info</th>
+										<th width="100">Stock</th>
 										<th width="100">Action</th>
 										<th width="100">Order type</th>
 										<th width="100">Price</th>
@@ -275,7 +281,7 @@
 										<th width="100">Created time</th>
 										<th width="100">State</th>
 										<th width="50">Edit</th>
-										<th width="50">Delete</th>
+										<th width="50">Del</th>
 									</tr>
 								</thead>
 								<c:forEach items="${listOrders}" var="u"  varStatus="loop">
@@ -285,11 +291,13 @@
 										<td>${u.balanceId}
 
 											<c:forEach items="${listBalances}" var="balance">
+											
 												<c:if test="${balance.balanceId == u.balanceId}">
+												- ${balance.balanceName}
 													<c:forEach items="${listUsers}" var="user">
 														<c:if test="${balance.userId == user.userId}"><br/> ${user.userFullName} </c:if> 
 													</c:forEach>
-													<br/>${balance.balanceName} - ${balance.balanceCash}
+													<br/> <span class="formatNumber">${balance.balanceCash}</span> 
 	                                           	</c:if> 
 											</c:forEach>
 
@@ -319,7 +327,7 @@
 										<td style="text-align:right;color: blue" class="formatQuantity">
 												${(u.quantity)}
 										</td>
-										<td class="formatNummber" style="text-align:right;color: blue">
+										<td class="formatNumber" style="text-align:right;color: blue">
 												<fmt:parseNumber var="i3" type="number" value="${(u.quantity * u.price *1000)}" pattern="#,###.##"/>
 												<c:out value="${i3}"/> đ
 										
@@ -327,9 +335,9 @@
 										<td>${u.createdTime}</td>
 										<td>${u.orderState}</td> 
 										<td><a
-											href="<c:url value='/core/editOrder/${u.orderId}' />">Edit</a></td>
+											href="<c:url value='/core/editOrder/${u.orderId}' />"><i class="fa fa-pencil-square-o  "></i></a></td>
 										<td><a
-											href="<c:url value='/core/removeOrder/${u.orderId}' />">Delete</a></td>
+											href="<c:url value='/core/removeOrder/${u.orderId}' />"><i style="color:red" class="fa fa-trash  "></i></a></td>
 									</tr>
 								</c:forEach>
 							</table>
@@ -666,7 +674,7 @@
 								$('#cashDisplay').html(form_num);
 							});
 							
-							$(".formatNummber").digits2();
+							$(".formatNumber").digits2();
 							$(".formatPercent").formatPercent();
 							$(".formatQuantity").formatQuantity();
 							
@@ -677,9 +685,9 @@
 							$(".dropdownSelect").select2();
 							
 						/* 	$("a").click(function(){
-								$(".formatNummber").digits();
+								$(".formatNumber").digits();
 							}); */
-							/* $(".formatNummber").breakLine(); */
+							/* $(".formatNumber").breakLine(); */
 
 							var $datetimepicker = $('#datetimepicker');
 

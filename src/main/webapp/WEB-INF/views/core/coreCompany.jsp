@@ -77,7 +77,7 @@
 											<th width="200">Info</th>
 											<th width="50">State</th>
 											<th width="50">Edit</th>
-											<th width="50">Delete</th>
+											<th width="50">Del</th>
 										</tr>
 									</thead>
 									<c:forEach items="${listCompany}" var="u" varStatus="loop">
@@ -96,9 +96,9 @@
 											<td>${fn:substring(u.companyInfo,0,200).replace("<", "[HTML TAG]")}</td>
 											<td>${u.companyState}</td>
 											<td><a
-												href="<c:url value='/core/editCompany/${u.companyId}' />">Edit</a></td>
+												href="<c:url value='/core/editCompany/${u.companyId}' />"><i class="fa fa-pencil-square-o  "></i></a></td>
 											<td><a
-												href="<c:url value='/core/removeCompany/${u.companyId}' />">Delete</a></td>
+												href="<c:url value='/core/removeCompany/${u.companyId}' />"><i style="color:red" class="fa fa-trash  "></i></a></td>
 										</tr>
 									</c:forEach>
 								</table>

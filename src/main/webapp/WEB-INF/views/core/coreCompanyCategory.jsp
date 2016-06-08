@@ -112,7 +112,7 @@
 											<th width="200">Description</th>
 											<th>Company category info</th>
 											<th width="50">Edit</th>
-											<th width="50">Delete</th>
+											<th width="50">Del</th>
 										</tr>
 									</thead>
 									<c:forEach items="${listCompanyCategory}" var="u"
@@ -124,9 +124,9 @@
 											<td>${u.description}</td>
 											<td>${fn:substring(u.companyCategoryInfo,0,200).replace("<", "[HTML TAG]")}</td>
 											<td><a
-												href="<c:url value='/core/editCompanyCategory/${u.companyCategoryId}' />">Edit</a></td>
+												href="<c:url value='/core/editCompanyCategory/${u.companyCategoryId}' />"><i class="fa fa-pencil-square-o  "></i></a></td>
 											<td><a
-												href="<c:url value='/core/removeCompanyCategory/${u.companyCategoryId}' />">Delete</a></td>
+												href="<c:url value='/core/removeCompanyCategory/${u.companyCategoryId}' />"><i style="color:red" class="fa fa-trash  "></i></a></td>
 										</tr>
 									</c:forEach>
 								</table>
