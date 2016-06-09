@@ -109,8 +109,11 @@
 						
 						
 							<div class="col-sm-4 homepageTabImage">
+							<iframe frameborder="0" scrolling="no" height="132" width="333" allowtransparency="true" marginwidth="0" marginheight="0" src="http://fxrates.investing.com/index_single_crosses.php?currency=87&header-text-color=%23FFFFFF&curr-name-color=%230059b0&inner-text-color=%23000000&green-text-color=%232A8215&green-background=%23B7F4C2&red-text-color=%23DC0001&red-background=%23FFE2E2&inner-border-color=%23CBCBCB&border-color=%23cbcbcb&bg1=%23F6F6F6&bg2=%23ffffff&bid=hide;&ask=hide;&last=hide&open=show&high=show&low=show&change=hide&change_in_percents=show&last_update=hide"></iframe>
 							
-  <iframe frameborder="0" scrolling="no" height="480" width="333" allowtransparency="true" marginwidth="0" marginheight="0" src="http://fxrates.investing.com/index.php?force_lang=1&pairs_ids=1565;1715;1803;142;1896;1910;2214;1;3;2;7;9;5;8;6;11;15;55;42;155;43;54;&header-text-color=%23FFFFFF&curr-name-color=%230059b0&inner-text-color=%23000000&green-text-color=%232A8215&green-background=%23B7F4C2&red-text-color=%23DC0001&red-background=%23FFE2E2&inner-border-color=%23CBCBCB&border-color=%23cbcbcb&bg1=%23F6F6F6&bg2=%23ffffff&bid=hide&ask=hide&last=hide&change=hide&last_update=hide"></iframe> 
+  <iframe frameborder="0" scrolling="no" height="350" width="333" allowtransparency="true" marginwidth="0" marginheight="0" src="http://fxrates.investing.com/index.php?force_lang=1&pairs_ids=1565;1715;1803;142;1896;1910;2214;1;3;2;7;9;5;8;6;11;15;55;42;155;43;54;&header-text-color=%23FFFFFF&curr-name-color=%230059b0&inner-text-color=%23000000&green-text-color=%232A8215&green-background=%23B7F4C2&red-text-color=%23DC0001&red-background=%23FFE2E2&inner-border-color=%23CBCBCB&border-color=%23cbcbcb&bg1=%23F6F6F6&bg2=%23ffffff&bid=hide&ask=hide&last=hide&change=hide&last_update=hide"></iframe> 
+							
+							
 							
 							<%-- 	<img
 									src="${pageContext.request.contextPath}/resources/images/core/tab4.png"
